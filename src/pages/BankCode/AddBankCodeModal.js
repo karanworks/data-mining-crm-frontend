@@ -12,14 +12,13 @@ import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import { useState } from "react";
 
-function AddCenterModal({
+function AddBankCodeModal({
   modal_list,
   tog_list,
   formHandleSubmit,
   validation,
   isEditingCenter,
   alreadyRegisteredError,
-  roles,
 }) {
   return (
     <Modal
@@ -234,11 +233,8 @@ function AddCenterModal({
                 Select User Type
               </option>
 
-              {roles?.map((role) => (
-                <option key={role.id} value={role.name}>
-                  {role.name}
-                </option>
-              ))}
+              <option value="Admin">Admin</option>
+              <option value="Branch Manager">Branch Manager</option>
             </Input>
 
             {validation.touched.role && validation.errors.role ? (
@@ -286,4 +282,4 @@ function AddCenterModal({
   );
 }
 
-export default AddCenterModal;
+export default AddBankCodeModal;

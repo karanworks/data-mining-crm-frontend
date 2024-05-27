@@ -21,6 +21,8 @@ import Report from "../pages/Report";
 import PendingTasks from "../pages/PendingTasks";
 import Calendar from "../pages/Calendar";
 import AllCenters from "../pages/AllCenters";
+import BankCode from "../pages/BankCode";
+import BankReport from "../pages/BankReport";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -28,7 +30,8 @@ const authProtectedRoutes = [
   { path: "/all-centers", component: <AllCenters /> },
   { path: "/users", component: <AddUsers /> },
   { path: "/home", component: <Invoice /> },
-  { path: "/bank-code", component: <PendingTasks /> },
+  { path: "/bank-code", component: <BankCode /> },
+  { path: "/bank-report", component: <BankReport /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile

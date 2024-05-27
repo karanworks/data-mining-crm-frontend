@@ -10,10 +10,10 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
-import AddCenterModal from "./AddCenterModal";
+import AddBankCodeModal from "./AddBankCodeModal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import CenterRemoveModal from "./CenterRemoveModal";
+import BankCodeRemoveModal from "./BankCodeRemoveModal";
 import {
   getCenters,
   createCenter,
@@ -24,9 +24,8 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getRoles } from "../../slices/Mapping/thunk";
 
-const AllCenters = () => {
+const BankCode = () => {
   const [modal_list, setmodal_list] = useState(false);
 
   const [modal_delete, setmodal_delete] = useState(false);
@@ -38,7 +37,8 @@ const AllCenters = () => {
   const dispatch = useDispatch();
 
   const { centers } = useSelector((state) => state.Centers);
-  const { roles } = useSelector((state) => state.Mapping);
+
+  console.log("CENTERS HERE ->", centers);
 
   function tog_list() {
     setmodal_list(!modal_list);
@@ -50,7 +50,6 @@ const AllCenters = () => {
 
   useEffect(() => {
     dispatch(getCenters());
-    dispatch(getRoles());
   }, [dispatch]);
 
   const validation = useFormik({
@@ -81,29 +80,6 @@ const AllCenters = () => {
     },
   });
 
-  const centersData = [
-    {
-      id: 1,
-      centerName: "Ascent Bpo",
-      ownerName: "Arhaan Rajak",
-      mobileNumber: "9999999999",
-      emailId: "arhaanji@live.com",
-      password: "132112",
-      branchId: "ABSABSCC",
-      status: "Activate",
-    },
-    {
-      id: 2,
-      centerName: "Credit Rupay",
-      ownerName: "Vipin Tomar",
-      mobileNumber: "1111111111",
-      emailId: "creditrupay@gmail.com",
-      password: "tomar@13211	",
-      branchId: "CRNABSCC",
-      status: "Deactivate",
-    },
-  ];
-
   function formHandleSubmit(e) {
     e.preventDefault();
 
@@ -132,6 +108,25 @@ const AllCenters = () => {
     });
   }
 
+  const bankCodeData = [
+    {
+      id: 1,
+      centerName: "Credit Rupay",
+      bankName: "Indusind Bank	",
+      userNameCode: "ASEND1",
+      password: "123456",
+      userStatus: "2022-12-20 19:36:09",
+    },
+    {
+      id: 2,
+      centerName: "Credit Rupay",
+      bankName: "Yes Bank",
+      userNameCode: "ABDS07",
+      password: "123123",
+      userStatus: "2022-12-20 19:37:33",
+    },
+  ];
+
   document.title = "All Centers";
   return (
     <React.Fragment>
@@ -142,7 +137,7 @@ const AllCenters = () => {
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Create a center</h4>
+                  <h4 className="card-title mb-0">Create Bank Code</h4>
                 </CardHeader>
 
                 <CardBody>
@@ -166,7 +161,7 @@ const AllCenters = () => {
                           id="create-btn"
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
-                          Center
+                          Bank Code
                         </Button>
                       </Col>
                     </Row>
@@ -179,28 +174,24 @@ const AllCenters = () => {
                         <thead className="table-light">
                           <tr>
                             <th className="sort" data-sort="id">
-                              ID
+                              S.NO
                             </th>
                             <th className="sort" data-sort="center_name">
                               Center Name
                             </th>
-                            <th className="sort" data-sort="owner_name">
-                              Owner Name
+                            <th className="sort" data-sort="bank_name">
+                              Bank Name
                             </th>
-                            <th className="sort" data-sort="phone_number">
-                              Phone Number
+                            <th className="sort" data-sort="user_name/code">
+                              User Name/Code
                             </th>
-                            <th className="sort" data-sort="email_id">
-                              Email ID
-                            </th>
+
                             <th className="sort" data-sort="phone_number">
                               Password
                             </th>
-                            <th className="sort" data-sort="phone_number">
-                              Branch Id
-                            </th>
-                            <th className="sort" data-sort="phone_number">
-                              Status
+
+                            <th className="sort" data-sort="user_status">
+                              User Status
                             </th>
 
                             <th className="sort" data-sort="action">
@@ -209,43 +200,25 @@ const AllCenters = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {centers?.map((center) => (
-                            <tr key={center?.id}>
+                          {bankCodeData?.map((bankCode) => (
+                            <tr key={bankCode?.id}>
                               <td className="id">
                                 <Link to="#" className="fw-medium link-primary">
-                                  {center?.id}
+                                  {bankCode?.id}
                                 </Link>
                               </td>
                               <td className="center_name">
-                                {center?.centerName}
+                                {bankCode?.centerName}
                               </td>
                               <td className="owner_name">
-                                {center?.ownerName}
+                                {bankCode?.bankName}
                               </td>
                               <td className="phone_number">
-                                {center?.mobileNumber}
+                                {bankCode?.userNameCode}
                               </td>
-                              <td className="email_id">{center?.emailId}</td>
-                              <td className="password">{center?.password}</td>
-                              <td className="password">{center?.branchId}</td>
-                              <td className="password">
-                                {center?.status === 1 ? (
-                                  <button
-                                    type="button"
-                                    className="btn btn-ghost-success waves-effect waves-light"
-                                  >
-                                    {" "}
-                                    Activate
-                                  </button>
-                                ) : (
-                                  <button
-                                    type="button"
-                                    className="btn btn-ghost-danger waves-effect waves-light"
-                                  >
-                                    {" "}
-                                    Deactivate
-                                  </button>
-                                )}
+                              <td className="password">{bankCode?.password}</td>
+                              <td className="userStatus">
+                                {bankCode?.userStatus}
                               </td>
 
                               <td>
@@ -306,16 +279,15 @@ const AllCenters = () => {
       </div>
       <ToastContainer />
 
-      <AddCenterModal
+      <AddBankCodeModal
         validation={validation}
         isEditingCenter={isEditingCenter}
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
-        roles={roles}
       />
 
-      <CenterRemoveModal
+      <BankCodeRemoveModal
         modal_delete={modal_delete}
         setmodal_delete={setmodal_delete}
         tog_delete={tog_delete}
@@ -328,4 +300,4 @@ const AllCenters = () => {
   );
 };
 
-export default AllCenters;
+export default BankCode;
