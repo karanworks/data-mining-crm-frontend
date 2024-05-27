@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 //Dashboard
-import Users from "../pages/Users";
 
 //login
 import Login from "../pages/Authentication/Login";
@@ -14,22 +13,23 @@ import Register from "../pages/Authentication/Register";
 import UserProfile from "../pages/Authentication/user-profile";
 
 //APi Key
+import AddUsers from "../pages/AddUsers";
 import Mapping from "../pages/Mapping";
-
 import AddLead from "../pages/AddLead";
 import Invoice from "../pages/Invoice";
 import Report from "../pages/Report";
 import PendingTasks from "../pages/PendingTasks";
 import Calendar from "../pages/Calendar";
+import AllCenters from "../pages/AllCenters";
 
 const authProtectedRoutes = [
-  { path: "/users", component: <Users /> },
+  // { path: "/users", component: <Users /> },
   { path: "/roles", component: <Mapping /> },
-  { path: "/add-lead", component: <AddLead /> },
-  { path: "/report", component: <Report /> },
-  { path: "/invoice", component: <Invoice /> },
-  { path: "/pending-tasks", component: <PendingTasks /> },
-  { path: "/calendar", component: <Calendar /> },
+  { path: "/all-centers", component: <AllCenters /> },
+  { path: "/users", component: <AddUsers /> },
+  { path: "/home", component: <Invoice /> },
+  { path: "/bank-code", component: <PendingTasks /> },
+  // { path: "/calendar", component: <Calendar /> },
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },

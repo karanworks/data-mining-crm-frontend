@@ -502,6 +502,30 @@ export const removeEvent = (eventId) => {
   );
 };
 
+// *****************************************************************
+// ************************* CENTERS *******************************
+// *****************************************************************
+export const getCenters = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/centers`);
+};
+
+export const createCenter = (data) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/center/create`, data);
+};
+
+export const updateCenter = (centerId, data) => {
+  return api.update(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/edit`,
+    data
+  );
+};
+
+export const removeCenter = (centerId) => {
+  return api.delete(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/delete`
+  );
+};
+
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);

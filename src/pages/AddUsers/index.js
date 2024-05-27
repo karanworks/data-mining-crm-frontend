@@ -28,7 +28,7 @@ import {
 } from "../../slices/Users/thunk";
 import { useNavigate } from "react-router-dom";
 
-const Users = () => {
+const AddUsers = () => {
   // register / edit user modal state whether modal is open or not
   const [modal_list, setmodal_list] = useState(false);
   // this state triggers when editing the user
@@ -315,4 +315,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default AddUsers;

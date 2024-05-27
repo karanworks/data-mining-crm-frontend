@@ -11,6 +11,7 @@ import AddLeadReducer from "./AddLead/reducer";
 import InvoiceReducer from "./Invoice/reducer";
 import PaymentReducer from "./Payment/reducer";
 import ReportReducer from "./Report/reducer";
+import CenterReducer from "./Centers/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   Invoice: InvoiceReducer,
   Payment: PaymentReducer,
   Report: ReportReducer,
+  Centers: CenterReducer,
   ForgetPassword: ForgetPasswordReducer,
   Profile: ProfileReducer,
 });
