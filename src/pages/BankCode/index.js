@@ -21,6 +21,7 @@ import {
   removeBankCode,
   updateBankCode,
 } from "../../slices/BankCode/thunk";
+import { searchBankCodes } from "../../slices/BankCode/reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -58,6 +59,10 @@ const BankCode = () => {
     dispatch(getBankCodes());
     dispatch(getCenters());
   }, [dispatch]);
+
+  function handleSearchCenter(e) {
+    dispatch(searchBankCodes(e.target.value));
+  }
 
   const validation = useFormik({
     initialValues: {
@@ -145,6 +150,7 @@ const BankCode = () => {
                             className="form-control bg-light border-light"
                             autoComplete="off"
                             id="searchList"
+                            onChange={handleSearchCenter}
                             placeholder="Search Bank Code"
                           />
                           <i className="ri-search-line search-icon"></i>

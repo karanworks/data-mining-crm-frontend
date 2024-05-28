@@ -19,7 +19,7 @@ const bankCodesSlice = createSlice({
   name: "bankCode",
   initialState,
   reducers: {
-    searchBankCodess(state, action) {
+    searchBankCodes(state, action) {
       const inputValue = action.payload.toLowerCase();
 
       if (inputValue === "") {
@@ -60,8 +60,6 @@ const bankCodesSlice = createSlice({
     });
 
     builder.addCase(updateBankCode.fulfilled, (state, action) => {
-      console.log("UPDATED BANK CODE ->", action.payload.data);
-
       if (action.payload.status == "failure") {
         state.alreadyRegisteredError = action.payload.message;
         state.error = "";
