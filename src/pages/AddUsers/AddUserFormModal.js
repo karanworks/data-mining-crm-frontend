@@ -12,14 +12,28 @@ import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import { useState } from "react";
 
-function AddBankCodeModal({
+function AddUserFormModal({
   modal_list, // modal state
   tog_list, // to change modal state
   formHandleSubmit, // submit function for form
   validation, // to get the values from formik
-  isEditingCenter, // state of whether we are editing the user or not, if we are editing the user then form fields will have the values of that user
+  isEditingUser, // state of whether we are editing the user or not, if we are editing the user then form fields will have the values of that user
   alreadyRegisteredError, // gives error if user already registered with same - id, email, agentMobile
+  handleRoleChange,
+  roles,
+  centers,
 }) {
+  const [selectedSingleCenterName, setSelectedSingleCenterName] =
+    useState(null);
+
+  function handleSelectSingleCenter(centerName) {
+    setSelectedSingleCenterName(centerName);
+  }
+
+  let CenterOptions = centers?.map((center) => {
+    return { value: center.centerName, label: center.centerName };
+  });
+
   return (
     <Modal
       isOpen={modal_list}
@@ -34,7 +48,7 @@ function AddBankCodeModal({
           tog_list();
         }}
       >
-        {isEditingCenter ? "Update Center" : "Add Center"}
+        Add User
       </ModalHeader>
       <Form className="tablelist-form" onSubmit={(e) => formHandleSubmit(e)}>
         <ModalBody style={{ paddingTop: "0px" }}>
@@ -48,53 +62,77 @@ function AddBankCodeModal({
             <Label htmlFor="centerName" className="form-label">
               Center Name
             </Label>
-
-            <Input
+            <Select
               id="centerName"
               name="centerName"
+              value={selectedSingleCenterName}
+              onChange={(centerName) => {
+                handleSelectSingleCenter(centerName);
+                validation.setFieldValue("centerName", centerName.value);
+              }}
+              options={CenterOptions}
+              placeholder="Select Center Name"
+            />
+          </div>
+
+          <div className="mb-2">
+            <Label htmlFor="userType" className="form-label">
+              Select Role
+            </Label>
+            <Input
+              id="userType"
+              name="userType"
               className="form-control"
-              placeholder="Enter Center Name"
-              type="text"
-              onChange={validation.handleChange}
+              type="select"
+              onChange={handleRoleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.centerName || ""}
+              value={validation.values.userType || ""}
               invalid={
-                validation.touched.centerName && validation.errors.centerName
+                validation.touched.userType && validation.errors.userType
                   ? true
                   : false
               }
-            />
+            >
+              <option value="" disabled>
+                Select User Type
+              </option>
 
-            {validation.touched.centerName && validation.errors.centerName ? (
+              {roles?.map((role) => (
+                <option value={role.id} key={role.id}>
+                  {role.name}
+                </option>
+              ))}
+            </Input>
+
+            {validation.touched.role && validation.errors.role ? (
               <FormFeedback type="invalid">
-                {validation.errors.centerName}
+                {validation.errors.role}
               </FormFeedback>
             ) : null}
           </div>
+
           <div className="mb-2">
-            <Label htmlFor="ownerName" className="form-label">
-              Owner Name
+            <Label htmlFor="name" className="form-label">
+              Name
             </Label>
 
             <Input
-              id="ownerName"
-              name="ownerName"
+              id="name"
+              name="name"
               className="form-control"
-              placeholder="Enter Owner Name"
+              placeholder="Enter Name"
               type="text"
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.ownerName || ""}
+              value={validation.values.name || ""}
               invalid={
-                validation.touched.ownerName && validation.errors.ownerName
-                  ? true
-                  : false
+                validation.touched.name && validation.errors.name ? true : false
               }
             />
 
-            {validation.touched.ownerName && validation.errors.ownerName ? (
+            {validation.touched.name && validation.errors.name ? (
               <FormFeedback type="invalid">
-                {validation.errors.ownerName}
+                {validation.errors.name}
               </FormFeedback>
             ) : null}
           </div>
@@ -129,29 +167,29 @@ function AddBankCodeModal({
           </div>
 
           <div className="mb-2">
-            <Label htmlFor="emailId" className="form-label">
+            <Label htmlFor="email" className="form-label">
               Email
             </Label>
 
             <Input
-              id="emailId"
-              name="emailId"
+              id="email"
+              name="email"
               className="form-control"
-              placeholder="Enter Email Id"
+              placeholder="Enter Email"
               type="email"
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.emailId || ""}
+              value={validation.values.email || ""}
               invalid={
-                validation.touched.emailId && validation.errors.emailId
+                validation.touched.email && validation.errors.email
                   ? true
                   : false
               }
             />
 
-            {validation.touched.emailId && validation.errors.emailId ? (
+            {validation.touched.email && validation.errors.email ? (
               <FormFeedback type="invalid">
-                {validation.errors.emailId}
+                {validation.errors.email}
               </FormFeedback>
             ) : null}
           </div>
@@ -184,65 +222,87 @@ function AddBankCodeModal({
             ) : null}
           </div>
           <div className="mb-2">
-            <Label htmlFor="branchId" className="form-label">
-              Branch ID
+            <Label htmlFor="age" className="form-label">
+              Age
             </Label>
 
             <Input
-              id="branchId"
-              name="branchId"
+              id="age"
+              name="age"
               className="form-control"
-              placeholder="Enter Branch Id"
+              placeholder="Enter age"
               type="text"
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.branchId || ""}
+              value={validation.values.age || ""}
               invalid={
-                validation.touched.branchId && validation.errors.branchId
+                validation.touched.age && validation.errors.age ? true : false
+              }
+            />
+
+            {validation.touched.age && validation.errors.age ? (
+              <FormFeedback type="invalid">
+                {validation.errors.age}
+              </FormFeedback>
+            ) : null}
+          </div>
+          <div className="mb-2">
+            <Label htmlFor="aadharNumber" className="form-label">
+              Aadhar No
+            </Label>
+
+            <Input
+              id="aadharNumber"
+              name="aadharNumber"
+              className="form-control"
+              placeholder="Enter aadhar no"
+              type="text"
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.aadharNumber || ""}
+              invalid={
+                validation.touched.aadharNumber &&
+                validation.errors.aadharNumber
                   ? true
                   : false
               }
             />
 
-            {validation.touched.branchId && validation.errors.branchId ? (
+            {validation.touched.aadharNumber &&
+            validation.errors.aadharNumber ? (
               <FormFeedback type="invalid">
-                {validation.errors.branchId}
+                {validation.errors.aadharNumber}
               </FormFeedback>
             ) : null}
           </div>
-
           <div className="mb-2">
-            <Label htmlFor="userType" className="form-label">
-              User Type
+            <Label htmlFor="panNo" className="form-label">
+              Pan No
             </Label>
+
             <Input
-              id="userType"
-              name="userType"
+              id="panNo"
+              name="panNo"
               className="form-control"
-              type="select"
-              onChange={() => {}}
+              placeholder="Enter pan no"
+              type="text"
+              onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.userType || ""}
+              value={validation.values.panNo || ""}
               invalid={
-                validation.touched.userType && validation.errors.userType
+                validation.touched.panNo && validation.errors.panNo
                   ? true
                   : false
               }
-            >
-              <option value="" disabled>
-                Select User Type
-              </option>
+            />
 
-              <option value="Admin">Admin</option>
-              <option value="Branch Manager">Branch Manager</option>
-            </Input>
-
-            {validation.touched.role && validation.errors.role ? (
+            {validation.touched.panNo && validation.errors.panNo ? (
               <FormFeedback type="invalid">
-                {validation.errors.role}
+                {validation.errors.panNo}
               </FormFeedback>
             ) : null}
           </div>
+
           <div className="mb-2">
             <Label htmlFor="password" className="form-label">
               Password
@@ -273,7 +333,7 @@ function AddBankCodeModal({
 
           <div className="text-end">
             <button type="submit" className="btn btn-primary">
-              {isEditingCenter ? "Update Center" : "Save Center"}
+              {isEditingUser ? "Update User" : "Save User"}
             </button>
           </div>
         </ModalBody>
@@ -282,4 +342,4 @@ function AddBankCodeModal({
   );
 }
 
-export default AddBankCodeModal;
+export default AddUserFormModal;

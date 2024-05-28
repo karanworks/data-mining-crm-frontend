@@ -15,13 +15,17 @@ import { getCenters } from "../../slices/Centers/thunk";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 
-const BankReport = () => {
+const ApplicationReport = () => {
   const [selectedSingleCenterName, setSelectedSingleCenterName] =
     useState(null);
 
   const [selectedSingleStatus1, setSelectedSingleStatus1] = useState(null);
 
   const [selectedSingleStatus2, setSelectedSingleStatus2] = useState(null);
+
+  const [selectedSingleDateType, setSelectedSingleDateType] = useState(null);
+
+  const [selectedSingleBank, setSelectedSingleBank] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -37,6 +41,14 @@ const BankReport = () => {
 
   function handleSelectSingleStatus2(status2) {
     setSelectedSingleStatus2(status2);
+  }
+
+  function handleSelectSingleDateType(dateType) {
+    setSelectedSingleDateType(dateType);
+  }
+
+  function handleSelectSingleBank(bank) {
+    setSelectedSingleBank(bank);
   }
 
   let CenterOptions = centers?.map((center) => {
@@ -73,6 +85,35 @@ const BankReport = () => {
     },
   ];
 
+  const dateTypeOptions = [
+    {
+      value: "By Decision Date",
+      label: "By Decision Date",
+    },
+    {
+      value: "By Punching Date",
+      label: "By Punching Date",
+    },
+  ];
+  const bankOptions = [
+    {
+      value: "AU Bank",
+      label: "AU Bank",
+    },
+    {
+      value: "ICICI Bank",
+      label: "ICICI Bank",
+    },
+    {
+      value: "HDFC Bank",
+      label: "HDFC Bank",
+    },
+    {
+      value: "Axis Bank",
+      label: "Axis Bank",
+    },
+  ];
+
   useEffect(() => {
     dispatch(getCenters());
   }, [dispatch]);
@@ -86,7 +127,7 @@ const BankReport = () => {
       panCard: "AHXPJ388D",
       clientOf: "Credit Rupay of Qadir on 17 Dec, 22",
       status1: "VKYC Done",
-      status2: 85,
+      status2: "PENDING",
     },
     {
       id: 2,
@@ -96,21 +137,21 @@ const BankReport = () => {
       panCard: "AHXPJ388D",
       clientOf: "Credit Rupay of Qadir on 17 Dec, 22",
       status1: "VKYC Done",
-      status2: 83,
+      status2: "APPROVED",
     },
   ];
 
-  document.title = "Bank Report";
+  document.title = "Application Report";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Bank Report" pageTitle="Applications" />
+          <BreadCrumb title="Application Report" pageTitle="Applications" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Bank Report</h4>
+                  <h4 className="card-title mb-0">Application Report</h4>
                 </CardHeader>
 
                 <CardBody>
@@ -142,6 +183,22 @@ const BankReport = () => {
 
                           <div>
                             <Select
+                              id="dateType"
+                              name="dateType"
+                              value={selectedSingleDateType}
+                              onChange={(dateType) => {
+                                handleSelectSingleDateType(dateType);
+                                // validation.setFieldValue(
+                                //   "centerName",
+                                //   centerName.value
+                                // );
+                              }}
+                              options={dateTypeOptions}
+                              placeholder="Date Type"
+                            />
+                          </div>
+                          <div>
+                            <Select
                               id="centerName"
                               name="centerName"
                               value={selectedSingleCenterName}
@@ -154,6 +211,22 @@ const BankReport = () => {
                               }}
                               options={CenterOptions}
                               placeholder="Centers"
+                            />
+                          </div>
+                          <div>
+                            <Select
+                              id="bankName"
+                              name="bankName"
+                              value={selectedSingleBank}
+                              onChange={(bankName) => {
+                                handleSelectSingleBank(bankName);
+                                // validation.setFieldValue(
+                                //   "centerName",
+                                //   centerName.value
+                                // );
+                              }}
+                              options={bankOptions}
+                              placeholder="Banks"
                             />
                           </div>
                           <div>
@@ -292,4 +365,4 @@ const BankReport = () => {
   );
 };
 
-export default BankReport;
+export default ApplicationReport;

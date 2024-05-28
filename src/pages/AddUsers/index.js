@@ -16,8 +16,8 @@ import { Link } from "react-router-dom";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import UserFormModal from "./UserFormModal";
-import UserRemoveModal from "./UserRemoveModal";
+import AddUserFormModal from "./AddUserFormModal";
+import AddUserRemoveModal from "./AddUserRemoveModal";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -27,6 +27,7 @@ import {
   updateUser,
 } from "../../slices/Users/thunk";
 import { useNavigate } from "react-router-dom";
+import { getCenters } from "../../slices/Centers/thunk";
 
 const AddUsers = () => {
   // register / edit user modal state whether modal is open or not
@@ -39,10 +40,9 @@ const AddUsers = () => {
   const [listUserId, setListUserId] = useState(null);
   // fetching all the roles
   const [roles, setRoles] = useState([]);
-  // campaigns that a user is in
-  const [selectedCampaigns, setSelectedCampaigns] = useState(null);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
+  const { centers } = useSelector((state) => state.Centers);
 
   const dispatch = useDispatch();
 
@@ -78,21 +78,34 @@ const AddUsers = () => {
 
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getCenters());
   }, [dispatch]);
 
   // formik setup
   const validation = useFormik({
     initialValues: {
+      centerName: "",
+      userType: "",
       name: "",
-      roleId: "",
+      mobileNumber: "",
       email: "",
+      location: "",
+      age: "",
+      aadharNumber: "",
+      panNo: "",
       password: "",
     },
     validationSchema: Yup.object({
+      centerName: Yup.string().required("Please center name"),
+      userType: Yup.string().required("Please select user role"),
       name: Yup.string().required("Please enter Name"),
-      roleId: Yup.string().required("Please select user role"),
-      email: Yup.string().required("Please enter CRM Email"),
-      password: Yup.string().required("Please enter CRM Password"),
+      mobileNumber: Yup.string().required("Please enter mobile number"),
+      email: Yup.string().required("Please enter email"),
+      location: Yup.string().required("Please enter select location"),
+      age: Yup.string().required("Please enter age"),
+      aadharNumber: Yup.string().required("Please enter aadhar card"),
+      panNo: Yup.string().required("Please enter pan card"),
+      password: Yup.string().required("Please enter Password"),
     }),
     onSubmit: (values) => {
       isEditingUser
@@ -180,14 +193,29 @@ const AddUsers = () => {
                                 />
                               </div>
                             </th>
-                            <th className="sort" data-sort="user_id">
-                              User ID
+                            <th className="sort" data-sort="id">
+                              ID
                             </th>
                             <th className="sort" data-sort="name">
                               Name
                             </th>
-                            <th className="sort" data-sort="device_id">
-                              email
+                            <th className="sort" data-sort="email">
+                              Email
+                            </th>
+                            <th className="sort" data-sort="password">
+                              Password
+                            </th>
+                            <th className="sort" data-sort="location">
+                              Location
+                            </th>
+                            <th className="sort" data-sort="branch_id">
+                              Branch ID
+                            </th>
+                            <th className="sort" data-sort="type">
+                              Type
+                            </th>
+                            <th className="sort" data-sort="user_status">
+                              User Status
                             </th>
 
                             <th className="sort" data-sort="action">
@@ -196,57 +224,62 @@ const AddUsers = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {users?.map((user) => (
-                            <tr key={user?.id}>
-                              <th scope="row">
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="checkAll"
-                                    value="option1"
-                                  />
-                                </div>
-                              </th>
-                              <td className="id">
-                                <Link to="#" className="fw-medium link-primary">
-                                  {user?.id}
-                                </Link>
-                              </td>
-                              <td className="name">{user?.username}</td>
-                              <td className="email">{user?.email}</td>
+                          {/* {users?.map((user) => ( */}
+                          <tr>
+                            <th scope="row">
+                              <div className="form-check">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  name="checkAll"
+                                  value="option1"
+                                />
+                              </div>
+                            </th>
+                            <td className="id">
+                              <Link to="#" className="fw-medium link-primary">
+                                1
+                              </Link>
+                            </td>
+                            <td className="name">someone</td>
+                            <td className="email">someone@gmail.com </td>
+                            <td className="password">123456</td>
+                            <td className="location">Noida</td>
+                            <td className="branch_id">ABSACC</td>
+                            <td className="type">Manager</td>
+                            <td className="user_status">Active</td>
 
-                              <td>
-                                <div className="d-flex gap-2">
-                                  <div className="edit">
-                                    <button
-                                      className="btn btn-sm btn-primary edit-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#showModal"
-                                      onClick={() => {
-                                        handleEditUser(user);
-                                      }}
-                                    >
-                                      Edit
-                                    </button>
-                                  </div>
-                                  <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteRecordModal"
-                                      onClick={() => {
-                                        setListUserId(user.id);
-                                        setmodal_delete(true);
-                                      }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
+                            <td>
+                              <div className="d-flex gap-2">
+                                <div className="edit">
+                                  <button
+                                    className="btn btn-sm btn-primary edit-item-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#showModal"
+                                    onClick={() => {
+                                      // handleEditUser(user);
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
                                 </div>
-                              </td>
-                            </tr>
-                          ))}
+                                <div className="remove">
+                                  <button
+                                    className="btn btn-sm btn-danger remove-item-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteRecordModal"
+                                    onClick={() => {
+                                      // setListUserId(user.id);
+                                      // setmodal_delete(true);
+                                    }}
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          {/* ))} */}
                         </tbody>
                       </table>
                       <div className="noresult" style={{ display: "none" }}>
@@ -290,7 +323,7 @@ const AddUsers = () => {
       </div>
 
       {/* Add Modal */}
-      <UserFormModal
+      <AddUserFormModal
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
@@ -299,10 +332,11 @@ const AddUsers = () => {
         alreadyRegisteredError={alreadyRegisteredError}
         handleRoleChange={handleRoleChange}
         roles={roles}
+        centers={centers}
       />
 
       {/* Remove Modal */}
-      <UserRemoveModal
+      <AddUserRemoveModal
         modal_delete={modal_delete}
         tog_delete={tog_delete}
         setmodal_delete={setmodal_delete}

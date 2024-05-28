@@ -15,23 +15,33 @@ import UserProfile from "../pages/Authentication/user-profile";
 //APi Key
 import AddUsers from "../pages/AddUsers";
 import Mapping from "../pages/Mapping";
-import AddLead from "../pages/AddLead";
-import Invoice from "../pages/Invoice";
-import Report from "../pages/Report";
-import PendingTasks from "../pages/PendingTasks";
-import Calendar from "../pages/Calendar";
 import AllCenters from "../pages/AllCenters";
 import BankCode from "../pages/BankCode";
 import BankReport from "../pages/BankReport";
+import Home from "../pages/Home";
+import DailyReport from "../pages/DailyReport";
+import Forms from "../pages/Forms";
+import ApplicationReport from "../pages/ApplicationReport";
+import PendingForms from "../pages/PendingForms";
+import ReportUpload from "../pages/ReportUpload";
+import AssignData from "../pages/AssignData";
+import TalktimeUpload from "../pages/TalktimeUpload";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
+  { path: "/home", component: <Home /> },
   { path: "/roles", component: <Mapping /> },
   { path: "/all-centers", component: <AllCenters /> },
-  { path: "/users", component: <AddUsers /> },
-  { path: "/home", component: <Invoice /> },
+  { path: "/add-users", component: <AddUsers /> },
   { path: "/bank-code", component: <BankCode /> },
   { path: "/bank-report", component: <BankReport /> },
+  { path: "/daily-report", component: <DailyReport /> },
+  { path: "/application-report", component: <ApplicationReport /> },
+  { path: "/pending-forms", component: <PendingForms /> },
+  { path: "/forms", component: <Forms /> },
+  { path: "/report-upload", component: <ReportUpload /> },
+  { path: "/assign-data", component: <AssignData /> },
+  { path: "/talktime-upload", component: <TalktimeUpload /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile
@@ -42,9 +52,9 @@ const authProtectedRoutes = [
   {
     path: "/",
     exact: true,
-    component: <Navigate to="/users" />,
+    component: <Navigate to="/home" />,
   },
-  { path: "*", component: <Navigate to="/users" /> },
+  { path: "*", component: <Navigate to="/home" /> },
 ];
 
 const publicRoutes = [

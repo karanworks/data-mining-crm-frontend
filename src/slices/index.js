@@ -7,9 +7,6 @@ import LayoutReducer from "./layouts/reducer";
 import LoginReducer from "./auth/login/reducer";
 import UsersReducer from "./Users/reducer";
 import MappingReducer from "./Mapping/reducer";
-import AddLeadReducer from "./AddLead/reducer";
-import InvoiceReducer from "./Invoice/reducer";
-import PaymentReducer from "./Payment/reducer";
 import ReportReducer from "./Report/reducer";
 import CenterReducer from "./Centers/reducer";
 import BankCodeReducer from "./BankCode/reducer";
@@ -25,9 +22,6 @@ const rootReducer = combineReducers({
   Account: AccountReducer,
   Users: UsersReducer,
   Mapping: MappingReducer,
-  AddLead: AddLeadReducer,
-  Invoice: InvoiceReducer,
-  Payment: PaymentReducer,
   Report: ReportReducer,
   Centers: CenterReducer,
   BankCodes: BankCodeReducer,

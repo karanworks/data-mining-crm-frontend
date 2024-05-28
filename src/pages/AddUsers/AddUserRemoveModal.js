@@ -1,6 +1,6 @@
 import { Button, Modal, ModalBody } from "reactstrap";
 
-function UserRemoveModal({
+function AddUserRemoveModal({
   modal_delete, // delete user confirmation modal
   setmodal_delete, // change user confirmation modal state
   handleDeleteUser, // function to delete a user
@@ -60,4 +60,4 @@ function UserRemoveModal({
   );
 }
 
-export default UserRemoveModal;
+export default AddUserRemoveModal;
