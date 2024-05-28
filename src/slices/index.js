@@ -12,6 +12,7 @@ import InvoiceReducer from "./Invoice/reducer";
 import PaymentReducer from "./Payment/reducer";
 import ReportReducer from "./Report/reducer";
 import CenterReducer from "./Centers/reducer";
+import BankCodeReducer from "./BankCode/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   Payment: PaymentReducer,
   Report: ReportReducer,
   Centers: CenterReducer,
+  BankCodes: BankCodeReducer,
   ForgetPassword: ForgetPasswordReducer,
   Profile: ProfileReducer,
 });

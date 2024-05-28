@@ -14,12 +14,13 @@ import AddBankCodeModal from "./AddBankCodeModal";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import BankCodeRemoveModal from "./BankCodeRemoveModal";
+import { getCenters } from "../../slices/Centers/thunk";
 import {
-  getCenters,
-  createCenter,
-  removeCenter,
-  updateCenter,
-} from "../../slices/Centers/thunk";
+  getBankCodes,
+  createBankCode,
+  removeBankCode,
+  updateBankCode,
+} from "../../slices/BankCode/thunk";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -30,15 +31,20 @@ const BankCode = () => {
 
   const [modal_delete, setmodal_delete] = useState(false);
 
-  const [isEditingCenter, setIsEditingCenter] = useState(false);
+  // const [isEditingCenter, setIsEditingCenter] = useState(false);
 
-  const [listCenterId, setListCenterId] = useState(null);
+  const [isEditingBankCode, setIsEditingBankCode] = useState(false);
+
+  // const [listCenterId, setListCenterId] = useState(null);
+
+  const [listBankCodeId, setListBankCodeId] = useState(null);
 
   const dispatch = useDispatch();
 
+  const { bankCodes, filteredBankCodes } = useSelector(
+    (state) => state.BankCodes
+  );
   const { centers } = useSelector((state) => state.Centers);
-
-  console.log("CENTERS HERE ->", centers);
 
   function tog_list() {
     setmodal_list(!modal_list);
@@ -49,34 +55,27 @@ const BankCode = () => {
   }
 
   useEffect(() => {
+    dispatch(getBankCodes());
     dispatch(getCenters());
   }, [dispatch]);
 
   const validation = useFormik({
     initialValues: {
       centerName: "",
-      ownerName: "",
-      mobileNumber: "",
-      emailId: "",
-      location: "",
-      branchId: "",
-      userType: "",
+      bankName: "",
+      userNameCode: "",
       password: "",
     },
     validationSchema: Yup.object({
       centerName: Yup.string().required("Please enter center name"),
-      ownerName: Yup.string().required("Please enter owner name"),
-      mobileNumber: Yup.string().required("Please enter mobile number"),
-      emailId: Yup.string().required("Please enter email id"),
-      location: Yup.string().required("Please enter location"),
-      branchId: Yup.string().required("Please enter branch id"),
-      userType: Yup.string(),
-      password: Yup.string().required("Please enter password id"),
+      bankName: Yup.string().required("Please enter bank name"),
+      userNameCode: Yup.string().required("Please enter user name / code"),
+      password: Yup.string().required("Please enter password"),
     }),
     onSubmit: (values) => {
-      isEditingCenter
-        ? dispatch(updateCenter({ values, centerId: listCenterId }))
-        : dispatch(createCenter(values));
+      isEditingBankCode
+        ? dispatch(updateBankCode({ values, bankCodeId: listBankCodeId }))
+        : dispatch(createBankCode(values));
     },
   });
 
@@ -90,21 +89,17 @@ const BankCode = () => {
   }
 
   //   function handleEditUser(userData) {
-  function handleEditCenter(centerData) {
-    setIsEditingCenter(true);
+  function handleEditBankCode(bankCodeData) {
+    setIsEditingBankCode(true);
     setmodal_list(!modal_list);
-    setListCenterId(centerData.id);
+    setListBankCodeId(bankCodeData.id);
 
     // setting the value of role according to roleId because in select element roleId is used as value
     validation.setValues({
-      centerName: centerData.centerName,
-      ownerName: centerData.ownerName,
-      mobileNumber: centerData.mobileNumber,
-      location: centerData.location,
-      branchId: centerData.branchId,
-      status: centerData.status,
-      emailId: centerData.emailId,
-      password: centerData.password,
+      centerName: bankCodeData.centerName,
+      bankName: bankCodeData.bankName,
+      userNameCode: bankCodeData.userNameCode,
+      password: bankCodeData.password,
     });
   }
 
@@ -127,12 +122,12 @@ const BankCode = () => {
     },
   ];
 
-  document.title = "All Centers";
+  document.title = "Bank Code";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="All Centers" pageTitle="Centers" />
+          <BreadCrumb title="Bank Code" pageTitle="Centers" />
           <Row>
             <Col lg={12}>
               <Card>
@@ -150,7 +145,7 @@ const BankCode = () => {
                             className="form-control bg-light border-light"
                             autoComplete="off"
                             id="searchList"
-                            placeholder="Search center"
+                            placeholder="Search Bank Code"
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -200,7 +195,10 @@ const BankCode = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {bankCodeData?.map((bankCode) => (
+                          {(filteredBankCodes.length > 0
+                            ? filteredBankCodes
+                            : bankCodes
+                          )?.map((bankCode) => (
                             <tr key={bankCode?.id}>
                               <td className="id">
                                 <Link to="#" className="fw-medium link-primary">
@@ -229,7 +227,7 @@ const BankCode = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
                                       onClick={() => {
-                                        handleEditCenter(center);
+                                        handleEditBankCode(bankCode);
                                       }}
                                     >
                                       Edit
@@ -241,7 +239,7 @@ const BankCode = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                       onClick={() => {
-                                        setListCenterId(center.id);
+                                        setListBankCodeId(bankCode.id);
                                         setmodal_delete(true);
                                       }}
                                     >
@@ -280,8 +278,9 @@ const BankCode = () => {
       <ToastContainer />
 
       <AddBankCodeModal
+        centers={centers}
         validation={validation}
-        isEditingCenter={isEditingCenter}
+        isEditingBankCode={isEditingBankCode}
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
@@ -292,7 +291,7 @@ const BankCode = () => {
         setmodal_delete={setmodal_delete}
         tog_delete={tog_delete}
         handleDeleteCenter={() => {
-          dispatch(removeCenter({ centerId: listCenterId }));
+          dispatch(removeBankCode({ bankCodeId: listBankCodeId }));
           setmodal_delete(false);
         }}
       />

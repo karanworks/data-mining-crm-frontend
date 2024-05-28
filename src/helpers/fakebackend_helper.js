@@ -526,6 +526,35 @@ export const removeCenter = (centerId) => {
   );
 };
 
+// *****************************************************************
+// *********************** BANK CODE *******************************
+// *****************************************************************
+export const getBankCodes = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/bank-codes`);
+};
+
+export const createBankCode = (data) => {
+  console.log("BANK CODE CREATE API CALL ->", data);
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/bank-code/create`,
+    data
+  );
+};
+
+export const updateBankCode = (bankCodeId, data) => {
+  console.log("BANK CODE UPDATE API CALL ->", bankCodeId, data);
+  return api.update(
+    `${process.env.REACT_APP_SERVER_URL}/bank-code/${bankCodeId}/edit`,
+    data
+  );
+};
+
+export const removeBankCode = (bankCodeId) => {
+  return api.delete(
+    `${process.env.REACT_APP_SERVER_URL}/bank-code/${bankCodeId}/delete`
+  );
+};
+
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);

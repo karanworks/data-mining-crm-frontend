@@ -13,13 +13,42 @@ import Select from "react-select";
 import { useState } from "react";
 
 function AddBankCodeModal({
+  centers,
   modal_list,
   tog_list,
   formHandleSubmit,
   validation,
-  isEditingCenter,
+  isEditingBankCode,
   alreadyRegisteredError,
 }) {
+  const [selectedSingleCenterName, setSelectedSingleCenterName] =
+    useState(null);
+
+  const [selectedSingleBankName, setSelectedSingleBankName] = useState(null);
+
+  function handleSelectSingleCenter(centerName) {
+    setSelectedSingleCenterName(centerName);
+  }
+
+  function handleSelectSingleBank(bankName) {
+    setSelectedSingleBankName(bankName);
+  }
+
+  let CenterOptions = centers?.map((center) => {
+    return { value: center.centerName, label: center.centerName };
+  });
+
+  const TemporaryBankNameOptions = [
+    { value: "Axis Bank", label: "Axis Bank" },
+    { value: "HDFC Bank", label: "HDFC Bank" },
+    { value: "ICICI Bank", label: "ICICI Bank" },
+    { value: "AU Bank", label: "AU Bank" },
+  ];
+
+  // let BankNameOptions = banks?.map((bank) => {
+  //   return { value: bank.bankName, label: bank.bankName };
+  // });
+
   return (
     <Modal
       isOpen={modal_list}
@@ -34,7 +63,7 @@ function AddBankCodeModal({
           tog_list();
         }}
       >
-        {isEditingCenter ? "Update Center" : "Add Center"}
+        {isEditingBankCode ? "Update Bank Code" : "Add Bank Code"}
       </ModalHeader>
       <Form className="tablelist-form" onSubmit={(e) => formHandleSubmit(e)}>
         <ModalBody style={{ paddingTop: "0px" }}>
@@ -48,201 +77,65 @@ function AddBankCodeModal({
             <Label htmlFor="centerName" className="form-label">
               Center Name
             </Label>
-
-            <Input
+            <Select
               id="centerName"
               name="centerName"
+              value={selectedSingleCenterName}
+              onChange={(centerName) => {
+                handleSelectSingleCenter(centerName);
+                validation.setFieldValue("centerName", centerName.value);
+              }}
+              options={CenterOptions}
+              placeholder="Select Center Name"
+            />
+          </div>
+          <div className="mb-2">
+            <Label htmlFor="bankName" className="form-label">
+              Bank Name
+            </Label>
+            <Select
+              id="bankName"
+              name="bankName"
+              value={selectedSingleBankName}
+              onChange={(bankName) => {
+                handleSelectSingleBank(bankName);
+                validation.setFieldValue("bankName", bankName.value);
+              }}
+              options={TemporaryBankNameOptions}
+              placeholder="Select Bank Name"
+            />
+          </div>
+
+          <div className="mb-2">
+            <Label htmlFor="userNameCode" className="form-label">
+              User Name/Code
+            </Label>
+
+            <Input
+              id="userNameCode"
+              name="userNameCode"
               className="form-control"
-              placeholder="Enter Center Name"
+              placeholder="Enter User Name/Code"
               type="text"
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.centerName || ""}
+              value={validation.values.userNameCode || ""}
               invalid={
-                validation.touched.centerName && validation.errors.centerName
+                validation.touched.userNameCode &&
+                validation.errors.userNameCode
                   ? true
                   : false
               }
             />
 
-            {validation.touched.centerName && validation.errors.centerName ? (
+            {validation.touched.userNameCode &&
+            validation.errors.userNameCode ? (
               <FormFeedback type="invalid">
-                {validation.errors.centerName}
-              </FormFeedback>
-            ) : null}
-          </div>
-          <div className="mb-2">
-            <Label htmlFor="ownerName" className="form-label">
-              Owner Name
-            </Label>
-
-            <Input
-              id="ownerName"
-              name="ownerName"
-              className="form-control"
-              placeholder="Enter Owner Name"
-              type="text"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.ownerName || ""}
-              invalid={
-                validation.touched.ownerName && validation.errors.ownerName
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.ownerName && validation.errors.ownerName ? (
-              <FormFeedback type="invalid">
-                {validation.errors.ownerName}
-              </FormFeedback>
-            ) : null}
-          </div>
-          <div className="mb-2">
-            <Label htmlFor="mobileNumber" className="form-label">
-              Mobile Number
-            </Label>
-
-            <Input
-              id="mobileNumber"
-              name="mobileNumber"
-              className="form-control"
-              placeholder="Enter Mobile Number"
-              type="text"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.mobileNumber || ""}
-              invalid={
-                validation.touched.mobileNumber &&
-                validation.errors.mobileNumber
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.mobileNumber &&
-            validation.errors.mobileNumber ? (
-              <FormFeedback type="invalid">
-                {validation.errors.mobileNumber}
+                {validation.errors.userNameCode}
               </FormFeedback>
             ) : null}
           </div>
 
-          <div className="mb-2">
-            <Label htmlFor="emailId" className="form-label">
-              Email
-            </Label>
-
-            <Input
-              id="emailId"
-              name="emailId"
-              className="form-control"
-              placeholder="Enter Email Id"
-              type="email"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.emailId || ""}
-              invalid={
-                validation.touched.emailId && validation.errors.emailId
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.emailId && validation.errors.emailId ? (
-              <FormFeedback type="invalid">
-                {validation.errors.emailId}
-              </FormFeedback>
-            ) : null}
-          </div>
-
-          <div className="mb-2">
-            <Label htmlFor="location" className="form-label">
-              Location
-            </Label>
-
-            <Input
-              id="location"
-              name="location"
-              className="form-control"
-              placeholder="Enter Location"
-              type="text"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.location || ""}
-              invalid={
-                validation.touched.location && validation.errors.location
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.location && validation.errors.location ? (
-              <FormFeedback type="invalid">
-                {validation.errors.location}
-              </FormFeedback>
-            ) : null}
-          </div>
-          <div className="mb-2">
-            <Label htmlFor="branchId" className="form-label">
-              Branch ID
-            </Label>
-
-            <Input
-              id="branchId"
-              name="branchId"
-              className="form-control"
-              placeholder="Enter Branch Id"
-              type="text"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.branchId || ""}
-              invalid={
-                validation.touched.branchId && validation.errors.branchId
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.branchId && validation.errors.branchId ? (
-              <FormFeedback type="invalid">
-                {validation.errors.branchId}
-              </FormFeedback>
-            ) : null}
-          </div>
-
-          <div className="mb-2">
-            <Label htmlFor="userType" className="form-label">
-              User Type
-            </Label>
-            <Input
-              id="userType"
-              name="userType"
-              className="form-control"
-              type="select"
-              onChange={() => {}}
-              onBlur={validation.handleBlur}
-              value={validation.values.userType || ""}
-              invalid={
-                validation.touched.userType && validation.errors.userType
-                  ? true
-                  : false
-              }
-            >
-              <option value="" disabled>
-                Select User Type
-              </option>
-
-              <option value="Admin">Admin</option>
-              <option value="Branch Manager">Branch Manager</option>
-            </Input>
-
-            {validation.touched.role && validation.errors.role ? (
-              <FormFeedback type="invalid">
-                {validation.errors.role}
-              </FormFeedback>
-            ) : null}
-          </div>
           <div className="mb-2">
             <Label htmlFor="password" className="form-label">
               Password
@@ -253,7 +146,7 @@ function AddBankCodeModal({
               name="password"
               className="form-control"
               placeholder="Enter Password"
-              type="password"
+              type="text"
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.password || ""}
@@ -273,7 +166,7 @@ function AddBankCodeModal({
 
           <div className="text-end">
             <button type="submit" className="btn btn-primary">
-              {isEditingCenter ? "Update Center" : "Save Center"}
+              {isEditingBankCode ? "Update Bank Code" : "Save Bank Code"}
             </button>
           </div>
         </ModalBody>
