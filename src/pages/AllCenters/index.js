@@ -20,6 +20,7 @@ import {
   removeCenter,
   updateCenter,
 } from "../../slices/Centers/thunk";
+import { searchCenters } from "../../slices/Centers/reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -37,7 +38,7 @@ const AllCenters = () => {
 
   const dispatch = useDispatch();
 
-  const { centers } = useSelector((state) => state.Centers);
+  const { centers, filteredCenters } = useSelector((state) => state.Centers);
   const { roles } = useSelector((state) => state.Mapping);
 
   function tog_list() {
@@ -52,6 +53,10 @@ const AllCenters = () => {
     dispatch(getCenters());
     dispatch(getRoles());
   }, [dispatch]);
+
+  function handleSearchCenter(e) {
+    dispatch(searchCenters(e.target.value));
+  }
 
   const validation = useFormik({
     initialValues: {
@@ -155,6 +160,7 @@ const AllCenters = () => {
                             className="form-control bg-light border-light"
                             autoComplete="off"
                             id="searchList"
+                            onChange={handleSearchCenter}
                             placeholder="Search center"
                           />
                           <i className="ri-search-line search-icon"></i>
@@ -209,7 +215,10 @@ const AllCenters = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {centers?.map((center) => (
+                          {(filteredCenters.length > 0
+                            ? filteredCenters
+                            : centers
+                          )?.map((center) => (
                             <tr key={center?.id}>
                               <td className="id">
                                 <Link to="#" className="fw-medium link-primary">

@@ -1,17 +1,32 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { getCenters, createCenter, removeCenter, updateCenter } from "./thunk";
 
 export const initialState = {
-  centers: [], // list of all users
-  alreadyRegisteredError: null, // if user with same email, mobile number already registered
+  centers: [],
+  filteredCenters: [], // centers that gets filtered after searching
+  alreadyRegisteredError: null,
   error: "",
 };
 
 const centersSlice = createSlice({
   name: "centers",
   initialState,
-  reducers: {},
+  reducers: {
+    searchCenters(state, action) {
+      const inputValue = action.payload.toLowerCase();
+
+      if (inputValue === "") {
+        state.filteredCenters = [];
+      } else {
+        state.filteredCenters = state.centers.filter((center) => {
+          return Object.values(center).some((centerVal) => {
+            return String(centerVal).toLowerCase().includes(inputValue);
+          });
+        });
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCenters.fulfilled, (state, action) => {
       if (action.payload.status === "failure") {
@@ -79,4 +94,5 @@ const centersSlice = createSlice({
   },
 });
 
+export const { searchCenters } = centersSlice.actions;
 export default centersSlice.reducer;
