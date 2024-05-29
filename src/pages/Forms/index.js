@@ -18,8 +18,70 @@ import {
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
+import Select from "react-select";
+import Flatpickr from "react-flatpickr";
 
 const Forms = () => {
+  const [selectedSingleEmployeeName, setSelectedSingleEmployeeName] =
+    useState(null);
+
+  const [selectedSingleBank, setSelectedSingleBank] = useState(null);
+
+  const [selectedSingleClientType, setSelectedSingleClientType] =
+    useState(null);
+
+  function handleSelectSingleEmployeeName(employeeName) {
+    setSelectedSingleEmployeeName(employeeName);
+  }
+  function handleSelectSingleBankName(bankName) {
+    setSelectedSingleBank(bankName);
+  }
+  function handleSelectSingleClientType(clientType) {
+    setSelectedSingleClientType(clientType);
+  }
+
+  const employeeOptions = [
+    {
+      value: "Already Applied",
+      label: "Already Applied",
+    },
+    {
+      value: "Client Denied",
+      label: "Client Denied",
+    },
+    {
+      value: "Link Sent",
+      label: "Link Sent",
+    },
+  ];
+  const bankOptions = [
+    {
+      value: "Axis Bank",
+      label: "Axis Bank",
+    },
+    {
+      value: "HDFC Bank",
+      label: "HDFC Bank",
+    },
+    {
+      value: "AU Bank",
+      label: "AU Bank",
+    },
+  ];
+  const clientTypeOptions = [
+    {
+      value: "Salaried",
+      label: "Salaried",
+    },
+    {
+      value: "Self Employed",
+      label: "Self Employed",
+    },
+    {
+      value: "Business Man",
+      label: "Business Man",
+    },
+  ];
   const [arrowNavTab, setarrowNavTab] = useState("1");
   const arrowNavToggle = (tab) => {
     if (arrowNavTab !== tab) {
@@ -112,11 +174,21 @@ const Forms = () => {
                                         >
                                           Employee Name
                                         </Label>
-                                        <Input
-                                          type="text"
-                                          className="form-control"
-                                          placeholder="Enter your Employee "
-                                          id="firstNameinput"
+                                        <Select
+                                          id="centerName"
+                                          name="centerName"
+                                          value={selectedSingleEmployeeName}
+                                          onChange={(employeeName) => {
+                                            handleSelectSingleEmployeeName(
+                                              employeeName
+                                            );
+                                            // validation.setFieldValue(
+                                            //   "centerName",
+                                            //   centerName.value
+                                            // );
+                                          }}
+                                          options={employeeOptions}
+                                          placeholder="Employee Name"
                                         />
                                       </div>
                                     </Col>
@@ -128,11 +200,21 @@ const Forms = () => {
                                         >
                                           Bank Name
                                         </Label>
-                                        <Input
-                                          type="text"
-                                          className="form-control"
-                                          placeholder="Enter your lastname"
-                                          id="lastNameinput"
+                                        <Select
+                                          id="bankName"
+                                          name="bankName"
+                                          value={selectedSingleBank}
+                                          onChange={(bankName) => {
+                                            handleSelectSingleBankName(
+                                              bankName
+                                            );
+                                            // validation.setFieldValue(
+                                            //   "centerName",
+                                            //   centerName.value
+                                            // );
+                                          }}
+                                          options={bankOptions}
+                                          placeholder="Bank Name"
                                         />
                                       </div>
                                     </Col>
@@ -144,11 +226,21 @@ const Forms = () => {
                                         >
                                           Client Type
                                         </Label>
-                                        <Input
-                                          type="text"
-                                          className="form-control"
-                                          placeholder="Enter company name"
-                                          id="compnayNameinput"
+                                        <Select
+                                          id="clientType"
+                                          name="clientType"
+                                          value={selectedSingleClientType}
+                                          onChange={(clientType) => {
+                                            handleSelectSingleClientType(
+                                              clientType
+                                            );
+                                            // validation.setFieldValue(
+                                            //   "centerName",
+                                            //   centerName.value
+                                            // );
+                                          }}
+                                          options={clientTypeOptions}
+                                          placeholder="Client Type"
                                         />
                                       </div>
                                     </Col>
@@ -211,7 +303,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter pin code"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -224,15 +316,13 @@ const Forms = () => {
                                         >
                                           Client DOB
                                         </Label>
-                                        <select
-                                          id="ForminputState"
-                                          className="form-select text-muted"
-                                          data-choices
-                                          data-choices-sorting="true"
-                                        >
-                                          <option>Choose...</option>
-                                          <option>...</option>
-                                        </select>
+                                        <Flatpickr
+                                          className="form-control border dash-filter-picker"
+                                          placeholder="Date Range"
+                                          options={{
+                                            dateFormat: "d M, Y",
+                                          }}
+                                        />
                                       </div>
                                     </Col>
                                     <Col md={4}>
@@ -246,7 +336,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter mother name"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -262,7 +352,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter father name"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -278,7 +368,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter company name"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -294,7 +384,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter company address"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -310,7 +400,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter income"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -326,7 +416,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter email id"
                                           id="citynameInput"
                                         />
                                       </div>
@@ -342,7 +432,7 @@ const Forms = () => {
                                         <Input
                                           type="text"
                                           className="form-control"
-                                          placeholder="Enter your city"
+                                          placeholder="Enter Pan no"
                                           id="citynameInput"
                                         />
                                       </div>

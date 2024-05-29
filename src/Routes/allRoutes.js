@@ -26,6 +26,8 @@ import PendingForms from "../pages/PendingForms";
 import ReportUpload from "../pages/ReportUpload";
 import AssignData from "../pages/AssignData";
 import TalktimeUpload from "../pages/TalktimeUpload";
+import CallHistory from "../pages/CallHistory";
+import AppData from "../pages/AppData";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -42,6 +44,8 @@ const authProtectedRoutes = [
   { path: "/report-upload", component: <ReportUpload /> },
   { path: "/assign-data", component: <AssignData /> },
   { path: "/talktime-upload", component: <TalktimeUpload /> },
+  { path: "/call-history", component: <CallHistory /> },
+  { path: "/app-data", component: <AppData /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile

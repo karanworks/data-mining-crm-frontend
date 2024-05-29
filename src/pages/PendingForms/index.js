@@ -109,7 +109,8 @@ const PendingForms = () => {
                       </Col>
                     </Row>
 
-                    <div className="table-responsive table-card mt-3 mb-1">
+                    {/* Removed this "table-responsive" class */}
+                    <div className="table-card mt-3 mb-1">
                       <table className="table align-middle table-nowrap">
                         <thead className="table-light">
                           <tr>
@@ -155,7 +156,8 @@ const PendingForms = () => {
                             >
                               <Input
                                 type="text"
-                                placeholder="Enter application number"
+                                placeholder="Application number"
+                                style={{ width: "auto" }}
                               />
                               <Select
                                 id="formStatus"
