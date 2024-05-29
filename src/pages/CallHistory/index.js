@@ -143,11 +143,11 @@ const CallHistory = () => {
                           </button> */}
                           <button
                             type="button"
-                            class="btn btn-success custom-toggle"
+                            className="btn btn-success custom-toggle"
                             data-bs-toggle="button"
                           >
-                            <span class="icon-on">
-                              <i class="ri-file-download-fill align-bottom me-1"></i>{" "}
+                            <span className="icon-on">
+                              <i className="ri-file-download-fill align-bottom me-1"></i>{" "}
                               Download Data
                             </span>
                           </button>

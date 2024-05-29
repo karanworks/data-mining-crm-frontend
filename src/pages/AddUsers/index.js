@@ -26,6 +26,13 @@ import {
   removeUser,
   updateUser,
 } from "../../slices/Users/thunk";
+
+import {
+  getCenterUsers,
+  createCenterUser,
+  removeCenterUser,
+  updateCenterUser,
+} from "../../slices/AddUsers/thunk";
 import { useNavigate } from "react-router-dom";
 import { getCenters } from "../../slices/Centers/thunk";
 
@@ -109,8 +116,11 @@ const AddUsers = () => {
     }),
     onSubmit: (values) => {
       isEditingUser
-        ? dispatch(updateUser({ values, userId: listUserId }))
-        : dispatch(createUser(values));
+        ? dispatch(updateCenterUser({ values, userId: listUserId }))
+        : dispatch(createCenterUser(values));
+      // isEditingUser
+      //   ? dispatch(updateUser({ values, userId: listUserId }))
+      //   : dispatch(createUser(values));
     },
   });
 
@@ -145,22 +155,36 @@ const AddUsers = () => {
     });
   }
 
-  document.title = "Users";
+  document.title = "All Users";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Users" pageTitle="System Configuration" />
+          <BreadCrumb title="All Users" pageTitle="Centers" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Create a user</h4>
+                  <h4 className="card-title mb-0">All Users</h4>
                 </CardHeader>
 
                 <CardBody>
                   <div className="listjs-table" id="userList">
-                    <Row className="g-4 mb-3">
+                    <Row className="g-4 mb-3 d-flex justify-content-between">
+                      <Col className="col-sm-auto">
+                        <div className="search-box">
+                          <input
+                            type="text"
+                            className="form-control bg-light border-light"
+                            autoComplete="off"
+                            id="searchList"
+                            onChange={() => {}}
+                            placeholder="Search User"
+                          />
+                          <i className="ri-search-line search-icon"></i>
+                        </div>
+                      </Col>
+
                       <Col className="col-sm-auto">
                         <div>
                           <Button

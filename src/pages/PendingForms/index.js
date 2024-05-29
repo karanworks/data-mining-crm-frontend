@@ -100,9 +100,9 @@ const PendingForms = () => {
 
                           <button
                             type="button"
-                            class="btn btn-primary btn-label waves-effect waves-light"
+                            className="btn btn-primary btn-label waves-effect waves-light"
                           >
-                            <i class="ri-equalizer-fill label-icon align-middle fs-16 me-2"></i>
+                            <i className="ri-equalizer-fill label-icon align-middle fs-16 me-2"></i>
                             Apply Filters
                           </button>
                         </div>

@@ -10,6 +10,7 @@ import MappingReducer from "./Mapping/reducer";
 import ReportReducer from "./Report/reducer";
 import CenterReducer from "./Centers/reducer";
 import BankCodeReducer from "./BankCode/reducer";
+import AddUsersReducer from "./AddUsers/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   Report: ReportReducer,
   Centers: CenterReducer,
   BankCodes: BankCodeReducer,
+  AddUsers: AddUsersReducer,
   ForgetPassword: ForgetPasswordReducer,
   Profile: ProfileReducer,
 });

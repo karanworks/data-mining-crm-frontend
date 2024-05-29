@@ -96,14 +96,14 @@ const ReportUpload = () => {
                     <button className="btn btn-primary ">
                       {" "}
                       <i
-                        class="ri-file-upload-line"
+                        className="ri-file-upload-line"
                         style={{ marginRight: "5px" }}
                       ></i>
                       Upload
                     </button>
                     <button className="btn btn-success">
                       <i
-                        class="ri-file-download-line"
+                        className="ri-file-download-line"
                         style={{ marginRight: "5px" }}
                       ></i>
                       Download Sample File

@@ -121,7 +121,7 @@ const AssignData = () => {
                         <button className="btn btn-primary ">
                           {" "}
                           <i
-                            class="ri-file-upload-line"
+                            className="ri-file-upload-line"
                             style={{ marginRight: "5px" }}
                           ></i>
                           Upload

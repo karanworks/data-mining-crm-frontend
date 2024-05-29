@@ -62,7 +62,7 @@ const AppData = () => {
       workProgress: 100,
     },
     {
-      id: 1,
+      id: 2,
       empName: "Karan",
       email: "karan@gmail.com",
       dataAssigned: 100,
@@ -158,16 +158,14 @@ const AppData = () => {
                             <i className="ri-equalizer-fill label-icon align-middle fs-16 me-2"></i>
                             Apply Filters
                           </button>
-                          {/* <button type="button" class="btn btn-success">
-                            Download Data
-                          </button> */}
+
                           <button
                             type="button"
-                            class="btn btn-success custom-toggle"
+                            className="btn btn-success custom-toggle"
                             data-bs-toggle="button"
                           >
-                            <span class="icon-on">
-                              <i class="ri-file-download-fill align-bottom me-1"></i>{" "}
+                            <span className="icon-on">
+                              <i className="ri-file-download-fill align-bottom me-1"></i>{" "}
                               Download Data
                             </span>
                           </button>
@@ -203,7 +201,7 @@ const AppData = () => {
                         </thead>
                         <tbody className="list form-check-all">
                           {userProgressData?.map((userData) => (
-                            <tr>
+                            <tr key={userData.id}>
                               <td>1</td>
                               <td className="d-flex align-items-center">
                                 <img
@@ -216,7 +214,7 @@ const AppData = () => {
                                     {userData.empName}
                                   </h5>
                                   <p className="fs-12 mb-0 text-muted">
-                                    <span class="badge bg-primary-subtle text-primary fs-12">
+                                    <span className="badge bg-primary-subtle text-primary fs-12">
                                       {userData.email}
                                     </span>
                                   </p>
@@ -225,10 +223,10 @@ const AppData = () => {
                               <td>{userData.dataAssigned}</td>
                               <td>{userData.completed}</td>
                               <td>
-                                <div class="flex-grow-1">
-                                  <div class="progress animated-progress custom-progress progress-label">
+                                <div className="flex-grow-1">
+                                  <div className="progress animated-progress custom-progress progress-label">
                                     <div
-                                      class="progress-bar bg-primary"
+                                      className="progress-bar bg-primary"
                                       role="progressbar"
                                       style={{
                                         width: `${userData.workProgress}%`,
@@ -237,8 +235,8 @@ const AppData = () => {
                                       aria-valuemin="0"
                                       aria-valuemax="100"
                                     >
-                                      <div class="label">
-                                        {userData.workProgress}
+                                      <div className="label">
+                                        {userData.workProgress}%
                                       </div>
                                     </div>
                                   </div>

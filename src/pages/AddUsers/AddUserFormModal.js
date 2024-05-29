@@ -84,7 +84,7 @@ function AddUserFormModal({
               name="userType"
               className="form-control"
               type="select"
-              onChange={handleRoleChange}
+              onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.userType || ""}
               invalid={

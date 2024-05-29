@@ -20,6 +20,14 @@ import {
   removeCenter,
   updateCenter,
 } from "../../slices/Centers/thunk";
+
+import {
+  getUsers,
+  createUser,
+  removeUser,
+  updateUser,
+} from "../../slices/Users/thunk";
+
 import { searchCenters } from "../../slices/Centers/reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -80,34 +88,33 @@ const AllCenters = () => {
       password: Yup.string().required("Please enter password id"),
     }),
     onSubmit: (values) => {
-      isEditingCenter
-        ? dispatch(updateCenter({ values, centerId: listCenterId }))
-        : dispatch(createCenter(values));
+      if (isEditingCenter) {
+        dispatch(updateCenter({ values, centerId: listCenterId }));
+        dispatch(
+          updateUser({
+            name: values.centerName,
+            email: values.emailId,
+            password: values.password,
+            roleId: values.userType,
+          })
+        );
+      } else {
+        dispatch(createCenter(values));
+        dispatch(
+          createUser({
+            name: values.centerName,
+            email: values.emailId,
+            password: values.password,
+            roleId: values.userType,
+          })
+        );
+      }
+
+      // isEditingCenter
+      //   ? dispatch(updateCenter({ values, centerId: listCenterId }))
+      //   : dispatch(createCenter(values));
     },
   });
-
-  const centersData = [
-    {
-      id: 1,
-      centerName: "Ascent Bpo",
-      ownerName: "Arhaan Rajak",
-      mobileNumber: "9999999999",
-      emailId: "arhaanji@live.com",
-      password: "132112",
-      branchId: "ABSABSCC",
-      status: "Activate",
-    },
-    {
-      id: 2,
-      centerName: "Credit Rupay",
-      ownerName: "Vipin Tomar",
-      mobileNumber: "1111111111",
-      emailId: "creditrupay@gmail.com",
-      password: "tomar@13211	",
-      branchId: "CRNABSCC",
-      status: "Deactivate",
-    },
-  ];
 
   function formHandleSubmit(e) {
     e.preventDefault();

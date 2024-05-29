@@ -221,7 +221,10 @@ function AddCenterModal({
               name="userType"
               className="form-control"
               type="select"
-              onChange={() => {}}
+              // onChange={(value) => {
+              //   console.log("ROLE NAME WHILE CREATING CENTER ->", value);
+              // }}
+              onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.userType || ""}
               invalid={
@@ -235,7 +238,7 @@ function AddCenterModal({
               </option>
 
               {roles?.map((role) => (
-                <option key={role.id} value={role.name}>
+                <option key={role.id} value={role.id}>
                   {role.name}
                 </option>
               ))}

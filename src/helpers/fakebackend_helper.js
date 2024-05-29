@@ -555,6 +555,35 @@ export const removeBankCode = (bankCodeId) => {
   );
 };
 
+// *****************************************************************
+// *********************** CENTER USERS ****************************
+// *****************************************************************
+export const getCenterUsers = ({ centerId }) => {
+  return api.get(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-users`
+  );
+};
+
+export const createCenterUser = (data) => {
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/center/${data.centerId}/center-user/create`,
+    data
+  );
+};
+
+export const updateCenterUser = (centerId, centerUserId, data) => {
+  return api.update(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
+    data
+  );
+};
+
+export const removeCenterUser = (centerId, centerUserId) => {
+  return api.delete(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
+  );
+};
+
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);
