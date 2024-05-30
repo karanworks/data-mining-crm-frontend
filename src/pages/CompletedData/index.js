@@ -16,6 +16,7 @@ import {
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import Select from "react-select";
+import Flatpickr from "react-flatpickr";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddUserFormModal from "./AddUserFormModal";
@@ -38,7 +39,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getCenters } from "../../slices/Centers/thunk";
 
-const AddClient = () => {
+const CompletedData = () => {
   // register / edit user modal state whether modal is open or not
   const [modal_list, setmodal_list] = useState(false);
   // this state triggers when editing the user
@@ -49,9 +50,6 @@ const AddClient = () => {
   const [listUserId, setListUserId] = useState(null);
   // fetching all the roles
   const [roles, setRoles] = useState([]);
-
-  const [selectedSingleUserStatus, setSelectedSingleUserStatus] =
-    useState(null);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
   const { centers } = useSelector((state) => state.Centers);
@@ -92,21 +90,6 @@ const AddClient = () => {
     dispatch(getUsers());
     dispatch(getCenters());
   }, [dispatch]);
-
-  function handleSelectSingleUserStatus(status) {
-    setSelectedSingleUserStatus(status);
-  }
-
-  const userStatusOptions = [
-    {
-      value: "Active",
-      label: "Active",
-    },
-    {
-      value: "Inactive",
-      label: "Inactive",
-    },
-  ];
 
   // formik setup
   const validation = useFormik({
@@ -182,27 +165,102 @@ const AddClient = () => {
     });
   }
 
-  const tempUserData = [
+  const tempCompanyData = [
     {
       id: 1,
       username: "demoavs_1",
-      password: "12345",
-      type: "User",
-      email: "arvindsarawa@gmail.com",
-      contact: "9999999999",
-      dataType: "L2 User",
+      dateAndTime: "2024-02-12 06:23:39",
+      companyInfo: "Company info",
+      businessType: "Manufacturer",
       status: "Inactive",
+      verified: "Yes",
     },
     {
       id: 2,
       username: "demoavs_2",
-      password: "12345",
-      type: "User",
-      email: "arvindsarawa@gmail.com",
-      contact: "9999999999",
-      dataType: "L1 User",
-      status: "Active",
+      dateAndTime: "2024-02-12 06:23:39",
+      companyInfo: "Company info",
+      businessType: "Trader",
+      status: "Actove",
+      verified: "No",
     },
+  ];
+
+  const tempUserData = [
+    {
+      id: 1,
+      name: "User 1",
+    },
+    {
+      id: 2,
+      name: "User 2",
+    },
+    {
+      id: 3,
+      name: "User 3",
+    },
+  ];
+
+  const tempBusinessTypeData = [
+    { id: 1, businessType: "Agriculture" },
+    { id: 2, businessType: "Apparel & Fashion" },
+    { id: 3, businessType: "Automotive Auto Parts" },
+    { id: 4, businessType: "Chemicals" },
+    { id: 5, businessType: "Construction" },
+    { id: 6, businessType: "Food Product" },
+    { id: 7, businessType: "Furniture" },
+    { id: 8, businessType: "Handcrafts & Gifts" },
+    { id: 9, businessType: "Health & Beauty" },
+    { id: 10, businessType: "Industrial Supplies" },
+    { id: 11, businessType: "Jewellery" },
+    { id: 12, businessType: "Machines & Equipment" },
+    { id: 13, businessType: "Jute & Jute Products" },
+    { id: 14, businessType: "Manufacturer" },
+    { id: 15, businessType: "Industrial Services" },
+    { id: 16, businessType: "Exporter" },
+    { id: 17, businessType: "Importer" },
+    { id: 18, businessType: "Trader" },
+    { id: 19, businessType: "Distributer" },
+    { id: 20, businessType: "Supplier" },
+  ];
+
+  const stateData = [
+    { id: 1, state: "Andhra Pradesh" },
+    { id: 2, state: "Arunachal Pradesh" },
+    { id: 3, state: "Assam" },
+    { id: 4, state: "Bihar" },
+    { id: 5, state: "Chhattisgarh" },
+    { id: 6, state: "Goa" },
+    { id: 7, state: "Gujarat" },
+    { id: 8, state: "Haryana" },
+    { id: 9, state: "Himachal Pradesh" },
+    { id: 10, state: "Jharkhand" },
+    { id: 11, state: "Karnataka" },
+    { id: 12, state: "Kerala" },
+    { id: 13, state: "Madhya Pradesh" },
+    { id: 14, state: "Maharashtra" },
+    { id: 15, state: "Manipur" },
+    { id: 16, state: "Meghalaya" },
+    { id: 17, state: "Mizoram" },
+    { id: 18, state: "Nagaland" },
+    { id: 19, state: "Odisha" },
+    { id: 20, state: "Punjab" },
+    { id: 21, state: "Rajasthan" },
+    { id: 22, state: "Sikkim" },
+    { id: 23, state: "Tamil Nadu" },
+    { id: 24, state: "Telangana" },
+    { id: 25, state: "Tripura" },
+    { id: 26, state: "Uttar Pradesh" },
+    { id: 27, state: "Uttarakhand" },
+    { id: 28, state: "West Bengal" },
+    { id: 29, state: "Andaman and Nicobar Islands" },
+    { id: 30, state: "Chandigarh" },
+    { id: 31, state: "Dadra and Nagar Haveli and Daman and Diu" },
+    { id: 32, state: "Lakshadweep" },
+    { id: 33, state: "Delhi" },
+    { id: 34, state: "Puducherry" },
+    { id: 35, state: "Ladakh" },
+    { id: 36, state: "Jammu and Kashmir" },
   ];
 
   document.title = "Add Client";
@@ -244,45 +302,153 @@ const AddClient = () => {
                           >
                             <div>
                               <Input
-                                id="userIdFilter"
-                                name="userIdFilter"
+                                id="url"
+                                name="url"
                                 className="form-control"
                                 type="text"
-                                placeholder="User Id"
+                                placeholder="Webiste URL"
                               />
                             </div>
 
                             <div>
                               <Input
-                                id="contactNoFilter"
-                                name="contactNoFilter"
+                                id="web_status"
+                                name="web_status"
                                 className="form-control"
-                                type="text"
-                                placeholder="Contact No"
-                              />
+                                type="select"
+                                placeholder="Select web status"
+
+                                // onChange={validation.handleChange}
+                                // onBlur={validation.handleBlur}
+                                // value={validation.values.role || ""}
+                                // invalid={
+                                //   validation.touched.role &&
+                                //   validation.errors.role
+                                //     ? true
+                                //     : false
+                                // }
+                              >
+                                <option value="">Select Web Status</option>
+
+                                <option value="Valid">Valid URL</option>
+                                <option value="Invalid URL">Invalid URL</option>
+                                <option value="Flash Website">
+                                  Flash Website
+                                </option>
+                              </Input>
                             </div>
                             <div>
                               <Input
-                                id="emailIdFilter"
-                                name="emailIdFilter"
+                                id="verified"
+                                name="verified"
                                 className="form-control"
-                                type="text"
-                                placeholder="Email Id"
+                                type="select"
+                                placeholder="Select Verified"
+
+                                // onChange={validation.handleChange}
+                                // onBlur={validation.handleBlur}
+                                // value={validation.values.role || ""}
+                                // invalid={
+                                //   validation.touched.role &&
+                                //   validation.errors.role
+                                //     ? true
+                                //     : false
+                                // }
+                              >
+                                <option value="">Select Verified</option>
+
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                              </Input>
+                            </div>
+                            <div>
+                              <Input
+                                id="verified"
+                                name="verified"
+                                className="form-control"
+                                type="select"
+                                placeholder="Select Verified"
+
+                                // onChange={validation.handleChange}
+                                // onBlur={validation.handleBlur}
+                                // value={validation.values.role || ""}
+                                // invalid={
+                                //   validation.touched.role &&
+                                //   validation.errors.role
+                                //     ? true
+                                //     : false
+                                // }
+                              >
+                                <option value="">Select User</option>
+
+                                {tempUserData?.map((user) => (
+                                  <option value={user.name}>{user.name}</option>
+                                ))}
+                              </Input>
+                            </div>
+                            <div>
+                              <Input
+                                id="verified"
+                                name="verified"
+                                className="form-control"
+                                type="select"
+                                placeholder="Select Verified"
+
+                                // onChange={validation.handleChange}
+                                // onBlur={validation.handleBlur}
+                                // value={validation.values.role || ""}
+                                // invalid={
+                                //   validation.touched.role &&
+                                //   validation.errors.role
+                                //     ? true
+                                //     : false
+                                // }
+                              >
+                                <option value="">Select Business Type</option>
+
+                                {tempBusinessTypeData?.map((business) => (
+                                  <option value={business.businessType}>
+                                    {business.businessType}
+                                  </option>
+                                ))}
+                              </Input>
+                            </div>
+                            <div>
+                              <Input
+                                id="state"
+                                name="state"
+                                className="form-control"
+                                type="select"
+                                placeholder="Select State"
+
+                                // onChange={validation.handleChange}
+                                // onBlur={validation.handleBlur}
+                                // value={validation.values.role || ""}
+                                // invalid={
+                                //   validation.touched.role &&
+                                //   validation.errors.role
+                                //     ? true
+                                //     : false
+                                // }
+                              >
+                                <option value="">Select State</option>
+
+                                {stateData?.map((state) => (
+                                  <option value={state.state}>
+                                    {state.state}
+                                  </option>
+                                ))}
+                              </Input>
+                            </div>
+                            <div>
+                              <Flatpickr
+                                className="form-control border dash-filter-picker"
+                                options={{
+                                  mode: "range",
+                                  dateFormat: "d M, Y",
+                                }}
+                                placeholder="Date range"
                               />
-                            </div>
-                            <div>
-                              <select className="form-select mb-3">
-                                <option>User Status </option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                              </select>
-                            </div>
-                            <div>
-                              <select className="form-select mb-3">
-                                <option>Data Type </option>
-                                <option value="L1 User">L1 User</option>
-                                <option value="L2 User">L2 User</option>
-                              </select>
                             </div>
 
                             <div>
@@ -292,7 +458,6 @@ const AddClient = () => {
                                 id="filter-btn"
                               >
                                 <i className="ri-equalizer-line"></i> Apply
-                                filters
                               </Button>
                             </div>
                           </div>
@@ -304,16 +469,16 @@ const AddClient = () => {
                           <Button
                             color="primary"
                             className="add-btn me-1"
-                            onClick={() => tog_list()}
+                            // onClick={() => tog_list()}
                             id="create-btn"
                           >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add New User
+                            <i class="ri-download-fill align-bottom me-1"></i>{" "}
+                            Export Data
                           </Button>
                           <Button
                             color="primary"
                             className="delete-btn me-1"
-                            onClick={() => tog_list()}
+                            // onClick={() => tog_list()}
                             id="create-btn"
                           >
                             <i className="ri-add-line align-bottom me-1"></i>{" "}
@@ -343,27 +508,22 @@ const AddClient = () => {
                             <th className="sort" data-sort="username">
                               Username
                             </th>
-                            <th className="sort" data-sort="password">
-                              Password
+                            <th className="sort" data-sort="dateAndTime">
+                              Date & Time
+                            </th>
+                            <th className="sort" data-sort="companyInfo">
+                              Company Info
                             </th>
                             <th className="sort" data-sort="type">
-                              Type
-                            </th>
-
-                            <th className="sort" data-sort="contact">
-                              Contact
-                            </th>
-
-                            <th className="sort" data-sort="email">
-                              Email
-                            </th>
-
-                            <th className="sort" data-sort="data_type">
-                              Data Type
+                              Business Type
                             </th>
 
                             <th className="sort" data-sort="status">
                               Status
+                            </th>
+
+                            <th className="sort" data-sort="contact">
+                              Verified
                             </th>
 
                             <th className="sort" data-sort="action">
@@ -372,7 +532,7 @@ const AddClient = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {tempUserData?.map((user) => (
+                          {tempCompanyData?.map((user) => (
                             <tr key={user.id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -386,12 +546,19 @@ const AddClient = () => {
                               </th>
 
                               <td className="username">{user.username}</td>
-                              <td className="password">{user.password}</td>
-                              <td className="type">{user.type}</td>
-                              <td className="contact">{user.contact}</td>
-                              <td className="email">{user.email} </td>
-                              <td className="data_type">{user.dataType}</td>
+                              <td className="dateAndTime">
+                                <span class="badge border border-primary text-primary fs-12">
+                                  {user.dateAndTime}
+                                </span>
+                              </td>
+                              <td className="companyInfo">
+                                {user.companyInfo}
+                              </td>
+                              <td className="businessType">
+                                {user.businessType}
+                              </td>
                               <td className="status">{user.status}</td>
+                              <td className="verified">{user.verified} </td>
 
                               <td>
                                 <div className="d-flex gap-2">
@@ -418,6 +585,18 @@ const AddClient = () => {
                                       }}
                                     >
                                       Remove
+                                    </button>
+                                  </div>
+                                  <div className="remove">
+                                    <button
+                                      className="btn btn-sm btn-success remove-item-btn"
+                                      data-bs-toggle="modal"
+                                      onClick={() => {
+                                        // setListUserId(user.id);
+                                        // setmodal_delete(true);
+                                      }}
+                                    >
+                                      View
                                     </button>
                                   </div>
                                 </div>
@@ -493,4 +672,4 @@ const AddClient = () => {
   );
 };
 
-export default AddClient;
+export default CompletedData;
