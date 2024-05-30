@@ -21,7 +21,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddUserFormModal from "./AddUserFormModal";
 import AddUserRemoveModal from "./AddUserRemoveModal";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUsers,
@@ -55,6 +54,7 @@ const CompletedData = () => {
   const { centers } = useSelector((state) => state.Centers);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // toggles register / edit user modal
   function tog_list() {
@@ -262,6 +262,10 @@ const CompletedData = () => {
     { id: 35, state: "Ladakh" },
     { id: 36, state: "Jammu and Kashmir" },
   ];
+
+  function handleViewData() {
+    navigate("/view-data");
+  }
 
   document.title = "Add Client";
   return (
@@ -567,9 +571,7 @@ const CompletedData = () => {
                                       className="btn btn-sm btn-primary edit-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
-                                      onClick={() => {
-                                        // handleEditUser(user);
-                                      }}
+                                      onClick={() => {}}
                                     >
                                       Edit
                                     </button>
@@ -591,10 +593,7 @@ const CompletedData = () => {
                                     <button
                                       className="btn btn-sm btn-success remove-item-btn"
                                       data-bs-toggle="modal"
-                                      onClick={() => {
-                                        // setListUserId(user.id);
-                                        // setmodal_delete(true);
-                                      }}
+                                      onClick={handleViewData}
                                     >
                                       View
                                     </button>

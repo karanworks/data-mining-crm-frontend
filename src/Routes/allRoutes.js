@@ -32,6 +32,8 @@ import TermsAndConditions from "../pages/TermsAndConditions";
 import AddWorkData from "../pages/AddWorkData";
 import AddClient from "../pages/AddClient";
 import CompletedData from "../pages/CompletedData";
+import ViewFilledData from "../pages/ViewFilledData/ViewFilledData";
+import AddData from "../pages/AddData";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -57,6 +59,8 @@ const authProtectedRoutes = [
   { path: "/add-work-data", component: <AddWorkData /> },
   { path: "/add-client", component: <AddClient /> },
   { path: "/completed-data", component: <CompletedData /> },
+  { path: "/view-data", component: <ViewFilledData /> },
+  { path: "/add-data", component: <AddData /> },
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },
