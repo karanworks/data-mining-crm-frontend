@@ -28,6 +28,9 @@ import AssignData from "../pages/AssignData";
 import TalktimeUpload from "../pages/TalktimeUpload";
 import CallHistory from "../pages/CallHistory";
 import AppData from "../pages/AppData";
+import TermsAndConditions from "../pages/TermsAndConditions";
+import AddWorkData from "../pages/AddWorkData";
+import AddClient from "../pages/AddClient";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -46,7 +49,12 @@ const authProtectedRoutes = [
   { path: "/talktime-upload", component: <TalktimeUpload /> },
   { path: "/call-history", component: <CallHistory /> },
   { path: "/app-data", component: <AppData /> },
-  // { path: "/calendar", component: <Calendar /> },
+
+  // SEPARATOR FOR DATA MINING PROJECT
+
+  { path: "/terms-and-conditions", component: <TermsAndConditions /> },
+  { path: "/add-work-data", component: <AddWorkData /> },
+  { path: "/add-client", component: <AddClient /> },
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },

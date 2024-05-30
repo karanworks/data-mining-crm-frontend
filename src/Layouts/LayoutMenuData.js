@@ -14,11 +14,19 @@ const Navdata = () => {
   const menuDataOfUser = userData.data.menus;
 
   //state data
-  // const [isAdminTools, setIsAdminTools] = useState(false);
+
+  const [isManagement, setIsManagement] = useState(false);
+
+  const [isClient, setIsClient] = useState(false);
+
+  const [isWork, setIsWork] = useState(false);
+
+  const [isReports, setIsReports] = useState(false);
+
   const [isSettings, setIsSettings] = useState(false);
-  // const [isLeadManagement, setIsLeadManagement] = useState(false);
+
   const [isCenters, setIsCenters] = useState(false);
-  // const [isPayments, setIsPayments] = useState(false);
+
   const [isDashboard, setIsDashboard] = useState(false);
 
   const [isApplications, setIsApplications] = useState(false);
@@ -56,6 +64,21 @@ const Navdata = () => {
     if (iscurrentState !== "Settings") {
       setIsSettings(false);
     }
+    if (iscurrentState !== "Management") {
+      setIsManagement(false);
+    }
+
+    if (iscurrentState !== "Client") {
+      setIsClient(false);
+    }
+
+    if (iscurrentState !== "Work") {
+      setIsWork(false);
+    }
+
+    if (iscurrentState !== "Reports") {
+      setIsReports(false);
+    }
     // if (iscurrentState !== "LeadManagement") {
     //   setIsLeadManagement(false);
     // }
@@ -89,6 +112,10 @@ const Navdata = () => {
     iscurrentState,
     // isAdminTools,
     isSettings,
+    isManagement,
+    isClient,
+    isWork,
+    isReports,
     // isLeadManagement,
     isCenters,
     // isPayments,
@@ -102,6 +129,10 @@ const Navdata = () => {
 
   const parentMenuStates = {
     // AdminTools: isAdminTools,
+    Management: isManagement,
+    Client: isClient,
+    Work: isWork,
+    Reports: isReports,
     Settings: isSettings,
     Centers: isCenters,
     // LeadManagement: isLeadManagement,
@@ -120,6 +151,22 @@ const Navdata = () => {
         //   setIsAdminTools(!isAdminTools);
         //   setIscurrentState(menuLabelId);
         //   updateIconSidebar(e);
+        case "Management":
+          setIsManagement(!isManagement);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
+        case "Client":
+          setIsClient(!isClient);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
+        case "Work":
+          setIsWork(!isWork);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
+        case "Reports":
+          setIsReports(!isReports);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
         case "Settings":
           setIsSettings(!isSettings);
           setIscurrentState(menuLabelId);
