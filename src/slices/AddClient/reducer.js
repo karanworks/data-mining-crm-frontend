@@ -1,12 +1,19 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { getClients, createClient, removeClient, updateClient } from "./thunk";
+import {
+  getClients,
+  createClient,
+  removeClient,
+  updateClient,
+  getClientUsers,
+} from "./thunk";
 
 export const initialState = {
   clients: [],
   filteredClients: [], // centers that gets filtered after searching
   alreadyRegisteredError: null,
   error: "",
+  clientUsers: [],
 };
 
 const clientSlice = createSlice({
@@ -33,6 +40,16 @@ const clientSlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.clients = action.payload?.data.clients;
+
+        state.error = "";
+      }
+    });
+    builder.addCase(getClientUsers.fulfilled, (state, action) => {
+      console.log("CLIENT payload ->", action?.payload.data);
+      if (action.payload.status === "failure") {
+        state.error = action.payload.message;
+      } else {
+        state.clientUsers = action.payload?.data;
         state.error = "";
       }
     });
@@ -94,5 +111,5 @@ const clientSlice = createSlice({
   },
 });
 
-export const { searchClient } = clientSlice.actions;
+export const { searchClients } = clientSlice.actions;
 export default clientSlice.reducer;

@@ -526,6 +526,13 @@ export const removeClient = (clientId) => {
   );
 };
 
+export const getClientUsers = (clientEmail) => {
+  console.log("CLIENT EMAIL IN FAKE BACKEND ->", clientEmail);
+  return api.get(
+    `${process.env.REACT_APP_SERVER_URL}/client/${clientEmail}/users`
+  );
+};
+
 // *****************************************************************
 // *********************** BANK CODE *******************************
 // *****************************************************************

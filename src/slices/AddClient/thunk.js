@@ -5,6 +5,7 @@ import {
   createClient as createClientApi,
   updateClient as updateClientApi,
   removeClient as removeClientApi,
+  getClientUsers as getClientUsersApi,
 } from "../../helpers/fakebackend_helper";
 
 export const getClients = createAsyncThunk("client/getClients", async () => {
@@ -50,6 +51,19 @@ export const removeClient = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("error inside remove client thunk", error);
+    }
+  }
+);
+
+export const getClientUsers = createAsyncThunk(
+  "client/getClientUsers",
+  async (clientEmail) => {
+    try {
+      const response = await getClientUsersApi(clientEmail);
+
+      return response;
+    } catch (error) {
+      console.log("error inside get client users thunk", error);
     }
   }
 );

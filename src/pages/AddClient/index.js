@@ -16,7 +16,7 @@ import {
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { useFormik } from "formik";
+import { useFormik, validateYupSchema } from "formik";
 import * as Yup from "yup";
 import AddClientFormModal from "./AddClientFormModal";
 import AddClientRemoveModal from "./AddClientRemoveModal";
@@ -41,28 +41,35 @@ import {
   createClient,
   updateClient,
   removeClient,
+  getClientUsers,
 } from "../../slices/AddClient/thunk";
 
+import { searchClients } from "../../slices/AddClient/reducer";
+
 import { useNavigate } from "react-router-dom";
+import ViewUsersModal from "./ViewUsersModal";
 // import { getCenters } from "../../slices/Centers/thunk";
 
 const AddClient = () => {
-  // register / edit user modal state whether modal is open or not
   const [modal_list, setmodal_list] = useState(false);
-  // this state triggers when editing the user
+
   const [isEditingClient, setIsEditingClient] = useState(false);
-  // delete user confirmation modal state
+
   const [modal_delete, setmodal_delete] = useState(false);
-  // when we click on edit / delete user button this state stores that user's id, had to make this state because I needed to have that user's id to make changes to it
+
   const [listClientId, setListClientId] = useState(null);
-  // fetching all the roles
+
+  const [users_view_modal_list, setUsers_view_modal_list] = useState(false);
+
   const [roles, setRoles] = useState([]);
 
   const [selectedSingleUserStatus, setSelectedSingleUserStatus] =
     useState(null);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
-  const { clients } = useSelector((state) => state.Client);
+  const { clients, filteredClients, clientUsers } = useSelector(
+    (state) => state.Client
+  );
 
   const dispatch = useDispatch();
 
@@ -75,6 +82,11 @@ const AddClient = () => {
   // toggles delete user confirmation modal
   function tog_delete() {
     setmodal_delete(!modal_delete);
+  }
+
+  function users_view_tog_list(clientEmail) {
+    setUsers_view_modal_list(!users_view_modal_list);
+    dispatch(getClientUsers(clientEmail));
   }
 
   useEffect(() => {
@@ -143,24 +155,32 @@ const AddClient = () => {
       noOfUsers: Yup.string().required("Enter no of user"),
       startTime: Yup.string().required("Enter start timining"),
       endTime: Yup.string().required("Enter end timining"),
-      userIdDemo: Yup.string().required("Enter user id demo"),
-      userIdLive: Yup.string().required("Enter user id live"),
+      userIdDemo: Yup.string(),
+      userIdLive: Yup.string(),
       password: Yup.string().required("Enter password"),
       image: Yup.string(),
       agreementTalk: Yup.string(),
     }),
     onSubmit: (values) => {
       console.log("CLIENT ADD FORM CALLED ->", values);
-      isEditingClient
-        ? dispatch(updateClient({ values, clientId: listClientId }))
-        : dispatch(createClient(values));
-      // isEditingUser
-      //   ? dispatch(updateUser({ values, userId: listUserId }))
-      //   : dispatch(createUser(values));
+
+      if (isEditingClient) {
+        dispatch(updateClient({ values, clientId: listClientId }));
+      } else {
+        console.log("ELSE CONDITION CALLED");
+        dispatch(createClient(values));
+        dispatch(
+          createUser({
+            email: values.email,
+            noOfUsers: values.noOfUsers,
+            userIdDemo: values.userIdDemo,
+            userIdLive: values.userIdLive,
+            password: values.password,
+          })
+        );
+      }
     },
   });
-
-  console.log("CLIENT ADD FORM VALUES ->", validation.values);
 
   // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit user from
   function formHandleSubmit(e) {
@@ -201,28 +221,11 @@ const AddClient = () => {
     });
   }
 
-  const tempUserData = [
-    {
-      id: 1,
-      username: "demoavs_1",
-      password: "12345",
-      type: "User",
-      email: "arvindsarawa@gmail.com",
-      contact: "9999999999",
-      dataType: "L2 User",
-      status: "Inactive",
-    },
-    {
-      id: 2,
-      username: "demoavs_2",
-      password: "12345",
-      type: "User",
-      email: "arvindsarawa@gmail.com",
-      contact: "9999999999",
-      dataType: "L1 User",
-      status: "Active",
-    },
-  ];
+  function handlefilterClientData(clientData) {}
+
+  function handleFilterData(e) {
+    dispatch(searchClients(e.target.value));
+  }
 
   document.title = "Add Client";
   return (
@@ -240,82 +243,18 @@ const AddClient = () => {
                 <CardBody>
                   <div className="listjs-table" id="userList">
                     <Row className="g-4 mb-3 d-flex justify-content-between">
-                      <Col
-                        className="col-sm-auto d-flex"
-                        style={{ gap: "5px" }}
-                      >
-                        {/* <div className="search-box">
+                      <Col className="col-sm-auto ">
+                        <div className="search-box">
                           <input
                             type="text"
                             className="form-control bg-light border-light"
                             autoComplete="off"
                             id="searchList"
-                            onChange={() => {}}
+                            onChange={handleFilterData}
                             placeholder="Search User"
                           />
                           <i className="ri-search-line search-icon"></i>
-                        </div> */}
-
-                        <Form>
-                          <div
-                            className="d-flex"
-                            style={{ gap: "5px", flexWrap: "wrap" }}
-                          >
-                            <div>
-                              <Input
-                                id="userIdFilter"
-                                name="userIdFilter"
-                                className="form-control"
-                                type="text"
-                                placeholder="User Id"
-                              />
-                            </div>
-
-                            <div>
-                              <Input
-                                id="contactNoFilter"
-                                name="contactNoFilter"
-                                className="form-control"
-                                type="text"
-                                placeholder="Contact No"
-                              />
-                            </div>
-                            <div>
-                              <Input
-                                id="emailIdFilter"
-                                name="emailIdFilter"
-                                className="form-control"
-                                type="text"
-                                placeholder="Email Id"
-                              />
-                            </div>
-                            <div>
-                              <select className="form-select mb-3">
-                                <option>User Status </option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                              </select>
-                            </div>
-                            <div>
-                              <select className="form-select mb-3">
-                                <option>Data Type </option>
-                                <option value="L1 User">L1 User</option>
-                                <option value="L2 User">L2 User</option>
-                              </select>
-                            </div>
-
-                            <div>
-                              <Button
-                                color="primary"
-                                className="add-btn me-1"
-                                id="filter-btn"
-                              >
-                                <i className="ri-equalizer-line"></i> Apply
-                                filters
-                              </Button>
-                            </div>
-                          </div>
-                        </Form>
+                        </div>
                       </Col>
 
                       <Col className="col-sm-auto">
@@ -387,7 +326,10 @@ const AddClient = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {clients?.map((client) => (
+                          {(filteredClients?.length > 0
+                            ? filteredClients
+                            : clients
+                          )?.map((client) => (
                             <tr key={client.id}>
                               <th scope="row">
                                 <div className="form-check">
@@ -418,9 +360,9 @@ const AddClient = () => {
                                       className="btn btn-sm btn-success edit-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
-                                      onClick={() => {
-                                        // handleEditUser(user);
-                                      }}
+                                      onClick={() =>
+                                        users_view_tog_list(client.email)
+                                      }
                                     >
                                       View Users
                                     </button>
@@ -518,6 +460,12 @@ const AddClient = () => {
           dispatch(removeClient({ clientId: listClientId }));
           setmodal_delete(false);
         }}
+      />
+
+      <ViewUsersModal
+        users_view_modal_list={users_view_modal_list}
+        users_view_tog_list={users_view_tog_list}
+        clientUsers={clientUsers}
       />
     </React.Fragment>
   );
