@@ -32,9 +32,9 @@ export const createClient = createAsyncThunk(
 
 export const updateClient = createAsyncThunk(
   "client/updateClient",
-  async ({ clientId, values }) => {
+  async ({ clientId, values, status }) => {
     try {
-      const response = await updateClientApi(clientId, values);
+      const response = await updateClientApi(clientId, values, status);
       return response;
     } catch (error) {
       console.log("error inside update client thunk", error);

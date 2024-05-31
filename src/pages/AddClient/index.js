@@ -48,6 +48,7 @@ import { searchClients } from "../../slices/AddClient/reducer";
 
 import { useNavigate } from "react-router-dom";
 import ViewUsersModal from "./ViewUsersModal";
+import AddUsersFormModal from "./AddUsersFormModal";
 // import { getCenters } from "../../slices/Centers/thunk";
 
 const AddClient = () => {
@@ -57,9 +58,17 @@ const AddClient = () => {
 
   const [modal_delete, setmodal_delete] = useState(false);
 
-  const [listClientId, setListClientId] = useState(null);
+  // const [listClientId, setListClientId] = useState(null);
+
+  const [listClient, setListClient] = useState(null);
 
   const [users_view_modal_list, setUsers_view_modal_list] = useState(false);
+
+  const [add_users_modal_list, setAdd_users_modal_list] = useState(false);
+
+  const [selectedClients, setSelectedClients] = useState([]);
+
+  const [isDeletingMultipleUsers, setIsDeletingMultipleUsers] = useState(false);
 
   const [roles, setRoles] = useState([]);
 
@@ -87,6 +96,56 @@ const AddClient = () => {
   function users_view_tog_list(clientEmail) {
     setUsers_view_modal_list(!users_view_modal_list);
     dispatch(getClientUsers(clientEmail));
+  }
+
+  function add_users_tog_list() {
+    setAdd_users_modal_list(!add_users_modal_list);
+  }
+
+  function handleSelectAll() {
+    const allClientIds = clients?.map((client) => {
+      return client.id;
+    });
+
+    if (clients?.length === selectedClients.length) {
+      setSelectedClients([]);
+    } else {
+      setSelectedClients(allClientIds);
+    }
+  }
+
+  function handleSelectedClients(clientId) {
+    const alreadySelected = selectedClients.includes(clientId);
+
+    if (alreadySelected) {
+      const filteredClients = selectedClients?.filter((id) => {
+        return id !== clientId;
+      });
+
+      setSelectedClients([...filteredClients]);
+    } else {
+      setSelectedClients([...selectedClients, clientId]);
+    }
+  }
+
+  function handleSingleDelete() {
+    setIsDeletingMultipleUsers(false);
+  }
+
+  function handleSelectedDelete() {
+    tog_delete();
+    setIsDeletingMultipleUsers(true);
+  }
+
+  function handleDelete() {
+    console.log("CLIENT WHILE DELETING ->", listClient);
+    if (isDeletingMultipleUsers) {
+      dispatch(removeClient({ clientId: selectedClients }));
+    } else {
+      dispatch(removeClient({ clientId: listClient.id }));
+    }
+
+    setmodal_delete(false);
   }
 
   useEffect(() => {
@@ -165,9 +224,8 @@ const AddClient = () => {
       console.log("CLIENT ADD FORM CALLED ->", values);
 
       if (isEditingClient) {
-        dispatch(updateClient({ values, clientId: listClientId }));
+        dispatch(updateClient({ values, clientId: listClient.id }));
       } else {
-        console.log("ELSE CONDITION CALLED");
         dispatch(createClient(values));
         dispatch(
           createUser({
@@ -181,6 +239,26 @@ const AddClient = () => {
       }
     },
   });
+  const addUserValidation = useFormik({
+    initialValues: {
+      noOfUsers: "",
+    },
+    validationSchema: Yup.object({
+      noOfUsers: Yup.number().required("Enter no of users"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
+  function addUserFormHandleSubmit(e) {
+    e.preventDefault();
+
+    addUserValidation.handleSubmit();
+
+    setAdd_users_modal_list(false);
+    return false;
+  }
 
   // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit user from
   function formHandleSubmit(e) {
@@ -200,7 +278,7 @@ const AddClient = () => {
   function handleEditClient(clientData) {
     setIsEditingClient(true);
     setmodal_list(!modal_list);
-    setListClientId(clientData.id);
+    setListClient(clientData);
 
     // setting the value of role according to roleId because in select element roleId is used as value
     const roleName = roles.find((role) => role.id === clientData.roleId);
@@ -227,6 +305,12 @@ const AddClient = () => {
     dispatch(searchClients(e.target.value));
   }
 
+  function handleClientStatusUpdate(client) {
+    const status = client.status === 1 ? 0 : 1;
+
+    dispatch(updateClient({ status, clientId: client.id }));
+  }
+
   document.title = "Add Client";
   return (
     <React.Fragment>
@@ -251,7 +335,7 @@ const AddClient = () => {
                             autoComplete="off"
                             id="searchList"
                             onChange={handleFilterData}
-                            placeholder="Search User"
+                            placeholder="Search Keyword"
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -268,15 +352,18 @@ const AddClient = () => {
                             <i className="ri-add-line align-bottom me-1"></i>{" "}
                             Add New Client
                           </Button>
-                          <Button
-                            color="primary"
-                            className="delete-btn me-1"
-                            onClick={() => tog_list()}
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Delete Selected Id
-                          </Button>
+
+                          {selectedClients.length > 0 ? (
+                            <Button
+                              color="primary"
+                              className="delete-btn me-1"
+                              onClick={handleSelectedDelete}
+                              id="create-btn"
+                            >
+                              <i className="ri-add-line align-bottom me-1"></i>{" "}
+                              Delete Selected Id
+                            </Button>
+                          ) : null}
                         </div>
                       </Col>
                     </Row>
@@ -294,16 +381,18 @@ const AddClient = () => {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="checkAll"
-                                  value="option"
+                                  checked={
+                                    clients?.length > 0 &&
+                                    clients?.length === selectedClients.length
+                                  }
+                                  onChange={handleSelectAll}
                                 />
                               </div>
                             </th>
                             <th className="sort" data-sort="username">
                               Company Name
                             </th>
-                            <th className="sort" data-sort="password">
-                              Password
-                            </th>
+
                             <th className="sort" data-sort="type">
                               Type
                             </th>
@@ -314,6 +403,9 @@ const AddClient = () => {
 
                             <th className="sort" data-sort="email">
                               Email
+                            </th>
+                            <th className="sort" data-sort="password">
+                              Password
                             </th>
 
                             <th className="sort" data-sort="status">
@@ -335,9 +427,14 @@ const AddClient = () => {
                                 <div className="form-check">
                                   <input
                                     className="form-check-input"
+                                    checked={selectedClients.includes(
+                                      client.id
+                                    )}
                                     type="checkbox"
-                                    name="checkAll"
-                                    value="option1"
+                                    name="checkbox"
+                                    onChange={() => {
+                                      handleSelectedClients(client.id);
+                                    }}
                                   />
                                 </div>
                               </th>
@@ -345,12 +442,31 @@ const AddClient = () => {
                               <td className="companyName">
                                 {client.companyName}
                               </td>
-                              <td className="password">{client.password}</td>
                               <td className="type">{client.type}</td>
                               <td className="contact">{client.contactNo}</td>
                               <td className="email">{client.email} </td>
+                              <td className="password">{client.password}</td>
+
                               <td className="status">
-                                {client.status === 1 ? "Active" : "Inactive"}
+                                {client.status === 1 ? (
+                                  <button
+                                    className="btn btn-sm btn-soft-success"
+                                    onClick={() =>
+                                      handleClientStatusUpdate(client)
+                                    }
+                                  >
+                                    Active
+                                  </button>
+                                ) : (
+                                  <button
+                                    className="btn btn-sm btn-soft-danger"
+                                    onClick={() =>
+                                      handleClientStatusUpdate(client)
+                                    }
+                                  >
+                                    Not Active
+                                  </button>
+                                )}
                               </td>
 
                               <td>
@@ -385,8 +501,9 @@ const AddClient = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                       onClick={() => {
-                                        setListClientId(client.id);
+                                        setListClient(client);
                                         setmodal_delete(true);
+                                        setIsDeletingMultipleUsers(false);
                                       }}
                                     >
                                       Remove
@@ -456,16 +573,21 @@ const AddClient = () => {
         modal_delete={modal_delete}
         tog_delete={tog_delete}
         setmodal_delete={setmodal_delete}
-        handleDeleteUser={() => {
-          dispatch(removeClient({ clientId: listClientId }));
-          setmodal_delete(false);
-        }}
+        handleDeleteUser={handleDelete}
+      />
+
+      <AddUsersFormModal
+        add_users_modal_list={add_users_modal_list}
+        add_users_tog_list={add_users_tog_list}
+        addUserValidation={addUserValidation}
+        addUserFormHandleSubmit={addUserFormHandleSubmit}
       />
 
       <ViewUsersModal
         users_view_modal_list={users_view_modal_list}
         users_view_tog_list={users_view_tog_list}
         clientUsers={clientUsers}
+        add_users_tog_list={add_users_tog_list}
       />
     </React.Fragment>
   );

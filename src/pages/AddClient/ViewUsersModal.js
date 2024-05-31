@@ -5,6 +5,7 @@ function ViewUsersModal({
   users_view_modal_list,
   users_view_tog_list,
   clientUsers,
+  add_users_tog_list,
 }) {
   const tempUsersData = [
     {
@@ -48,6 +49,8 @@ function ViewUsersModal({
               <tr>
                 <th scope="col">S.No</th>
                 <th scope="col">Username</th>
+                <th scope="col">Data Assigned</th>
+                <th scope="col">Completed</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -57,6 +60,8 @@ function ViewUsersModal({
                 <tr key={user.id}>
                   <td>{i + 1}</td>
                   <td>{user.username}</td>
+                  <td>{user.dataAssigned}</td>
+                  <td>{user.completed}</td>
                   <td>
                     {user.status === 1 ? (
                       <button
@@ -74,18 +79,17 @@ function ViewUsersModal({
                       </button>
                     )}
                   </td>
-                  {/* <td>
-                    <button
-                      className="btn btn-sm btn-soft-danger remove-list"
-                      onClick={() => {}}
-                    >
-                      Deactivate
-                    </button>
-                  </td> */}
                 </tr>
               ))}
             </tbody>
           </table>
+          <button
+            className="btn btn-sm btn-primary mt-2"
+            onClick={add_users_tog_list}
+            style={{ float: "right" }}
+          >
+            Add Users
+          </button>
         </div>
       </ModalBody>
     </Modal>

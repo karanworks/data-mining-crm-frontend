@@ -513,14 +513,15 @@ export const createClient = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/client/create`, data);
 };
 
-export const updateClient = (clientId, data) => {
+export const updateClient = (clientId, values, status) => {
   return api.update(
     `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/edit`,
-    data
+    { ...values, status }
   );
 };
 
 export const removeClient = (clientId) => {
+  console.log("CLIENTS ARRAY IN FAKE BACKEND ->", clientId);
   return api.delete(
     `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/delete`
   );
