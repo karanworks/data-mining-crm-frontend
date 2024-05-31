@@ -18,8 +18,8 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import AddUserFormModal from "./AddUserFormModal";
-import AddUserRemoveModal from "./AddUserRemoveModal";
+import AddClientFormModal from "./AddClientFormModal";
+import AddClientRemoveModal from "./AddClientRemoveModal";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -35,18 +35,26 @@ import {
   removeCenterUser,
   updateCenterUser,
 } from "../../slices/AddUsers/thunk";
+
+import {
+  getClients,
+  createClient,
+  updateClient,
+  removeClient,
+} from "../../slices/AddClient/thunk";
+
 import { useNavigate } from "react-router-dom";
-import { getCenters } from "../../slices/Centers/thunk";
+// import { getCenters } from "../../slices/Centers/thunk";
 
 const AddClient = () => {
   // register / edit user modal state whether modal is open or not
   const [modal_list, setmodal_list] = useState(false);
   // this state triggers when editing the user
-  const [isEditingUser, setIsEditingUser] = useState(false);
+  const [isEditingClient, setIsEditingClient] = useState(false);
   // delete user confirmation modal state
   const [modal_delete, setmodal_delete] = useState(false);
   // when we click on edit / delete user button this state stores that user's id, had to make this state because I needed to have that user's id to make changes to it
-  const [listUserId, setListUserId] = useState(null);
+  const [listClientId, setListClientId] = useState(null);
   // fetching all the roles
   const [roles, setRoles] = useState([]);
 
@@ -54,14 +62,14 @@ const AddClient = () => {
     useState(null);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
-  const { centers } = useSelector((state) => state.Centers);
+  const { clients } = useSelector((state) => state.Client);
 
   const dispatch = useDispatch();
 
   // toggles register / edit user modal
   function tog_list() {
     setmodal_list(!modal_list);
-    setIsEditingUser(false);
+    setIsEditingClient(false);
   }
 
   // toggles delete user confirmation modal
@@ -89,8 +97,7 @@ const AddClient = () => {
   }, [alreadyRegisteredError]);
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getCenters());
+    dispatch(getClients());
   }, [dispatch]);
 
   function handleSelectSingleUserStatus(status) {
@@ -111,45 +118,49 @@ const AddClient = () => {
   // formik setup
   const validation = useFormik({
     initialValues: {
-      role: "",
+      roleId: "",
       companyName: "",
       address: "",
       agreementDate: "",
       email: "",
       contactNo: "",
       noOfUsers: "",
-      timing: "",
       userIdDemo: "",
       userIdLive: "",
+      startTime: "",
+      endTime: "",
       password: "",
       image: "",
       agreementTalk: "",
     },
     validationSchema: Yup.object({
-      role: Yup.string().required("Please Select Role"),
+      roleId: Yup.string().required("Please Select Role"),
       companyName: Yup.string().required("Enter company name"),
       address: Yup.string().required("Enter Address"),
       agreementDate: Yup.string().required("Enter agreement date"),
       email: Yup.string().required("Enter email"),
       contactNo: Yup.string().required("Enter contact no"),
       noOfUsers: Yup.string().required("Enter no of user"),
-      startTiming: Yup.string().required("Enter start timining"),
-      endTiming: Yup.string().required("Enter end timining"),
+      startTime: Yup.string().required("Enter start timining"),
+      endTime: Yup.string().required("Enter end timining"),
       userIdDemo: Yup.string().required("Enter user id demo"),
       userIdLive: Yup.string().required("Enter user id live"),
       password: Yup.string().required("Enter password"),
       image: Yup.string(),
-      agreementTalk: Yup.string().required("Enter agreement talk"),
+      agreementTalk: Yup.string(),
     }),
     onSubmit: (values) => {
-      isEditingUser
-        ? dispatch(updateCenterUser({ values, userId: listUserId }))
-        : dispatch(createCenterUser(values));
+      console.log("CLIENT ADD FORM CALLED ->", values);
+      isEditingClient
+        ? dispatch(updateClient({ values, clientId: listClientId }))
+        : dispatch(createClient(values));
       // isEditingUser
       //   ? dispatch(updateUser({ values, userId: listUserId }))
       //   : dispatch(createUser(values));
     },
   });
+
+  console.log("CLIENT ADD FORM VALUES ->", validation.values);
 
   // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit user from
   function formHandleSubmit(e) {
@@ -166,18 +177,26 @@ const AddClient = () => {
   }
 
   // to update the values of register form when editing the user
-  function handleEditUser(userData) {
-    setIsEditingUser(true);
+  function handleEditClient(clientData) {
+    setIsEditingClient(true);
     setmodal_list(!modal_list);
-    setListUserId(userData.id);
+    setListClientId(clientData.id);
 
     // setting the value of role according to roleId because in select element roleId is used as value
-    const roleName = roles.find((role) => role.id === userData.roleId);
+    const roleName = roles.find((role) => role.id === clientData.roleId);
 
     validation.setValues({
-      name: userData.username,
-      email: userData.email,
-      password: userData.password,
+      companyName: clientData.companyName,
+      address: clientData.address,
+      agreementDate: clientData.agreementDate,
+      email: clientData.email,
+      contactNo: clientData.contactNo,
+      noOfUsers: clientData.noOfUsers,
+      userIdDemo: clientData.userIdDemo,
+      userIdLive: clientData.userIdLive,
+      startTime: clientData.startTime,
+      endTime: clientData.endTime,
+      password: clientData.password,
       roleId: roleName.id,
     });
   }
@@ -308,7 +327,7 @@ const AddClient = () => {
                             id="create-btn"
                           >
                             <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add New User
+                            Add New Client
                           </Button>
                           <Button
                             color="primary"
@@ -341,7 +360,7 @@ const AddClient = () => {
                               </div>
                             </th>
                             <th className="sort" data-sort="username">
-                              Username
+                              Company Name
                             </th>
                             <th className="sort" data-sort="password">
                               Password
@@ -351,15 +370,11 @@ const AddClient = () => {
                             </th>
 
                             <th className="sort" data-sort="contact">
-                              Contact
+                              Contact No
                             </th>
 
                             <th className="sort" data-sort="email">
                               Email
-                            </th>
-
-                            <th className="sort" data-sort="data_type">
-                              Data Type
                             </th>
 
                             <th className="sort" data-sort="status">
@@ -372,8 +387,8 @@ const AddClient = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {tempUserData?.map((user) => (
-                            <tr key={user.id}>
+                          {clients?.map((client) => (
+                            <tr key={client.id}>
                               <th scope="row">
                                 <div className="form-check">
                                   <input
@@ -385,23 +400,38 @@ const AddClient = () => {
                                 </div>
                               </th>
 
-                              <td className="username">{user.username}</td>
-                              <td className="password">{user.password}</td>
-                              <td className="type">{user.type}</td>
-                              <td className="contact">{user.contact}</td>
-                              <td className="email">{user.email} </td>
-                              <td className="data_type">{user.dataType}</td>
-                              <td className="status">{user.status}</td>
+                              <td className="companyName">
+                                {client.companyName}
+                              </td>
+                              <td className="password">{client.password}</td>
+                              <td className="type">{client.type}</td>
+                              <td className="contact">{client.contactNo}</td>
+                              <td className="email">{client.email} </td>
+                              <td className="status">
+                                {client.status === 1 ? "Active" : "Inactive"}
+                              </td>
 
                               <td>
                                 <div className="d-flex gap-2">
+                                  <div className="viewUsers">
+                                    <button
+                                      className="btn btn-sm btn-success edit-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#showModal"
+                                      onClick={() => {
+                                        // handleEditUser(user);
+                                      }}
+                                    >
+                                      View Users
+                                    </button>
+                                  </div>
                                   <div className="edit">
                                     <button
                                       className="btn btn-sm btn-primary edit-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
                                       onClick={() => {
-                                        // handleEditUser(user);
+                                        handleEditClient(client);
                                       }}
                                     >
                                       Edit
@@ -413,8 +443,8 @@ const AddClient = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                       onClick={() => {
-                                        // setListUserId(user.id);
-                                        // setmodal_delete(true);
+                                        setListClientId(client.id);
+                                        setmodal_delete(true);
                                       }}
                                     >
                                       Remove
@@ -467,25 +497,25 @@ const AddClient = () => {
       </div>
 
       {/* Add Modal */}
-      <AddUserFormModal
+      <AddClientFormModal
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
         validation={validation}
-        isEditingUser={isEditingUser}
+        isEditingClient={isEditingClient}
         alreadyRegisteredError={alreadyRegisteredError}
         handleRoleChange={handleRoleChange}
         roles={roles}
-        centers={centers}
+        clients={clients}
       />
 
       {/* Remove Modal */}
-      <AddUserRemoveModal
+      <AddClientRemoveModal
         modal_delete={modal_delete}
         tog_delete={tog_delete}
         setmodal_delete={setmodal_delete}
         handleDeleteUser={() => {
-          dispatch(removeUser({ userId: listUserId }));
+          dispatch(removeClient({ clientId: listClientId }));
           setmodal_delete(false);
         }}
       />

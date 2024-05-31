@@ -8,8 +8,7 @@ import LoginReducer from "./auth/login/reducer";
 import UsersReducer from "./Users/reducer";
 import MappingReducer from "./Mapping/reducer";
 import ReportReducer from "./Report/reducer";
-import CenterReducer from "./Centers/reducer";
-import BankCodeReducer from "./BankCode/reducer";
+import AddClientReducer from "./AddClient/reducer";
 import AddUsersReducer from "./AddUsers/reducer";
 
 // SEPARATER
@@ -24,8 +23,7 @@ const rootReducer = combineReducers({
   Users: UsersReducer,
   Mapping: MappingReducer,
   Report: ReportReducer,
-  Centers: CenterReducer,
-  BankCodes: BankCodeReducer,
+  Client: AddClientReducer,
   AddUsers: AddUsersReducer,
   ForgetPassword: ForgetPasswordReducer,
   Profile: ProfileReducer,

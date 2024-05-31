@@ -34,7 +34,7 @@ import {
   updateCenterUser,
 } from "../../slices/AddUsers/thunk";
 import { useNavigate } from "react-router-dom";
-import { getCenters } from "../../slices/Centers/thunk";
+// import { getCenters } from "../../slices/Centers/thunk";
 
 const AddUsers = () => {
   // register / edit user modal state whether modal is open or not
@@ -85,7 +85,7 @@ const AddUsers = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-    dispatch(getCenters());
+    // dispatch(getCenters());
   }, [dispatch]);
 
   // formik setup

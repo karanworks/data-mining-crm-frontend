@@ -25,16 +25,16 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 // Register the plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-function AddUserFormModal({
+function AddClientFormModal({
   modal_list, // modal state
   tog_list, // to change modal state
   formHandleSubmit, // submit function for form
   validation, // to get the values from formik
-  isEditingUser, // state of whether we are editing the user or not, if we are editing the user then form fields will have the values of that user
+  isEditingClient, // state of whether we are editing the user or not, if we are editing the user then form fields will have the values of that user
   alreadyRegisteredError, // gives error if user already registered with same - id, email, agentMobile
   handleRoleChange,
   roles,
-  centers,
+  clients,
 }) {
   const [imageFile, setImageFile] = useState([]);
   const [agreementTalkFile, setAgreementTalkFile] = useState([]);
@@ -54,7 +54,7 @@ function AddUserFormModal({
           tog_list();
         }}
       >
-        Add User
+        Add Client
       </ModalHeader>
       <Form className="tablelist-form" onSubmit={(e) => formHandleSubmit(e)}>
         <ModalBody style={{ paddingTop: "0px" }}>
@@ -67,19 +67,19 @@ function AddUserFormModal({
           <Row>
             <Col md={4}>
               <div className="mb-2">
-                <Label htmlFor="role" className="form-label">
+                <Label htmlFor="roleId" className="form-label">
                   Role
                 </Label>
                 <Input
-                  id="role"
-                  name="role"
+                  id="roleId"
+                  name="roleId"
                   className="form-control"
                   type="select"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.role || ""}
+                  value={validation.values.roleId || ""}
                   invalid={
-                    validation.touched.role && validation.errors.role
+                    validation.touched.roleId && validation.errors.roleId
                       ? true
                       : false
                   }
@@ -174,12 +174,25 @@ function AddUserFormModal({
                   id="datepicker-publish-input"
                   className="form-control"
                   placeholder="Select a date"
+                  onChange={(date) => {
+                    const formattedDate = new Date(date).toLocaleDateString(
+                      "en-GB"
+                    );
+                    validation.setFieldValue("agreementDate", formattedDate);
+                  }}
+                  onBlur={validation.handleBlur}
                   options={{
                     altInput: true,
                     altFormat: "d M, Y",
                     dateFormat: "d M, Y",
                   }}
                   value={validation.values.agreementDate || ""}
+                  // invalid={
+                  //   validation.touched.agreementDate &&
+                  //   validation.errors.agreementDate
+                  //     ? true
+                  //     : false
+                  // }
                 />
 
                 {validation.touched.agreementDate &&
@@ -262,7 +275,7 @@ function AddUserFormModal({
                   name="noOfUsers"
                   className="form-control"
                   placeholder="Enter No Of Users"
-                  type="text"
+                  type="number"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
                   value={validation.values.noOfUsers || ""}
@@ -295,7 +308,7 @@ function AddUserFormModal({
                   type="text"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.age || ""}
+                  value={validation.values.userIdDemo || ""}
                   invalid={
                     validation.touched.userIdDemo &&
                     validation.errors.userIdDemo
@@ -376,31 +389,29 @@ function AddUserFormModal({
 
             <Col md={4}>
               <div className="mb-2">
-                <Label htmlFor="name" className="form-label">
+                <Label htmlFor="timing" className="form-label">
                   Timing
                 </Label>
 
                 <Input
-                  id="startTiming"
-                  name="startTiming"
+                  id="startTime"
+                  name="startTime"
                   className="form-control"
                   placeholder="Enter start time"
                   type="text"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.startTiming || ""}
+                  value={validation.values.startTime || ""}
                   invalid={
-                    validation.touched.startTiming &&
-                    validation.errors.startTiming
+                    validation.touched.startTime && validation.errors.startTime
                       ? true
                       : false
                   }
                 />
 
-                {validation.touched.startTiming &&
-                validation.errors.startTiming ? (
+                {validation.touched.startTime && validation.errors.startTime ? (
                   <FormFeedback type="invalid">
-                    {validation.errors.startTiming}
+                    {validation.errors.startTime}
                   </FormFeedback>
                 ) : null}
               </div>
@@ -408,24 +419,24 @@ function AddUserFormModal({
             <Col md={4}>
               <div className="mb-2" style={{ marginTop: "1.8rem" }}>
                 <Input
-                  id="endTiming"
-                  name="endTiming"
+                  id="endTime"
+                  name="endTime"
                   className="form-control"
                   placeholder="Enter end time"
                   type="text"
                   onChange={validation.handleChange}
                   onBlur={validation.handleBlur}
-                  value={validation.values.endTiming || ""}
+                  value={validation.values.endTime || ""}
                   invalid={
-                    validation.touched.endTiming && validation.errors.endTiming
+                    validation.touched.endTime && validation.errors.endTime
                       ? true
                       : false
                   }
                 />
 
-                {validation.touched.endTiming && validation.errors.endTiming ? (
+                {validation.touched.endTime && validation.errors.endTime ? (
                   <FormFeedback type="invalid">
-                    {validation.errors.endTiming}
+                    {validation.errors.endTime}
                   </FormFeedback>
                 ) : null}
               </div>
@@ -466,7 +477,7 @@ function AddUserFormModal({
             </Col>
             <div className="text-end">
               <button type="submit" className="btn btn-primary">
-                {isEditingUser ? "Update User" : "Save User"}
+                {isEditingClient ? "Update Client" : "Save Client"}
               </button>
             </div>
           </Row>
@@ -476,4 +487,4 @@ function AddUserFormModal({
   );
 }
 
-export default AddUserFormModal;
+export default AddClientFormModal;

@@ -503,26 +503,26 @@ export const removeEvent = (eventId) => {
 };
 
 // *****************************************************************
-// ************************* CENTERS *******************************
+// ********************** ADD CLIENT *******************************
 // *****************************************************************
-export const getCenters = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/centers`);
+export const getClients = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/clients`);
 };
 
-export const createCenter = (data) => {
-  return api.create(`${process.env.REACT_APP_SERVER_URL}/center/create`, data);
+export const createClient = (data) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/client/create`, data);
 };
 
-export const updateCenter = (centerId, data) => {
+export const updateClient = (clientId, data) => {
   return api.update(
-    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/edit`,
+    `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/edit`,
     data
   );
 };
 
-export const removeCenter = (centerId) => {
+export const removeClient = (clientId) => {
   return api.delete(
-    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/delete`
+    `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/delete`
   );
 };
 
