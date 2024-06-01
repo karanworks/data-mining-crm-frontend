@@ -1,5 +1,7 @@
 import { Modal, ModalBody, ModalHeader } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../slices/Users/thunk";
 
 function ViewUsersModal({
   users_view_modal_list,
@@ -7,23 +9,13 @@ function ViewUsersModal({
   clientUsers,
   add_users_tog_list,
 }) {
-  const tempUsersData = [
-    {
-      id: 1,
-      username: "KRN_1",
-      status: 1,
-    },
-    {
-      id: 2,
-      username: "KRN_2",
-      status: 1,
-    },
-    {
-      id: 3,
-      username: "KRN_3",
-      status: 0,
-    },
-  ];
+  const dispatch = useDispatch();
+
+  function handleUserStatusUpdate(user) {
+    const status = user.status === 1 ? 0 : 1;
+
+    dispatch(updateUser({ status, userId: user.id }));
+  }
 
   return (
     <Modal
@@ -65,17 +57,17 @@ function ViewUsersModal({
                   <td>
                     {user.status === 1 ? (
                       <button
-                        className="btn btn-sm btn-soft-danger"
-                        onClick={() => {}}
+                        className="btn btn-sm btn-soft-success"
+                        onClick={() => handleUserStatusUpdate(user)}
                       >
-                        Deactivate
+                        Active
                       </button>
                     ) : (
                       <button
-                        className="btn btn-sm btn-soft-success"
-                        onClick={() => {}}
+                        className="btn btn-sm btn-soft-danger"
+                        onClick={() => handleUserStatusUpdate(user)}
                       >
-                        Activate
+                        Not Active
                       </button>
                     )}
                   </td>

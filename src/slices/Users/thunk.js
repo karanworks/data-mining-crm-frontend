@@ -30,9 +30,9 @@ export const createUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "users/updateUser",
-  async ({ userId, values }) => {
+  async ({ userId, values, status }) => {
     try {
-      const response = await updateUserApi(userId, values);
+      const response = await updateUserApi(userId, values, status);
       console.log("response after udpating user ->", response);
       return response;
     } catch (error) {
