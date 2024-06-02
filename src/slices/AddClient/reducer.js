@@ -33,6 +33,17 @@ const clientSlice = createSlice({
         });
       }
     },
+
+    updateClientUserOnStatusUpdate(state, action) {
+      const updatedUser = action.payload;
+      state.clientUsers = state.clientUsers.map((user) =>
+        user.id === updatedUser.id ? updatedUser : user
+      );
+    },
+    updateClientUserOnUserAdd(state, action) {
+      const newUsers = action.payload;
+      state.clientUsers = [...state.clientUsers, ...newUsers];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getClients.fulfilled, (state, action) => {
@@ -111,5 +122,9 @@ const clientSlice = createSlice({
   },
 });
 
-export const { searchClients } = clientSlice.actions;
+export const {
+  searchClients,
+  updateClientUserOnStatusUpdate,
+  updateClientUserOnUserAdd,
+} = clientSlice.actions;
 export default clientSlice.reducer;
