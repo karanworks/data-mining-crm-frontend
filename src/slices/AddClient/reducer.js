@@ -108,10 +108,24 @@ const clientSlice = createSlice({
     });
 
     builder.addCase(removeClient.fulfilled, (state, action) => {
-      const deletedClientId = action.payload.deletedClient.id;
-      state.clients = state.clients.filter(
-        (client) => client.id !== deletedClientId
-      );
+      const deletedClient = action.payload.deletedClient;
+
+      console.log("DELETED CLIENT FROM BACKEND ->", deletedClient);
+
+      if (Array.isArray(deletedClient)) {
+        const deletedClientIds = deletedClient?.map((client) => {
+          return client.id;
+        });
+
+        state.clients = state.clients.filter((client) => {
+          return !deletedClientIds.includes(client.id);
+        });
+      } else {
+        state.clients = state.clients.filter(
+          (client) => client.id !== deletedClient.id
+        );
+      }
+
       state.error = "";
       toast.error("Client has been removed !", {
         position: "bottom-center",

@@ -521,11 +521,17 @@ export const updateClient = (clientId, values, status) => {
 };
 
 export const removeClient = (clientId) => {
-  console.log("CLIENTS ARRAY IN FAKE BACKEND ->", clientId);
-  return api.delete(
-    `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/delete`
-  );
+  console.log("CLIENTS REMOVE ARRAY IN FAKE BACKEND ->", clientId);
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/client/delete`, {
+    clientId,
+  });
 };
+// export const removeClient = (clientId) => {
+//   console.log("CLIENTS ARRAY IN FAKE BACKEND ->", clientId);
+//   return api.delete(
+//     `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/delete`
+//   );
+// };
 
 export const getClientUsers = (clientEmail) => {
   console.log("CLIENT EMAIL IN FAKE BACKEND ->", clientEmail);

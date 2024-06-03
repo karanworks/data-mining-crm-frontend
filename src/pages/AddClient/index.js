@@ -138,7 +138,6 @@ const AddClient = () => {
   }
 
   function handleDelete() {
-    console.log("CLIENT WHILE DELETING ->", listClient);
     if (isDeletingMultipleUsers) {
       dispatch(removeClient({ clientId: selectedClients }));
     } else {
