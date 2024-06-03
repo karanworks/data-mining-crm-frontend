@@ -51,7 +51,7 @@ const CompletedData = () => {
   const [roles, setRoles] = useState([]);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
-  const { centers } = useSelector((state) => state.Centers);
+  // const { centers } = useSelector((state) => state.Centers);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -476,7 +476,7 @@ const CompletedData = () => {
                             // onClick={() => tog_list()}
                             id="create-btn"
                           >
-                            <i class="ri-download-fill align-bottom me-1"></i>{" "}
+                            <i className="ri-download-fill align-bottom me-1"></i>{" "}
                             Export Data
                           </Button>
                           <Button
@@ -551,7 +551,7 @@ const CompletedData = () => {
 
                               <td className="username">{user.username}</td>
                               <td className="dateAndTime">
-                                <span class="badge border border-primary text-primary fs-12">
+                                <span className="badge border border-primary text-primary fs-12">
                                   {user.dateAndTime}
                                 </span>
                               </td>
@@ -654,7 +654,7 @@ const CompletedData = () => {
         alreadyRegisteredError={alreadyRegisteredError}
         handleRoleChange={handleRoleChange}
         roles={roles}
-        centers={centers}
+        // centers={centers}
       />
 
       {/* Remove Modal */}

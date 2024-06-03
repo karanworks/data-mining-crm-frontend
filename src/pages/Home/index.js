@@ -7,7 +7,7 @@ const Home = () => {
   document.title = "Home ";
   return (
     <React.Fragment>
-      <div className="page-content bg-primary">
+      <div className="page-content ">
         <Container fluid>
           <BreadCrumb title="Home" pageTitle="Dashboard" />
           <Row>
@@ -22,7 +22,9 @@ const Home = () => {
                   />
                 </div>
                 <div className="mb-5">
-                  <h1 className="display-2 coming-soon-text">Coming Soon</h1>
+                  <h1 className="display-2 text-primary fw-bold">
+                    Coming Soon
+                  </h1>
                 </div>
               </div>
             </Col>
