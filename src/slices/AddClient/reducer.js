@@ -56,7 +56,6 @@ const clientSlice = createSlice({
       }
     });
     builder.addCase(getClientUsers.fulfilled, (state, action) => {
-      console.log("CLIENT payload ->", action?.payload.data);
       if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {

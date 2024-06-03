@@ -534,7 +534,6 @@ export const removeClient = (clientId) => {
 // };
 
 export const getClientUsers = (clientEmail) => {
-  console.log("CLIENT EMAIL IN FAKE BACKEND ->", clientEmail);
   return api.get(
     `${process.env.REACT_APP_SERVER_URL}/client/${clientEmail}/users`
   );
@@ -596,6 +595,15 @@ export const removeCenterUser = (centerId, centerUserId) => {
   return api.delete(
     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
   );
+};
+// *****************************************************************
+// ************************** ADD DATA *****************************
+// *****************************************************************
+
+export const addDataUpload = (values) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/add-data`, values, {
+    "Content-Type": "multipart/form-data",
+  });
 };
 
 // postForgetPwd
