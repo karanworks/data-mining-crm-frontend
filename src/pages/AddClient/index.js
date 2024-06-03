@@ -175,17 +175,6 @@ const AddClient = () => {
     setSelectedSingleUserStatus(status);
   }
 
-  const userStatusOptions = [
-    {
-      value: "Active",
-      label: "Active",
-    },
-    {
-      value: "Inactive",
-      label: "Inactive",
-    },
-  ];
-
   // formik setup
   const validation = useFormik({
     initialValues: {
@@ -247,7 +236,19 @@ const AddClient = () => {
       noOfUsers: Yup.number().required("Enter no of users"),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      const { noOfUsers } = values;
+
+      console.log("no of users we want to add ->", values);
+      console.log("client we are adding users for ->", listClient);
+      dispatch(
+        createUser({
+          email: listClient.email,
+          noOfUsers,
+          userIdDemo: listClient.userIdDemo,
+          userIdLive: listClient.userIdLive,
+          password: listClient.password,
+        })
+      );
     },
   });
 
@@ -476,9 +477,10 @@ const AddClient = () => {
                                       className="btn btn-sm btn-success edit-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
-                                      onClick={() =>
-                                        users_view_tog_list(client.email)
-                                      }
+                                      onClick={() => {
+                                        users_view_tog_list(client.email);
+                                        setListClient(client);
+                                      }}
                                     >
                                       View Users
                                     </button>
@@ -588,6 +590,7 @@ const AddClient = () => {
         users_view_tog_list={users_view_tog_list}
         clientUsers={clientUsers}
         add_users_tog_list={add_users_tog_list}
+        listClient={listClient}
       />
     </React.Fragment>
   );

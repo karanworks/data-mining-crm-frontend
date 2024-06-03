@@ -50,33 +50,33 @@ const Login = (props) => {
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
 
-  useEffect(() => {
-    if (user && user) {
-      const updatedUserData =
-        process.env.REACT_APP_DEFAULTAUTH === "firebase"
-          ? user.multiFactor.user.email
-          : user.user.email;
-      const updatedUserPassword =
-        process.env.REACT_APP_DEFAULTAUTH === "firebase"
-          ? ""
-          : user.user.confirm_password;
-      setUserLogin({
-        email: updatedUserData,
-        password: updatedUserPassword,
-      });
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user) {
+  //     const updatedUserData =
+  //       process.env.REACT_APP_DEFAULTAUTH === "firebase"
+  //         ? user.multiFactor.user.email
+  //         : user.user.email;
+  //     const updatedUserPassword =
+  //       process.env.REACT_APP_DEFAULTAUTH === "firebase"
+  //         ? ""
+  //         : user.user.confirm_password;
+  //     setUserLogin({
+  //       email: updatedUserData,
+  //       password: updatedUserPassword,
+  //     });
+  //   }
+  // }, [user]);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: userLogin.email || "",
+      usernameOrEmail: userLogin.email || "",
       password: userLogin.password || "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
+      usernameOrEmail: Yup.string().required("Please Enter Your Email"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: (values) => {
@@ -122,28 +122,31 @@ const Login = (props) => {
                         action="#"
                       >
                         <div className="mb-3">
-                          <Label htmlFor="email" className="form-label">
-                            Email
+                          <Label
+                            htmlFor="usernameOrEmail"
+                            className="form-label"
+                          >
+                            Email Or Username
                           </Label>
                           <Input
-                            name="email"
+                            name="usernameOrEmail"
                             className="form-control"
-                            placeholder="Enter email"
-                            type="email"
+                            placeholder="Enter Username Or Email"
+                            type="text"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
-                            value={validation.values.email || ""}
+                            value={validation.values.usernameOrEmail || ""}
                             invalid={
-                              validation.touched.email &&
-                              validation.errors.email
+                              validation.touched.usernameOrEmail &&
+                              validation.errors.usernameOrEmail
                                 ? true
                                 : false
                             }
                           />
-                          {validation.touched.email &&
-                          validation.errors.email ? (
+                          {validation.touched.usernameOrEmail &&
+                          validation.errors.usernameOrEmail ? (
                             <FormFeedback type="invalid">
-                              {validation.errors.email}
+                              {validation.errors.usernameOrEmail}
                             </FormFeedback>
                           ) : null}
                         </div>

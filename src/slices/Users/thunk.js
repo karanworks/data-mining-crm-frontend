@@ -5,6 +5,10 @@ import {
   removeUser as removeUserApi,
   updateUser as updateUserApi,
 } from "../../helpers/fakebackend_helper";
+import {
+  updateClientUserOnStatusUpdate,
+  updateClientUserOnUserAdd,
+} from "../AddClient/reducer";
 
 export const getUsers = createAsyncThunk("users/getUsers", async () => {
   try {
@@ -17,9 +21,13 @@ export const getUsers = createAsyncThunk("users/getUsers", async () => {
 
 export const createUser = createAsyncThunk(
   "users/createUser",
-  async (values) => {
+  async (values, { dispatch }) => {
     try {
       const response = await createUserApi(values);
+
+      if (response.status === "success") {
+        dispatch(updateClientUserOnUserAdd(response.data));
+      }
 
       return response;
     } catch (error) {
@@ -30,10 +38,15 @@ export const createUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "users/updateUser",
-  async ({ userId, values }) => {
+  async ({ userId, values, status }, { dispatch }) => {
     try {
-      const response = await updateUserApi(userId, values);
+      const response = await updateUserApi(userId, values, status);
       console.log("response after udpating user ->", response);
+
+      if (response.status === "success") {
+        dispatch(updateClientUserOnStatusUpdate(response.data.updatedUser));
+      }
+
       return response;
     } catch (error) {
       console.log("error inside remove user thunk", error);

@@ -50,11 +50,13 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(updateUser.fulfilled, (state, action) => {
+      console.log("UPDATED USER'S STATUS ->", action.payload);
+
       if (action.payload.status == "failure") {
         state.alreadyRegisteredError = action.payload.message;
         state.error = "";
       } else {
-        console.log("updated user reducer ->", action.payload);
+        // console.log("updated user reducer ->", action.payload);
         const updatedUserId = action.payload.data.updatedUser.id;
         state.users = state.users.map((user) => {
           if (user.id == updatedUserId) {
