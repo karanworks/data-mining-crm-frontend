@@ -72,9 +72,6 @@ const AddClient = () => {
 
   const [roles, setRoles] = useState([]);
 
-  const [selectedSingleUserStatus, setSelectedSingleUserStatus] =
-    useState(null);
-
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
   const { clients, filteredClients, clientUsers } = useSelector(
     (state) => state.Client
@@ -128,10 +125,6 @@ const AddClient = () => {
     }
   }
 
-  function handleSingleDelete() {
-    setIsDeletingMultipleUsers(false);
-  }
-
   function handleSelectedDelete() {
     tog_delete();
     setIsDeletingMultipleUsers(true);
@@ -169,10 +162,6 @@ const AddClient = () => {
   useEffect(() => {
     dispatch(getClients());
   }, [dispatch]);
-
-  function handleSelectSingleUserStatus(status) {
-    setSelectedSingleUserStatus(status);
-  }
 
   // formik setup
   const validation = useFormik({

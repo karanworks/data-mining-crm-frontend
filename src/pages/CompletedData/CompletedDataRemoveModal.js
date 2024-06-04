@@ -1,9 +1,9 @@
 import { Button, Modal, ModalBody } from "reactstrap";
 
-function AddUserRemoveModal({
-  modal_delete, // delete user confirmation modal
-  setmodal_delete, // change user confirmation modal state
-  handleDeleteUser, // function to delete a user
+function CompletedDataRemoveModal({
+  modal_delete,
+  setmodal_delete,
+  handleDeleteData,
 }) {
   return (
     <Modal
@@ -50,7 +50,7 @@ function AddUserRemoveModal({
             type="button"
             className="btn w-sm btn-primary"
             id="delete-record"
-            onClick={handleDeleteUser}
+            onClick={handleDeleteData}
           >
             Yes, Delete It!
           </button>
@@ -60,4 +60,4 @@ function AddUserRemoveModal({
   );
 }
 
-export default AddUserRemoveModal;
+export default CompletedDataRemoveModal;

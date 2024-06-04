@@ -521,7 +521,6 @@ export const updateClient = (clientId, values, status) => {
 };
 
 export const removeClient = (clientId) => {
-  console.log("CLIENTS REMOVE ARRAY IN FAKE BACKEND ->", clientId);
   return api.create(`${process.env.REACT_APP_SERVER_URL}/client/delete`, {
     clientId,
   });
@@ -629,6 +628,35 @@ export const removeAssignedData = (centerId, centerUserId) => {
     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
   );
 };
+
+// *****************************************************************
+// ************************ COMPLETED DATA **************************
+// *****************************************************************
+export const getCompletedWorkData = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/completed-data`);
+};
+
+export const removeCompletedWorkData = (dataId) => {
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/completed-data/delete`,
+    {
+      dataId,
+    }
+  );
+};
+
+// export const updateCompletedWorkData = (centerId, centerUserId, data) => {
+//   return api.update(
+//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
+//     data
+//   );
+// };
+
+// export const removeCompletedData = (centerId, centerUserId) => {
+//   return api.delete(
+//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
+//   );
+// };
 
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>

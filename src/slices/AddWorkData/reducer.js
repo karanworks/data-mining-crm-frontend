@@ -24,28 +24,22 @@ const addWorkDataSlice = createSlice({
           }
         );
         state.assignedWorkData = singleData;
+        state.error = "";
+      }
+    });
+
+    builder.addCase(createAssignedWorkData.fulfilled, (state, action) => {
+      console.log("createAssignedWorkData ->", action.payload);
+      if (action.payload.status == "failure") {
+        state.error = action.payload.message;
+      } else {
         toast.success("Data submitted !", {
           position: "bottom-center",
           autoClose: 3000,
           theme: "colored",
         });
-
-        state.error = "";
       }
     });
-
-    // builder.addCase(createAssignedWorkData.fulfilled, (state, action) => {
-    //   console.log("createAssignedWorkData ->", action.payload);
-    //   if (action.payload.status == "failure") {
-    //     state.error = action.payload.message;
-    //   } else {
-    //     toast.success("Data submitted !", {
-    //       position: "bottom-center",
-    //       autoClose: 3000,
-    //       theme: "colored",
-    //     });
-    //   }
-    // });
 
     // builder.addCase(updateClient.fulfilled, (state, action) => {
     //   if (action.payload.status == "failure") {

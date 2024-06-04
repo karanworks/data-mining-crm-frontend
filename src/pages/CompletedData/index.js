@@ -20,7 +20,7 @@ import Flatpickr from "react-flatpickr";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddUserFormModal from "./AddUserFormModal";
-import AddUserRemoveModal from "./AddUserRemoveModal";
+import CompletedDataRemoveModal from "./CompletedDataRemoveModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUsers,
@@ -35,23 +35,36 @@ import {
   removeCenterUser,
   updateCenterUser,
 } from "../../slices/AddUsers/thunk";
+
+import {
+  getCompletedWorkData,
+  removeCompletedWorkData,
+} from "../../slices/CompletedData/thunk";
+import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
 // import { getCenters } from "../../slices/Centers/thunk";
 
 const CompletedData = () => {
-  // register / edit user modal state whether modal is open or not
   const [modal_list, setmodal_list] = useState(false);
-  // this state triggers when editing the user
+
   const [isEditingUser, setIsEditingUser] = useState(false);
-  // delete user confirmation modal state
+
   const [modal_delete, setmodal_delete] = useState(false);
-  // when we click on edit / delete user button this state stores that user's id, had to make this state because I needed to have that user's id to make changes to it
-  const [listUserId, setListUserId] = useState(null);
-  // fetching all the roles
+
+  const [selectedCompletedData, setSelectedCompletedData] = useState([]);
+
+  const [isDeletingMultipleData, setIsDeletingMultipleData] = useState(false);
+
+  const [listData, setListData] = useState(null);
+
   const [roles, setRoles] = useState([]);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
-  // const { centers } = useSelector((state) => state.Centers);
+  const { completedWorkData, filteredCompletedWorkData } = useSelector(
+    (state) => state.CompletedData
+  );
+
+  console.log("FILTERED DATA ->", filteredCompletedWorkData);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,6 +78,56 @@ const CompletedData = () => {
   // toggles delete user confirmation modal
   function tog_delete() {
     setmodal_delete(!modal_delete);
+  }
+
+  function handleSelectedDelete() {
+    tog_delete();
+    setIsDeletingMultipleData(true);
+  }
+
+  function handleFilterData(e) {
+    dispatch(searchCompletedData(e.target.value));
+  }
+
+  function handleSelectAll() {
+    const allCompletedDataIds = completedWorkData?.completedWorkData?.map(
+      (data) => {
+        return data.id;
+      }
+    );
+
+    if (
+      completedWorkData?.completedWorkData?.length ===
+      selectedCompletedData.length
+    ) {
+      setSelectedCompletedData([]);
+    } else {
+      setSelectedCompletedData(allCompletedDataIds);
+    }
+  }
+
+  function handleSelectedCompletedData(dataId) {
+    const alreadySelected = selectedCompletedData.includes(dataId);
+
+    if (alreadySelected) {
+      const filteredCompletedWorkData = selectedCompletedData?.filter((id) => {
+        return id !== dataId;
+      });
+
+      setSelectedCompletedData([...filteredCompletedWorkData]);
+    } else {
+      setSelectedCompletedData([...selectedCompletedData, dataId]);
+    }
+  }
+
+  function handleDelete() {
+    if (isDeletingMultipleData) {
+      dispatch(removeCompletedWorkData({ dataId: selectedCompletedData }));
+    } else {
+      dispatch(removeCompletedWorkData({ dataId: listData.id }));
+    }
+
+    setmodal_delete(false);
   }
 
   useEffect(() => {
@@ -88,7 +151,7 @@ const CompletedData = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-    // dispatch(getCenters());
+    dispatch(getCompletedWorkData());
   }, [dispatch]);
 
   // formik setup
@@ -126,7 +189,7 @@ const CompletedData = () => {
     }),
     onSubmit: (values) => {
       isEditingUser
-        ? dispatch(updateCenterUser({ values, userId: listUserId }))
+        ? dispatch(updateCenterUser({ values, dataId: listData.id }))
         : dispatch(createCenterUser(values));
       // isEditingUser
       //   ? dispatch(updateUser({ values, userId: listUserId }))
@@ -152,7 +215,7 @@ const CompletedData = () => {
   function handleEditUser(userData) {
     setIsEditingUser(true);
     setmodal_list(!modal_list);
-    setListUserId(userData.id);
+    setListData(userData.id);
 
     // setting the value of role according to roleId because in select element roleId is used as value
     const roleName = roles.find((role) => role.id === userData.roleId);
@@ -267,6 +330,35 @@ const CompletedData = () => {
     navigate("/view-data");
   }
 
+  function handleISTTimeZone(utcTimestamp) {
+    // Timestamp in UTC
+
+    // Create a new Date object from the UTC timestamp
+    const utcDate = new Date(utcTimestamp);
+
+    // Get the offset in minutes between UTC and IST
+    const istOffsetInMinutes = utcDate.getTimezoneOffset() + 330;
+
+    // Create a new Date object with the IST offset
+    const istDate = new Date(
+      utcDate.getTime() + istOffsetInMinutes * 60 * 1000
+    );
+
+    // Get the IST day and time components
+    const istYear = istDate.getFullYear();
+    const istMonth = String(istDate.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+    const istDay = String(istDate.getDate()).padStart(2, "0");
+    const istHours = String(istDate.getHours()).padStart(2, "0");
+    const istMinutes = String(istDate.getMinutes()).padStart(2, "0");
+    const istSeconds = String(istDate.getSeconds()).padStart(2, "0");
+    // const istMilliseconds = String(istDate.getMilliseconds()).padStart(3, "0");
+
+    // Format the IST day and time
+    const istDayAndTime = `${istDay}-${istMonth}-${istYear} ${istHours}:${istMinutes}:${istSeconds}`;
+
+    return istDayAndTime;
+  }
+
   document.title = "Add Client";
   return (
     <React.Fragment>
@@ -306,11 +398,12 @@ const CompletedData = () => {
                           >
                             <div>
                               <Input
-                                id="url"
-                                name="url"
+                                id="searchKeyword"
+                                name="searchKeyword"
                                 className="form-control"
                                 type="text"
-                                placeholder="Webiste URL"
+                                placeholder="Search Keyword"
+                                onChange={handleFilterData}
                               />
                             </div>
 
@@ -341,37 +434,14 @@ const CompletedData = () => {
                                 </option>
                               </Input>
                             </div>
+
                             <div>
                               <Input
-                                id="verified"
-                                name="verified"
+                                id="selectUser"
+                                name="selectUser"
                                 className="form-control"
                                 type="select"
-                                placeholder="Select Verified"
-
-                                // onChange={validation.handleChange}
-                                // onBlur={validation.handleBlur}
-                                // value={validation.values.role || ""}
-                                // invalid={
-                                //   validation.touched.role &&
-                                //   validation.errors.role
-                                //     ? true
-                                //     : false
-                                // }
-                              >
-                                <option value="">Select Verified</option>
-
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                              </Input>
-                            </div>
-                            <div>
-                              <Input
-                                id="verified"
-                                name="verified"
-                                className="form-control"
-                                type="select"
-                                placeholder="Select Verified"
+                                placeholder="Select User"
 
                                 // onChange={validation.handleChange}
                                 // onBlur={validation.handleBlur}
@@ -385,8 +455,10 @@ const CompletedData = () => {
                               >
                                 <option value="">Select User</option>
 
-                                {tempUserData?.map((user) => (
-                                  <option value={user.name}>{user.name}</option>
+                                {tempUserData?.map((user, i) => (
+                                  <option value={user.name} key={i}>
+                                    {user.name}
+                                  </option>
                                 ))}
                               </Input>
                             </div>
@@ -410,8 +482,8 @@ const CompletedData = () => {
                               >
                                 <option value="">Select Business Type</option>
 
-                                {tempBusinessTypeData?.map((business) => (
-                                  <option value={business.businessType}>
+                                {tempBusinessTypeData?.map((business, i) => (
+                                  <option value={business.businessType} key={i}>
                                     {business.businessType}
                                   </option>
                                 ))}
@@ -437,8 +509,8 @@ const CompletedData = () => {
                               >
                                 <option value="">Select State</option>
 
-                                {stateData?.map((state) => (
-                                  <option value={state.state}>
+                                {stateData?.map((state, i) => (
+                                  <option value={state.state} key={i}>
                                     {state.state}
                                   </option>
                                 ))}
@@ -479,24 +551,23 @@ const CompletedData = () => {
                             <i className="ri-download-fill align-bottom me-1"></i>{" "}
                             Export Data
                           </Button>
-                          <Button
-                            color="primary"
-                            className="delete-btn me-1"
-                            // onClick={() => tog_list()}
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Delete Selected Id
-                          </Button>
+                          {selectedCompletedData.length > 0 ? (
+                            <Button
+                              color="primary"
+                              className="delete-btn me-1"
+                              onClick={handleSelectedDelete}
+                              id="create-btn"
+                            >
+                              <i className="ri-add-line align-bottom me-1"></i>{" "}
+                              Delete Selected Id
+                            </Button>
+                          ) : null}
                         </div>
                       </Col>
                     </Row>
 
                     <div className="table-responsive table-card mt-3 mb-1">
-                      <table
-                        className="table align-middle table-nowrap"
-                        id="userTable"
-                      >
+                      <table className="table table-nowrap" id="userTable">
                         <thead className="table-light">
                           <tr>
                             <th scope="col" style={{ width: "50px" }}>
@@ -506,6 +577,13 @@ const CompletedData = () => {
                                   type="checkbox"
                                   id="checkAll"
                                   value="option"
+                                  checked={
+                                    completedWorkData?.completedWorkData
+                                      ?.length > 0 &&
+                                    completedWorkData?.completedWorkData
+                                      ?.length === selectedCompletedData.length
+                                  }
+                                  onChange={handleSelectAll}
                                 />
                               </div>
                             </th>
@@ -526,43 +604,71 @@ const CompletedData = () => {
                               Status
                             </th>
 
-                            <th className="sort" data-sort="contact">
-                              Verified
-                            </th>
-
                             <th className="sort" data-sort="action">
                               Action
                             </th>
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {tempCompanyData?.map((user) => (
-                            <tr key={user.id}>
+                          {(filteredCompletedWorkData?.length > 0
+                            ? filteredCompletedWorkData
+                            : completedWorkData?.completedWorkData
+                          )?.map((data) => (
+                            <tr key={data.id}>
                               <th scope="row">
                                 <div className="form-check">
                                   <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    name="checkAll"
-                                    value="option1"
+                                    name="checkbox"
+                                    checked={selectedCompletedData.includes(
+                                      data.id
+                                    )}
+                                    onChange={() => {
+                                      handleSelectedCompletedData(data.id);
+                                    }}
                                   />
                                 </div>
                               </th>
 
-                              <td className="username">{user.username}</td>
+                              <td className="username">
+                                {completedWorkData.username}
+                              </td>
                               <td className="dateAndTime">
                                 <span className="badge border border-primary text-primary fs-12">
-                                  {user.dateAndTime}
+                                  {handleISTTimeZone(data.createdAt)}
                                 </span>
                               </td>
                               <td className="companyInfo">
-                                {user.companyInfo}
+                                <div>
+                                  <div>URL - {data.url}</div>
+                                  <div>Name - {data.companyName}</div>
+                                  <div>Contact 1 - {data.contactNo1}</div>
+                                  <div>Contact 2 - {data.contactNo2}</div>
+                                  <div>Email 1 - {data.emailId1}</div>
+                                  <div>Email 2 - {data.emailId2}</div>
+                                  <div>Fax - {data.faxNo}</div>
+                                  <div>
+                                    <span>{data.state}-</span>
+                                    <span>{data.pinCode}, </span>
+                                    <span>{data.country}</span>
+                                  </div>
+                                </div>
                               </td>
                               <td className="businessType">
-                                {user.businessType}
+                                {data.businessType}
                               </td>
-                              <td className="status">{user.status}</td>
-                              <td className="verified">{user.verified} </td>
+                              <td className="status">
+                                {data.websiteStatus === "Valid URL" ? (
+                                  <span class="badge border border-success text-success">
+                                    {data.websiteStatus}
+                                  </span>
+                                ) : (
+                                  <span class="badge border border-danger text-danger">
+                                    {data.websiteStatus}
+                                  </span>
+                                )}
+                              </td>
 
                               <td>
                                 <div className="d-flex gap-2">
@@ -582,8 +688,8 @@ const CompletedData = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#deleteRecordModal"
                                       onClick={() => {
-                                        // setListUserId(user.id);
-                                        // setmodal_delete(true);
+                                        setListData(data);
+                                        setmodal_delete(true);
                                       }}
                                     >
                                       Remove
@@ -593,7 +699,7 @@ const CompletedData = () => {
                                     <button
                                       className="btn btn-sm btn-success remove-item-btn"
                                       data-bs-toggle="modal"
-                                      onClick={handleViewData}
+                                      onClick={() => {}}
                                     >
                                       View
                                     </button>
@@ -658,14 +764,11 @@ const CompletedData = () => {
       />
 
       {/* Remove Modal */}
-      <AddUserRemoveModal
+      <CompletedDataRemoveModal
         modal_delete={modal_delete}
         tog_delete={tog_delete}
         setmodal_delete={setmodal_delete}
-        handleDeleteUser={() => {
-          dispatch(removeUser({ userId: listUserId }));
-          setmodal_delete(false);
-        }}
+        handleDeleteData={handleDelete}
       />
     </React.Fragment>
   );
