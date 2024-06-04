@@ -11,6 +11,7 @@ import ReportReducer from "./Report/reducer";
 import AddClientReducer from "./AddClient/reducer";
 import AddUsersReducer from "./AddUsers/reducer";
 import AddDataReducer from "./AddData/reducer";
+import AddWorkDataReducer from "./AddWorkData/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   Client: AddClientReducer,
   AddUsers: AddUsersReducer,
   AddData: AddDataReducer,
+  AddWorkData: AddWorkDataReducer,
   ForgetPassword: ForgetPasswordReducer,
   Profile: ProfileReducer,
 });

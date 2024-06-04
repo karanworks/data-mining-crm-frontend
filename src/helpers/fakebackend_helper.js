@@ -606,6 +606,30 @@ export const addDataUpload = (values) => {
   });
 };
 
+// *****************************************************************
+// ************************ ADD WORK DATA **************************
+// *****************************************************************
+export const getAssignedWorkData = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/add-work-data`);
+};
+
+export const createAssignedWorkData = (data) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/add-work-data`, data);
+};
+
+export const updateAssignedWorkData = (centerId, centerUserId, data) => {
+  return api.update(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
+    data
+  );
+};
+
+export const removeAssignedData = (centerId, centerUserId) => {
+  return api.delete(
+    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
+  );
+};
+
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);

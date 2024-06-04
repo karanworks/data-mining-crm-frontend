@@ -23,7 +23,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getClients, getClientUsers } from "../../slices/AddClient/thunk";
-import { useFormik, validateYupSchema } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { addDataUpload } from "../../slices/AddData/thunk";
 

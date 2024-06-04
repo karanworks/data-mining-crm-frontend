@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -6,6 +6,7 @@ import {
   Col,
   Container,
   Form,
+  FormFeedback,
   Input,
   InputGroup,
   Label,
@@ -15,12 +16,19 @@ import {
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {
+  getAssignedWorkData,
+  createAssignedWorkData,
+} from "../../slices/AddWorkData/thunk";
 
 // Register the plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -33,12 +41,22 @@ const AddWorkData = () => {
 
   const [files, setFiles] = useState([]);
 
+  const { assignedWorkData } = useSelector((state) => state.AddWorkData);
+
+  const dispatch = useDispatch();
+
+  console.log("WORK DATA NEEDED TO BE FILLED ->", assignedWorkData);
+
   function handleSelectSingleWebsiteStatus(status) {
     setSelectedSingleWebsiteStatus(status);
   }
   function handleSelectSingleBusinessType(businessType) {
     setSelectedSingleBusinessType(businessType);
   }
+
+  useEffect(() => {
+    dispatch(getAssignedWorkData());
+  }, [dispatch]);
 
   const statusOptions = [
     {
@@ -137,6 +155,56 @@ const AddWorkData = () => {
     },
   ];
 
+  const addWorkDataValidation = useFormik({
+    initialValues: {
+      websiteStatus: "",
+      companyName: "",
+      contactNo1: "",
+      contactNo2: "",
+      emailId1: "",
+      emailId2: "",
+      faxNo: "",
+      businessType: "",
+      address: "",
+      companyProfile: "",
+      city: "",
+      state: "",
+      pinCode: "",
+      country: "",
+    },
+    validationSchema: Yup.object({
+      websiteStatus: Yup.string().required("Select website status"),
+      companyName: Yup.string().required("Enter company name"),
+      contactNo1: Yup.string(),
+      contactNo2: Yup.string(),
+      emailId1: Yup.string(),
+      emailId2: Yup.string(),
+      faxNo: Yup.string(),
+      businessType: Yup.string(),
+      address: Yup.string(),
+      companyProfile: Yup.string(),
+      city: Yup.string(),
+      state: Yup.string(),
+      pinCode: Yup.string(),
+      country: Yup.string(),
+    }),
+    onSubmit: (values) => {
+      dispatch(
+        createAssignedWorkData({ ...values, urlId: assignedWorkData.id })
+      );
+      dispatch(getAssignedWorkData());
+    },
+  });
+
+  function addWorkDataFormHandleSubmit(e) {
+    e.preventDefault();
+
+    addWorkDataValidation.handleSubmit();
+    // addWorkDataValidation.resetForm();
+
+    return false;
+  }
+
   document.title = "Add Work Data";
   return (
     <React.Fragment>
@@ -145,6 +213,10 @@ const AddWorkData = () => {
           <BreadCrumb title="Add Work Data" pageTitle="Work" />
           <Row>
             <Col xs={12}>
+              {/* <Form
+                className="row g-3"
+                onSubmit={(e) => addWorkDataFormHandleSubmit(e)}
+              > */}
               <Card>
                 <CardHeader className="align-items-center d-flex">
                   <h4 className="card-title mb-0 flex-grow-1">
@@ -153,19 +225,21 @@ const AddWorkData = () => {
                 </CardHeader>
                 <div className="card-body">
                   <div className="live-preview">
-                    <form action="#" className="row g-3">
+                    <form
+                      action="#"
+                      className="row g-3"
+                      onSubmit={(e) => addWorkDataFormHandleSubmit(e)}
+                    >
                       <Col md={6} className="d-flex" style={{ gap: "10px" }}>
                         <Label htmlFor="websiteURL" className="form-label">
                           Webiste URL
                         </Label>
-                        {/* <Input
-                          type="text"
-                          className="form-control"
-                          id="fullnameInput"
-                          placeholder="Enter your name"
-                        /> */}
 
-                        <a href="#">ascenthaat.com</a>
+                        {/* Issue is how would we know that if the website is on http or https or do we need to add it while adding the data for the user */}
+
+                        <a href={assignedWorkData?.url} target="_blank">
+                          {assignedWorkData?.url}
+                        </a>
                       </Col>
 
                       <Col md={6}>
@@ -192,14 +266,20 @@ const AddWorkData = () => {
                           value={selectedSingleWebsiteStatus}
                           onChange={(status) => {
                             handleSelectSingleWebsiteStatus(status);
-                            // validation.setFieldValue(
-                            //   "centerName",
-                            //   centerName.value
-                            // );
+                            addWorkDataValidation.setFieldValue(
+                              "websiteStatus",
+                              status.value
+                            );
                           }}
                           options={statusOptions}
-                          placeholder="Select Website Statuss"
+                          placeholder="Select Website Status"
                         />
+                        {addWorkDataValidation.touched.websiteStatus &&
+                        addWorkDataValidation.errors.websiteStatus ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.websiteStatus}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
 
                       <Col md={6}>
@@ -207,33 +287,81 @@ const AddWorkData = () => {
                           Company Name
                         </Label>
                         <Input
-                          type="text"
-                          className="form-control"
                           id="companyName"
-                          placeholder="Enter company's name"
+                          name="companyName"
+                          className="form-control"
+                          placeholder="Enter Company Name"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.companyName || ""}
+                          invalid={
+                            addWorkDataValidation.touched.companyName &&
+                            addWorkDataValidation.errors.companyName
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.companyName &&
+                        addWorkDataValidation.errors.companyName ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.companyName}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col md={6}>
-                        <Label htmlFor="contantNo1" className="form-label">
+                        <Label htmlFor="contactNo1" className="form-label">
                           Contact No 1
                         </Label>
                         <Input
-                          type="text"
+                          id="contactNo1"
+                          name="contactNo1"
                           className="form-control"
-                          id="contantNo1"
-                          placeholder="Enter contact no"
+                          placeholder="Enter contact no 1"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.contactNo1 || ""}
+                          invalid={
+                            addWorkDataValidation.touched.contactNo1 &&
+                            addWorkDataValidation.errors.contactNo1
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.contactNo1 &&
+                        addWorkDataValidation.errors.contactNo1 ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.contactNo1}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col md={6}>
                         <Label htmlFor="contactNo2" className="form-label">
                           Contact No 2
                         </Label>
                         <Input
-                          type="text"
-                          className="form-control"
                           id="contactNo2"
-                          placeholder="Enter contact no"
+                          name="contactNo2"
+                          className="form-control"
+                          placeholder="Enter contact no 2"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.contactNo2 || ""}
+                          invalid={
+                            addWorkDataValidation.touched.contactNo2 &&
+                            addWorkDataValidation.errors.contactNo2
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.contactNo2 &&
+                        addWorkDataValidation.errors.contactNo2 ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.contactNo2}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
 
                       <Col xs={6}>
@@ -241,33 +369,83 @@ const AddWorkData = () => {
                           Email Id 1
                         </Label>
                         <Input
-                          type="email"
-                          className="form-control"
                           id="emailId1"
+                          name="emailId1"
+                          className="form-control"
                           placeholder="example@gmail.com"
+                          type="email"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.emailId1 || ""}
+                          invalid={
+                            addWorkDataValidation.touched.emailId1 &&
+                            addWorkDataValidation.errors.emailId1
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.emailId1 &&
+                        addWorkDataValidation.errors.emailId1 ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.emailId1}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col xs={6}>
                         <Label htmlFor="emailId2" className="form-label">
                           Email Id 2
                         </Label>
                         <Input
-                          type="email"
-                          className="form-control"
                           id="emailId2"
+                          name="emailId2"
+                          className="form-control"
                           placeholder="example@gmail.com"
+                          type="email"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.emailId2 || ""}
+                          invalid={
+                            addWorkDataValidation.touched.emailId2 &&
+                            addWorkDataValidation.errors.emailId2
+                              ? true
+                              : false
+                          }
                         />
+
+                        {addWorkDataValidation.touched.emailId2 &&
+                        addWorkDataValidation.errors.emailId2 ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.emailId2}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col xs={6}>
                         <Label htmlFor="faxNo" className="form-label">
                           Fax No
                         </Label>
+
                         <Input
-                          type="text"
+                          id="faxNo"
+                          name="faxNo"
                           className="form-control"
-                          id="inputAddress"
                           placeholder="(123) 456-7890"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.faxNo || ""}
+                          invalid={
+                            addWorkDataValidation.touched.faxNo &&
+                            addWorkDataValidation.errors.faxNo
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.faxNo &&
+                        addWorkDataValidation.errors.faxNo ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.faxNo}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col md={6}>
                         <Label htmlFor="businessType" className="form-label">
@@ -279,47 +457,96 @@ const AddWorkData = () => {
                           value={selectedSingleBusinessType}
                           onChange={(businessType) => {
                             handleSelectSingleBusinessType(businessType);
-                            // validation.setFieldValue(
-                            //   "centerName",
-                            //   centerName.value
-                            // );
+                            addWorkDataValidation.setFieldValue(
+                              "businessType",
+                              businessType.value
+                            );
                           }}
                           options={businessTypeOptions}
-                          placeholder="Select Business Types"
+                          placeholder="Select Business Type"
                         />
                       </Col>
 
                       <Col md={6}>
-                        <Label for="companyAddress">Address</Label>
+                        <Label for="address">Address</Label>
                         <Input
-                          type="textarea"
+                          id="address"
+                          name="address"
                           className="form-control"
-                          id="companyAddress"
-                          rows="3"
-                          placeholder="Company address"
+                          placeholder="Company's Address"
+                          type="textarea"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.address || ""}
+                          invalid={
+                            addWorkDataValidation.touched.address &&
+                            addWorkDataValidation.errors.address
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.address &&
+                        addWorkDataValidation.errors.address ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.address}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col md={6}>
                         <Label for="companyProfile">Company Profile</Label>
                         <Input
-                          type="textarea"
-                          className="form-control"
                           id="companyProfile"
-                          rows="3"
+                          name="companyProfile"
+                          className="form-control"
                           placeholder="Company profile"
+                          type="textarea"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={
+                            addWorkDataValidation.values.companyProfile || ""
+                          }
+                          invalid={
+                            addWorkDataValidation.touched.companyProfile &&
+                            addWorkDataValidation.errors.companyProfile
+                              ? true
+                              : false
+                          }
                         />
+
+                        {addWorkDataValidation.touched.companyProfile &&
+                        addWorkDataValidation.errors.companyProfile ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.companyProfile}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
 
                       <Col md={3}>
-                        <Label htmlFor="inputCity" className="form-label">
+                        <Label htmlFor="city" className="form-label">
                           City
                         </Label>
                         <Input
-                          type="text"
+                          id="city"
+                          name="city"
                           className="form-control"
-                          id="inputCity"
                           placeholder="Enter city"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.city || ""}
+                          invalid={
+                            addWorkDataValidation.touched.city &&
+                            addWorkDataValidation.errors.city
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.city &&
+                        addWorkDataValidation.errors.city ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.city}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
 
                       <Col md={3}>
@@ -327,33 +554,81 @@ const AddWorkData = () => {
                           State
                         </Label>
                         <Input
-                          type="text"
-                          className="form-control"
                           id="state"
+                          name="state"
+                          className="form-control"
                           placeholder="Enter state"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.state || ""}
+                          invalid={
+                            addWorkDataValidation.touched.state &&
+                            addWorkDataValidation.errors.state
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.state &&
+                        addWorkDataValidation.errors.state ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.state}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col md={3}>
                         <Label htmlFor="pinCode" className="form-label">
                           Pin Code
                         </Label>
                         <Input
-                          type="text"
-                          className="form-control"
                           id="pinCode"
-                          placeholder="Enter Pin code"
+                          name="pinCode"
+                          className="form-control"
+                          placeholder="Enter pin code"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.pinCode || ""}
+                          invalid={
+                            addWorkDataValidation.touched.pinCode &&
+                            addWorkDataValidation.errors.pinCode
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.pinCode &&
+                        addWorkDataValidation.errors.pinCode ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.pinCode}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
                       <Col md={3}>
-                        <Label htmlFor="inputCountry" className="form-label">
+                        <Label htmlFor="country" className="form-label">
                           Country
                         </Label>
                         <Input
-                          type="text"
+                          id="country"
+                          name="country"
                           className="form-control"
-                          id="inputCountry"
                           placeholder="Enter country"
+                          type="text"
+                          onChange={addWorkDataValidation.handleChange}
+                          onBlur={addWorkDataValidation.handleBlur}
+                          value={addWorkDataValidation.values.country || ""}
+                          invalid={
+                            addWorkDataValidation.touched.country &&
+                            addWorkDataValidation.errors.country
+                              ? true
+                              : false
+                          }
                         />
+                        {addWorkDataValidation.touched.country &&
+                        addWorkDataValidation.errors.country ? (
+                          <FormFeedback type="invalid">
+                            {addWorkDataValidation.errors.country}
+                          </FormFeedback>
+                        ) : null}
                       </Col>
 
                       <Col xs={6}>
@@ -367,6 +642,7 @@ const AddWorkData = () => {
                   </div>
                 </div>
               </Card>
+              {/* </Form> */}
             </Col>
           </Row>
         </Container>

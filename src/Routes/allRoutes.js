@@ -17,7 +17,6 @@ import AddUsers from "../pages/AddUsers";
 import Mapping from "../pages/Mapping";
 import Home from "../pages/Home";
 import ReportUpload from "../pages/ReportUpload";
-import AssignData from "../pages/AssignData";
 import TermsAndConditions from "../pages/TermsAndConditions";
 import AddWorkData from "../pages/AddWorkData";
 import AddClient from "../pages/AddClient";
@@ -31,7 +30,6 @@ const authProtectedRoutes = [
   { path: "/roles", component: <Mapping /> },
   { path: "/add-users", component: <AddUsers /> },
   { path: "/report-upload", component: <ReportUpload /> },
-  { path: "/assign-data", component: <AssignData /> },
 
   // SEPARATOR FOR DATA MINING PROJECT
 
