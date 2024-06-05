@@ -23,7 +23,6 @@ import { getUsers } from "../../slices/Users/thunk";
 import {
   getCompletedWorkData,
   removeCompletedWorkData,
-  updateCompletedWorkData,
 } from "../../slices/CompletedData/thunk";
 import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +31,7 @@ import {
   tempBusinessTypeData,
   stateData,
 } from "../../common/data/completedData";
+import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
 
 const CompletedData = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -144,8 +144,24 @@ const CompletedData = () => {
     });
   }
 
-  function handleViewData() {
-    navigate("/view-data");
+  async function handleExportData() {
+    const response = await exportCompletedWorkData();
+    const url = window.URL.createObjectURL(
+      new Blob([response], {
+        type: "text/csv",
+      })
+    );
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function handleViewData(data) {
+    navigate("/completed-data/view-data", { state: { data } });
   }
 
   function handleEditData(data) {
@@ -301,7 +317,7 @@ const CompletedData = () => {
                           <Button
                             color="primary"
                             className="add-btn me-1"
-                            // onClick={() => tog_list()}
+                            onClick={handleExportData}
                             id="create-btn"
                           >
                             <i className="ri-download-fill align-bottom me-1"></i>{" "}
@@ -479,7 +495,7 @@ const CompletedData = () => {
                                     <button
                                       className="btn btn-sm btn-success remove-item-btn"
                                       data-bs-toggle="modal"
-                                      onClick={() => {}}
+                                      onClick={() => handleViewData(data)}
                                     >
                                       View
                                     </button>

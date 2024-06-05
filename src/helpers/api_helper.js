@@ -76,8 +76,11 @@ class APIClient {
    * post given data to url
    */
 
-  get = (url) => {
-    return axios.get(url, { withCredentials: true });
+  get = (url, extraHeaders) => {
+    return axios.get(url, {
+      withCredentials: true,
+      ...extraHeaders,
+    });
   };
 
   create = (url, data, headers) => {

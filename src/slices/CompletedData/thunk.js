@@ -11,6 +11,7 @@ import {
   getCompletedWorkData as getCompletedWorkDataApi,
   removeCompletedWorkData as removeCompletedWorkDataApi,
   updateCompletedWorkData as updateCompletedWorkDataApi,
+  exportCompletedWorkData as exportCompletedWorkDataApi,
   // updateClient as updateClientApi,
   // removeClient as removeClientApi,
 } from "../../helpers/fakebackend_helper";
@@ -47,7 +48,20 @@ export const removeCompletedWorkData = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.log("error inside remove client thunk", error);
+      console.log("error inside remove completed work data thunk", error);
     }
   }
 );
+// export const exportCompletedWorkData = createAsyncThunk(
+//   "completedData/exportCompletedWorkData",
+//   async () => {
+//     try {
+//       console.log("EXPORT THUNK WAS CALLED");
+//       const response = await exportCompletedWorkDataApi();
+
+//       return response.data;
+//     } catch (error) {
+//       console.log("error inside export data completed work data thunk", error);
+//     }
+//   }
+// );

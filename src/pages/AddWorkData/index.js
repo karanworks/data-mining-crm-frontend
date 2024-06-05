@@ -251,14 +251,22 @@ const AddWorkData = () => {
                           <Label htmlFor="companyLogo" className="form-label">
                             Company Logo
                           </Label>
-                          <FilePond
+                          {/* <FilePond
                             files={files}
                             onupdatefiles={setFiles}
                             allowMultiple={false}
                             maxFiles={1}
                             name="files"
                             className="filepond"
-                          />
+                          /> */}
+
+                          <div>
+                            <input
+                              type="file"
+                              id="companyLogo"
+                              name="companyLogo"
+                            />
+                          </div>
                         </Col>
 
                         <Col md={6}>

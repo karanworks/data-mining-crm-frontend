@@ -2,8 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Card, CardBody } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
+import { useLocation } from "react-router-dom";
 
 const ViewFilledData = () => {
+  const location = useLocation();
+  const data = location?.state?.data;
+
+  console.log("DATA IN VIEW FORM ->", data);
   const fieldData = [
     {
       id: 1,
