@@ -47,7 +47,7 @@ const CompletedData = () => {
   const [roles, setRoles] = useState([]);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
-  const { completedWorkData, filteredCompletedWorkData } = useSelector(
+  const { userData, filteredCompletedData } = useSelector(
     (state) => state.CompletedData
   );
 
@@ -69,16 +69,11 @@ const CompletedData = () => {
   }
 
   function handleSelectAll() {
-    const allCompletedDataIds = completedWorkData?.completedWorkData?.map(
-      (data) => {
-        return data.id;
-      }
-    );
+    const allCompletedDataIds = userData?.completedWorkData?.map((data) => {
+      return data.id;
+    });
 
-    if (
-      completedWorkData?.completedWorkData?.length ===
-      selectedCompletedData.length
-    ) {
+    if (userData?.completedWorkData?.length === selectedCompletedData.length) {
       setSelectedCompletedData([]);
     } else {
       setSelectedCompletedData(allCompletedDataIds);
@@ -203,172 +198,106 @@ const CompletedData = () => {
                   <div className="listjs-table" id="userList">
                     <Row className="g-4 mb-3 d-flex justify-content-between">
                       <Col
-                        className="col-sm-auto d-flex"
+                        className="col-sm-auto w-100 d-flex justify-content-between"
                         style={{ gap: "5px" }}
                       >
-                        {/* <div className="search-box">
-                          <input
-                            type="text"
-                            className="form-control bg-light border-light"
-                            autoComplete="off"
-                            id="searchList"
-                            onChange={() => {}}
-                            placeholder="Search User"
-                          />
-                          <i className="ri-search-line search-icon"></i>
-                        </div> */}
-
-                        <Form>
-                          <div
-                            className="d-flex"
-                            style={{ gap: "5px", flexWrap: "wrap" }}
-                          >
-                            <div>
-                              <Input
-                                id="searchKeyword"
-                                name="searchKeyword"
-                                className="form-control"
-                                type="text"
-                                placeholder="Search Keyword"
-                                onChange={handleFilterData}
-                              />
-                            </div>
-
-                            <div>
-                              <Input
-                                id="web_status"
-                                name="web_status"
-                                className="form-control"
-                                type="select"
-                                placeholder="Select web status"
-
-                                // onChange={validation.handleChange}
-                                // onBlur={validation.handleBlur}
-                                // value={validation.values.role || ""}
-                                // invalid={
-                                //   validation.touched.role &&
-                                //   validation.errors.role
-                                //     ? true
-                                //     : false
-                                // }
-                              >
-                                <option value="">Select Web Status</option>
-
-                                <option value="Valid">Valid URL</option>
-                                <option value="Invalid URL">Invalid URL</option>
-                                <option value="Flash Website">
-                                  Flash Website
-                                </option>
-                              </Input>
-                            </div>
-
-                            <div>
-                              <Input
-                                id="selectUser"
-                                name="selectUser"
-                                className="form-control"
-                                type="select"
-                                placeholder="Select User"
-
-                                // onChange={validation.handleChange}
-                                // onBlur={validation.handleBlur}
-                                // value={validation.values.role || ""}
-                                // invalid={
-                                //   validation.touched.role &&
-                                //   validation.errors.role
-                                //     ? true
-                                //     : false
-                                // }
-                              >
-                                <option value="">Select User</option>
-
-                                {tempUserData?.map((user, i) => (
-                                  <option value={user.name} key={i}>
-                                    {user.name}
-                                  </option>
-                                ))}
-                              </Input>
-                            </div>
-                            <div>
-                              <Input
-                                id="verified"
-                                name="verified"
-                                className="form-control"
-                                type="select"
-                                placeholder="Select Verified"
-
-                                // onChange={validation.handleChange}
-                                // onBlur={validation.handleBlur}
-                                // value={validation.values.role || ""}
-                                // invalid={
-                                //   validation.touched.role &&
-                                //   validation.errors.role
-                                //     ? true
-                                //     : false
-                                // }
-                              >
-                                <option value="">Select Business Type</option>
-
-                                {tempBusinessTypeData?.map((business, i) => (
-                                  <option value={business.businessType} key={i}>
-                                    {business.businessType}
-                                  </option>
-                                ))}
-                              </Input>
-                            </div>
-                            <div>
-                              <Input
-                                id="state"
-                                name="state"
-                                className="form-control"
-                                type="select"
-                                placeholder="Select State"
-
-                                // onChange={validation.handleChange}
-                                // onBlur={validation.handleBlur}
-                                // value={validation.values.role || ""}
-                                // invalid={
-                                //   validation.touched.role &&
-                                //   validation.errors.role
-                                //     ? true
-                                //     : false
-                                // }
-                              >
-                                <option value="">Select State</option>
-
-                                {stateData?.map((state, i) => (
-                                  <option value={state.state} key={i}>
-                                    {state.state}
-                                  </option>
-                                ))}
-                              </Input>
-                            </div>
-                            <div>
-                              <Flatpickr
-                                className="form-control border dash-filter-picker"
-                                options={{
-                                  mode: "range",
-                                  dateFormat: "d M, Y",
-                                }}
-                                placeholder="Date range"
-                              />
-                            </div>
-
-                            <div>
-                              <Button
-                                color="primary"
-                                className="add-btn me-1"
-                                id="filter-btn"
-                              >
-                                <i className="ri-equalizer-line"></i> Apply
-                              </Button>
-                            </div>
-                          </div>
-                        </Form>
-                      </Col>
-
-                      <Col className="col-sm-auto">
                         <div>
+                          <Input
+                            id="searchKeyword"
+                            name="searchKeyword"
+                            className="form-control"
+                            type="text"
+                            placeholder="Search Keyword"
+                            onChange={handleFilterData}
+                          />
+                        </div>
+
+                        <div className="d-flex">
+                          <Form>
+                            <div
+                              className="d-flex"
+                              style={{ gap: "5px", flexWrap: "wrap" }}
+                            >
+                              <div>
+                                <Input
+                                  id="selectUser"
+                                  name="selectUser"
+                                  className="form-control"
+                                  type="select"
+                                  placeholder="Select User"
+
+                                  // onChange={validation.handleChange}
+                                  // onBlur={validation.handleBlur}
+                                  // value={validation.values.role || ""}
+                                  // invalid={
+                                  //   validation.touched.role &&
+                                  //   validation.errors.role
+                                  //     ? true
+                                  //     : false
+                                  // }
+                                >
+                                  <option value="">Select User</option>
+
+                                  {tempUserData?.map((user, i) => (
+                                    <option value={user.name} key={i}>
+                                      {user.name}
+                                    </option>
+                                  ))}
+                                </Input>
+                              </div>
+                              <div>
+                                <Input
+                                  id="businessType"
+                                  name="businessType"
+                                  className="form-control"
+                                  type="select"
+                                  placeholder="Select Business Type"
+
+                                  // onChange={validation.handleChange}
+                                  // onBlur={validation.handleBlur}
+                                  // value={validation.values.role || ""}
+                                  // invalid={
+                                  //   validation.touched.role &&
+                                  //   validation.errors.role
+                                  //     ? true
+                                  //     : false
+                                  // }
+                                >
+                                  <option value="">Select Business Type</option>
+
+                                  {tempBusinessTypeData?.map((business, i) => (
+                                    <option
+                                      value={business.businessType}
+                                      key={i}
+                                    >
+                                      {business.businessType}
+                                    </option>
+                                  ))}
+                                </Input>
+                              </div>
+
+                              <div>
+                                <Flatpickr
+                                  className="form-control border dash-filter-picker"
+                                  options={{
+                                    mode: "range",
+                                    dateFormat: "d M, Y",
+                                  }}
+                                  placeholder="Date range"
+                                />
+                              </div>
+
+                              <div>
+                                <Button
+                                  color="primary"
+                                  className="add-btn me-1"
+                                  id="filter-btn"
+                                >
+                                  <i className="ri-equalizer-line"></i> Apply
+                                </Button>
+                              </div>
+                            </div>
+                          </Form>
                           <Button
                             color="primary"
                             className="add-btn me-1"
@@ -391,6 +320,31 @@ const CompletedData = () => {
                           ) : null}
                         </div>
                       </Col>
+
+                      {/* <Col className="col-sm-auto">
+                        <div>
+                          <Button
+                            color="primary"
+                            className="add-btn me-1"
+                            // onClick={() => tog_list()}
+                            id="create-btn"
+                          >
+                            <i className="ri-download-fill align-bottom me-1"></i>{" "}
+                            Export Data
+                          </Button>
+                          {selectedCompletedData.length > 0 ? (
+                            <Button
+                              color="primary"
+                              className="delete-btn me-1"
+                              onClick={handleSelectedDelete}
+                              id="create-btn"
+                            >
+                              <i className="ri-add-line align-bottom me-1"></i>{" "}
+                              Delete Selected Id
+                            </Button>
+                          ) : null}
+                        </div>
+                      </Col> */}
                     </Row>
 
                     <div className="table-responsive table-card mt-3 mb-1">
@@ -405,10 +359,9 @@ const CompletedData = () => {
                                   id="checkAll"
                                   value="option"
                                   checked={
-                                    completedWorkData?.completedWorkData
-                                      ?.length > 0 &&
-                                    completedWorkData?.completedWorkData
-                                      ?.length === selectedCompletedData.length
+                                    userData?.completedWorkData?.length > 0 &&
+                                    userData?.completedWorkData?.length ===
+                                      selectedCompletedData.length
                                   }
                                   onChange={handleSelectAll}
                                 />
@@ -437,9 +390,9 @@ const CompletedData = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {(filteredCompletedWorkData?.length > 0
-                            ? filteredCompletedWorkData
-                            : completedWorkData?.completedWorkData
+                          {(filteredCompletedData?.length > 0
+                            ? filteredCompletedData
+                            : userData?.completedWorkData
                           )?.map((data) => (
                             <tr key={data.id}>
                               <th scope="row">
@@ -458,9 +411,7 @@ const CompletedData = () => {
                                 </div>
                               </th>
 
-                              <td className="username">
-                                {completedWorkData.username}
-                              </td>
+                              <td className="username">{userData.username}</td>
                               <td className="dateAndTime">
                                 <span className="badge border border-primary text-primary fs-12">
                                   {handleISTTimeZone(data.createdAt)}

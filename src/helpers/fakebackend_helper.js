@@ -653,12 +653,6 @@ export const updateCompletedWorkData = (data) => {
   );
 };
 
-// export const removeCompletedData = (centerId, centerUserId) => {
-//   return api.delete(
-//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
-//   );
-// };
-
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);
