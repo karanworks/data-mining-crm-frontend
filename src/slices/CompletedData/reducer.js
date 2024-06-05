@@ -1,6 +1,10 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { getCompletedWorkData, removeCompletedWorkData } from "./thunk";
+import {
+  getCompletedWorkData,
+  removeCompletedWorkData,
+  updateCompletedWorkData,
+} from "./thunk";
 
 export const initialState = {
   completedWorkData: [],
@@ -41,44 +45,31 @@ const completedWorkDataSlice = createSlice({
       }
     });
 
-    // builder.addCase(createAssignedWorkData.fulfilled, (state, action) => {
-    //   console.log("createAssignedWorkData ->", action.payload);
-    //   if (action.payload.status == "failure") {
-    //     state.error = action.payload.message;
-    //   } else {
-    //     toast.success("Data submitted !", {
-    //       position: "bottom-center",
-    //       autoClose: 3000,
-    //       theme: "colored",
-    //     });
-    //   }
-    // });
+    builder.addCase(updateCompletedWorkData.fulfilled, (state, action) => {
+      if (action.payload.status == "failure") {
+        state.alreadyRegisteredError = action.payload.message;
+        state.error = "";
+      } else {
+        // const updatedClientId = action.payload.data.updatedClient.id;
+        // state.clients = state.clients.map((client) => {
+        //   if (client.id == updatedClientId) {
+        //     client = action.payload.data.updatedClient;
+        //     return client;
+        //   } else {
+        //     return client;
+        //   }
+        // });
 
-    // builder.addCase(updateClient.fulfilled, (state, action) => {
-    //   if (action.payload.status == "failure") {
-    //     state.alreadyRegisteredError = action.payload.message;
-    //     state.error = "";
-    //   } else {
-    //     const updatedClientId = action.payload.data.updatedClient.id;
-    //     state.clients = state.clients.map((client) => {
-    //       if (client.id == updatedClientId) {
-    //         client = action.payload.data.updatedClient;
-    //         return client;
-    //       } else {
-    //         return client;
-    //       }
-    //     });
+        state.alreadyRegisteredError = null;
+        state.error = "";
 
-    //     state.alreadyRegisteredError = null;
-    //     state.error = "";
-
-    //     toast.success("Client details updated !", {
-    //       position: "bottom-center",
-    //       autoClose: 3000,
-    //       theme: "colored",
-    //     });
-    //   }
-    // });
+        toast.success("Data details updated !", {
+          position: "bottom-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
+      }
+    });
 
     builder.addCase(removeCompletedWorkData.fulfilled, (state, action) => {
       const deletedCompletedData = action.payload.deletedCompletedData;

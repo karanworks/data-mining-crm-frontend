@@ -23,6 +23,7 @@ import AddClient from "../pages/AddClient";
 import CompletedData from "../pages/CompletedData";
 import ViewFilledData from "../pages/ViewFilledData/ViewFilledData";
 import AddData from "../pages/AddData";
+import CompletedDataEdit from "../pages/CompletedData/CompletedDataEdit";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -37,6 +38,7 @@ const authProtectedRoutes = [
   { path: "/add-work-data", component: <AddWorkData /> },
   { path: "/add-client", component: <AddClient /> },
   { path: "/completed-data", component: <CompletedData /> },
+  { path: "/completed-data/edit", component: <CompletedDataEdit /> },
   { path: "/view-data", component: <ViewFilledData /> },
   { path: "/add-data", component: <AddData /> },
 

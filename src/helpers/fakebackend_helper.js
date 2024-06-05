@@ -616,18 +616,18 @@ export const createAssignedWorkData = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/add-work-data`, data);
 };
 
-export const updateAssignedWorkData = (centerId, centerUserId, data) => {
-  return api.update(
-    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
-    data
-  );
-};
+// export const updateAssignedWorkData = (centerId, centerUserId, data) => {
+//   return api.update(
+//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
+//     data
+//   );
+// };
 
-export const removeAssignedData = (centerId, centerUserId) => {
-  return api.delete(
-    `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
-  );
-};
+// export const removeAssignedData = (centerId, centerUserId) => {
+//   return api.delete(
+//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
+//   );
+// };
 
 // *****************************************************************
 // ************************ COMPLETED DATA **************************
@@ -645,12 +645,13 @@ export const removeCompletedWorkData = (dataId) => {
   );
 };
 
-// export const updateCompletedWorkData = (centerId, centerUserId, data) => {
-//   return api.update(
-//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
-//     data
-//   );
-// };
+export const updateCompletedWorkData = (data) => {
+  console.log("GETTING DATA WHILE UPDATING ->", data);
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/completed-data/edit`,
+    data
+  );
+};
 
 // export const removeCompletedData = (centerId, centerUserId) => {
 //   return api.delete(

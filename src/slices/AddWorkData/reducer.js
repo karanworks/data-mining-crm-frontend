@@ -13,7 +13,6 @@ const addWorkDataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAssignedWorkData.fulfilled, (state, action) => {
-      console.log("PAYLOAD RECIEVED FROM BACKEND ->", action.payload);
       if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {

@@ -15,39 +15,26 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
-import Select from "react-select";
 import Flatpickr from "react-flatpickr";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import AddUserFormModal from "./AddUserFormModal";
 import CompletedDataRemoveModal from "./CompletedDataRemoveModal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getUsers,
-  createUser,
-  removeUser,
-  updateUser,
-} from "../../slices/Users/thunk";
-
-import {
-  getCenterUsers,
-  createCenterUser,
-  removeCenterUser,
-  updateCenterUser,
-} from "../../slices/AddUsers/thunk";
+import { getUsers } from "../../slices/Users/thunk";
 
 import {
   getCompletedWorkData,
   removeCompletedWorkData,
+  updateCompletedWorkData,
 } from "../../slices/CompletedData/thunk";
 import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
-// import { getCenters } from "../../slices/Centers/thunk";
+import {
+  tempUserData,
+  tempBusinessTypeData,
+  stateData,
+} from "../../common/data/completedData";
 
 const CompletedData = () => {
   const [modal_list, setmodal_list] = useState(false);
-
-  const [isEditingUser, setIsEditingUser] = useState(false);
 
   const [modal_delete, setmodal_delete] = useState(false);
 
@@ -64,16 +51,8 @@ const CompletedData = () => {
     (state) => state.CompletedData
   );
 
-  console.log("FILTERED DATA ->", filteredCompletedWorkData);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // toggles register / edit user modal
-  function tog_list() {
-    setmodal_list(!modal_list);
-    setIsEditingUser(false);
-  }
 
   // toggles delete user confirmation modal
   function tog_delete() {
@@ -154,66 +133,8 @@ const CompletedData = () => {
     dispatch(getCompletedWorkData());
   }, [dispatch]);
 
-  // formik setup
-  const validation = useFormik({
-    initialValues: {
-      role: "",
-      companyName: "",
-      address: "",
-      agreementDate: "",
-      email: "",
-      contactNo: "",
-      noOfUsers: "",
-      timing: "",
-      userIdDemo: "",
-      userIdLive: "",
-      password: "",
-      image: "",
-      agreementTalk: "",
-    },
-    validationSchema: Yup.object({
-      role: Yup.string().required("Please Select Role"),
-      companyName: Yup.string().required("Enter company name"),
-      address: Yup.string().required("Enter Address"),
-      agreementDate: Yup.string().required("Enter agreement date"),
-      email: Yup.string().required("Enter email"),
-      contactNo: Yup.string().required("Enter contact no"),
-      noOfUsers: Yup.string().required("Enter no of user"),
-      startTiming: Yup.string().required("Enter start timining"),
-      endTiming: Yup.string().required("Enter end timining"),
-      userIdDemo: Yup.string().required("Enter user id demo"),
-      userIdLive: Yup.string().required("Enter user id live"),
-      password: Yup.string().required("Enter password"),
-      image: Yup.string(),
-      agreementTalk: Yup.string().required("Enter agreement talk"),
-    }),
-    onSubmit: (values) => {
-      isEditingUser
-        ? dispatch(updateCenterUser({ values, dataId: listData.id }))
-        : dispatch(createCenterUser(values));
-      // isEditingUser
-      //   ? dispatch(updateUser({ values, userId: listUserId }))
-      //   : dispatch(createUser(values));
-    },
-  });
-
-  // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit user from
-  function formHandleSubmit(e) {
-    e.preventDefault();
-
-    validation.handleSubmit();
-
-    setmodal_list(false);
-    return false;
-  }
-
-  function handleRoleChange(e) {
-    validation.setFieldValue("roleId", e.target.value);
-  }
-
   // to update the values of register form when editing the user
   function handleEditUser(userData) {
-    setIsEditingUser(true);
     setmodal_list(!modal_list);
     setListData(userData.id);
 
@@ -228,106 +149,12 @@ const CompletedData = () => {
     });
   }
 
-  const tempCompanyData = [
-    {
-      id: 1,
-      username: "demoavs_1",
-      dateAndTime: "2024-02-12 06:23:39",
-      companyInfo: "Company info",
-      businessType: "Manufacturer",
-      status: "Inactive",
-      verified: "Yes",
-    },
-    {
-      id: 2,
-      username: "demoavs_2",
-      dateAndTime: "2024-02-12 06:23:39",
-      companyInfo: "Company info",
-      businessType: "Trader",
-      status: "Actove",
-      verified: "No",
-    },
-  ];
-
-  const tempUserData = [
-    {
-      id: 1,
-      name: "User 1",
-    },
-    {
-      id: 2,
-      name: "User 2",
-    },
-    {
-      id: 3,
-      name: "User 3",
-    },
-  ];
-
-  const tempBusinessTypeData = [
-    { id: 1, businessType: "Agriculture" },
-    { id: 2, businessType: "Apparel & Fashion" },
-    { id: 3, businessType: "Automotive Auto Parts" },
-    { id: 4, businessType: "Chemicals" },
-    { id: 5, businessType: "Construction" },
-    { id: 6, businessType: "Food Product" },
-    { id: 7, businessType: "Furniture" },
-    { id: 8, businessType: "Handcrafts & Gifts" },
-    { id: 9, businessType: "Health & Beauty" },
-    { id: 10, businessType: "Industrial Supplies" },
-    { id: 11, businessType: "Jewellery" },
-    { id: 12, businessType: "Machines & Equipment" },
-    { id: 13, businessType: "Jute & Jute Products" },
-    { id: 14, businessType: "Manufacturer" },
-    { id: 15, businessType: "Industrial Services" },
-    { id: 16, businessType: "Exporter" },
-    { id: 17, businessType: "Importer" },
-    { id: 18, businessType: "Trader" },
-    { id: 19, businessType: "Distributer" },
-    { id: 20, businessType: "Supplier" },
-  ];
-
-  const stateData = [
-    { id: 1, state: "Andhra Pradesh" },
-    { id: 2, state: "Arunachal Pradesh" },
-    { id: 3, state: "Assam" },
-    { id: 4, state: "Bihar" },
-    { id: 5, state: "Chhattisgarh" },
-    { id: 6, state: "Goa" },
-    { id: 7, state: "Gujarat" },
-    { id: 8, state: "Haryana" },
-    { id: 9, state: "Himachal Pradesh" },
-    { id: 10, state: "Jharkhand" },
-    { id: 11, state: "Karnataka" },
-    { id: 12, state: "Kerala" },
-    { id: 13, state: "Madhya Pradesh" },
-    { id: 14, state: "Maharashtra" },
-    { id: 15, state: "Manipur" },
-    { id: 16, state: "Meghalaya" },
-    { id: 17, state: "Mizoram" },
-    { id: 18, state: "Nagaland" },
-    { id: 19, state: "Odisha" },
-    { id: 20, state: "Punjab" },
-    { id: 21, state: "Rajasthan" },
-    { id: 22, state: "Sikkim" },
-    { id: 23, state: "Tamil Nadu" },
-    { id: 24, state: "Telangana" },
-    { id: 25, state: "Tripura" },
-    { id: 26, state: "Uttar Pradesh" },
-    { id: 27, state: "Uttarakhand" },
-    { id: 28, state: "West Bengal" },
-    { id: 29, state: "Andaman and Nicobar Islands" },
-    { id: 30, state: "Chandigarh" },
-    { id: 31, state: "Dadra and Nagar Haveli and Daman and Diu" },
-    { id: 32, state: "Lakshadweep" },
-    { id: 33, state: "Delhi" },
-    { id: 34, state: "Puducherry" },
-    { id: 35, state: "Ladakh" },
-    { id: 36, state: "Jammu and Kashmir" },
-  ];
-
   function handleViewData() {
     navigate("/view-data");
+  }
+
+  function handleEditData(data) {
+    navigate("/completed-data/edit", { state: { data } });
   }
 
   function handleISTTimeZone(utcTimestamp) {
@@ -660,11 +487,11 @@ const CompletedData = () => {
                               </td>
                               <td className="status">
                                 {data.websiteStatus === "Valid URL" ? (
-                                  <span class="badge border border-success text-success">
+                                  <span className="badge border border-success text-success">
                                     {data.websiteStatus}
                                   </span>
                                 ) : (
-                                  <span class="badge border border-danger text-danger">
+                                  <span className="badge border border-danger text-danger">
                                     {data.websiteStatus}
                                   </span>
                                 )}
@@ -677,7 +504,9 @@ const CompletedData = () => {
                                       className="btn btn-sm btn-primary edit-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
-                                      onClick={() => {}}
+                                      onClick={() => {
+                                        handleEditData(data);
+                                      }}
                                     >
                                       Edit
                                     </button>
@@ -751,7 +580,7 @@ const CompletedData = () => {
       </div>
 
       {/* Add Modal */}
-      <AddUserFormModal
+      {/* <AddUserFormModal
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
@@ -760,8 +589,7 @@ const CompletedData = () => {
         alreadyRegisteredError={alreadyRegisteredError}
         handleRoleChange={handleRoleChange}
         roles={roles}
-        // centers={centers}
-      />
+      /> */}
 
       {/* Remove Modal */}
       <CompletedDataRemoveModal
