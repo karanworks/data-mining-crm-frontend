@@ -9,7 +9,6 @@ import Route from "./Routes";
 // import { initFirebaseBackend } from "./helpers/firebase_helper";
 
 import fakeBackend from "./helpers/AuthType/fakeBackend";
-import UpdateActiveTimeModal from "./UpdateActiveTimeModal";
 import { useLocation } from "react-router-dom";
 import { updateSession } from "./helpers/fakebackend_helper";
 
@@ -57,12 +56,6 @@ function App() {
 
   return (
     <React.Fragment>
-      <UpdateActiveTimeModal
-        modalVisible={modalVisible}
-        tog_modal={tog_modal}
-        handleUpdateSession={handleUpdateSession}
-      />
-
       <Route />
     </React.Fragment>
   );

@@ -19,19 +19,20 @@ import Flatpickr from "react-flatpickr";
 import CompletedDataRemoveModal from "./CompletedDataRemoveModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../slices/Users/thunk";
-
+import * as Yup from "yup";
 import {
   getCompletedWorkData,
   removeCompletedWorkData,
+  filterCompletedWorkData,
 } from "../../slices/CompletedData/thunk";
 import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
 import {
   tempUserData,
   tempBusinessTypeData,
-  stateData,
 } from "../../common/data/completedData";
 import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
+import { useFormik } from "formik";
 
 const CompletedData = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -47,12 +48,55 @@ const CompletedData = () => {
   const [roles, setRoles] = useState([]);
 
   const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
-  const { userData, filteredCompletedData } = useSelector(
+  const { userData, searchedData } = useSelector(
     (state) => state.CompletedData
   );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/roles`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setRoles(res.data);
+      })
+      .catch((error) => {
+        console.log("error while fetching roles ->", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    dispatch(getUsers());
+    dispatch(getCompletedWorkData());
+  }, [dispatch]);
+
+  const filterValidation = useFormik({
+    initialValues: {
+      startDate: "",
+      endDate: "",
+      businessType: "",
+    },
+    validationSchema: Yup.object({
+      startDate: Yup.string(),
+      endDate: Yup.string(),
+      businessType: Yup.string(),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      dispatch(filterCompletedWorkData(values));
+      console.log("FILTERED VALUES ->", values);
+    },
+  });
+
+  function filterHandleSubmit(e) {
+    e.preventDefault();
+
+    filterValidation.handleSubmit();
+
+    return false;
+  }
 
   // toggles delete user confirmation modal
   function tog_delete() {
@@ -102,46 +146,6 @@ const CompletedData = () => {
     }
 
     setmodal_delete(false);
-  }
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/roles`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setRoles(res.data);
-      })
-      .catch((error) => {
-        console.log("error while fetching roles ->", error);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (alreadyRegisteredError) {
-      setmodal_list(!modal_list);
-    }
-  }, [alreadyRegisteredError]);
-
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getCompletedWorkData());
-  }, [dispatch]);
-
-  // to update the values of register form when editing the user
-  function handleEditUser(userData) {
-    setmodal_list(!modal_list);
-    setListData(userData.id);
-
-    // setting the value of role according to roleId because in select element roleId is used as value
-    const roleName = roles.find((role) => role.id === userData.roleId);
-
-    validation.setValues({
-      name: userData.username,
-      email: userData.email,
-      password: userData.password,
-      roleId: roleName.id,
-    });
   }
 
   async function handleExportData() {
@@ -229,7 +233,7 @@ const CompletedData = () => {
                         </div>
 
                         <div className="d-flex">
-                          <Form>
+                          <Form onSubmit={(e) => filterHandleSubmit(e)}>
                             <div
                               className="d-flex"
                               style={{ gap: "5px", flexWrap: "wrap" }}
@@ -268,16 +272,12 @@ const CompletedData = () => {
                                   className="form-control"
                                   type="select"
                                   placeholder="Select Business Type"
-
-                                  // onChange={validation.handleChange}
-                                  // onBlur={validation.handleBlur}
-                                  // value={validation.values.role || ""}
-                                  // invalid={
-                                  //   validation.touched.role &&
-                                  //   validation.errors.role
-                                  //     ? true
-                                  //     : false
-                                  // }
+                                  onChange={(e) => {
+                                    filterValidation.setFieldValue(
+                                      "businessType",
+                                      e.target.value
+                                    );
+                                  }}
                                 >
                                   <option value="">Select Business Type</option>
 
@@ -299,6 +299,23 @@ const CompletedData = () => {
                                     mode: "range",
                                     dateFormat: "d M, Y",
                                   }}
+                                  onChange={(d) => {
+                                    const formattedStartDate = new Date(
+                                      d[0]
+                                    ).toLocaleDateString("en-GB");
+                                    const formattedEndDate = new Date(
+                                      d[1]
+                                    ).toLocaleDateString("en-GB");
+
+                                    filterValidation.setFieldValue(
+                                      "startDate",
+                                      formattedStartDate
+                                    );
+                                    filterValidation.setFieldValue(
+                                      "endDate",
+                                      formattedEndDate
+                                    );
+                                  }}
                                   placeholder="Date range"
                                 />
                               </div>
@@ -308,6 +325,7 @@ const CompletedData = () => {
                                   color="primary"
                                   className="add-btn me-1"
                                   id="filter-btn"
+                                  type="submit"
                                 >
                                   <i className="ri-equalizer-line"></i> Apply
                                 </Button>
@@ -336,31 +354,6 @@ const CompletedData = () => {
                           ) : null}
                         </div>
                       </Col>
-
-                      {/* <Col className="col-sm-auto">
-                        <div>
-                          <Button
-                            color="primary"
-                            className="add-btn me-1"
-                            // onClick={() => tog_list()}
-                            id="create-btn"
-                          >
-                            <i className="ri-download-fill align-bottom me-1"></i>{" "}
-                            Export Data
-                          </Button>
-                          {selectedCompletedData.length > 0 ? (
-                            <Button
-                              color="primary"
-                              className="delete-btn me-1"
-                              onClick={handleSelectedDelete}
-                              id="create-btn"
-                            >
-                              <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Delete Selected Id
-                            </Button>
-                          ) : null}
-                        </div>
-                      </Col> */}
                     </Row>
 
                     <div className="table-responsive table-card mt-3 mb-1">
@@ -406,8 +399,8 @@ const CompletedData = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {(filteredCompletedData?.length > 0
-                            ? filteredCompletedData
+                          {(searchedData?.length > 0
+                            ? searchedData
                             : userData?.completedWorkData
                           )?.map((data) => (
                             <tr key={data.id}>
@@ -427,7 +420,7 @@ const CompletedData = () => {
                                 </div>
                               </th>
 
-                              <td className="username">{userData.username}</td>
+                              <td className="username">{data.username}</td>
                               <td className="dateAndTime">
                                 <span className="badge border border-primary text-primary fs-12">
                                   {handleISTTimeZone(data.createdAt)}
@@ -437,7 +430,7 @@ const CompletedData = () => {
                                 <div>
                                   <div>URL - {data.url}</div>
                                   <div>Name - {data.companyName}</div>
-                                  <div>Contact 1 - {data.contactNo1}</div>
+                                  {/* <div>Contact 1 - {data.contactNo1}</div>
                                   <div>Contact 2 - {data.contactNo2}</div>
                                   <div>Email 1 - {data.emailId1}</div>
                                   <div>Email 2 - {data.emailId2}</div>
@@ -446,7 +439,7 @@ const CompletedData = () => {
                                     <span>{data.state}-</span>
                                     <span>{data.pinCode}, </span>
                                     <span>{data.country}</span>
-                                  </div>
+                                  </div> */}
                                 </div>
                               </td>
                               <td className="businessType">

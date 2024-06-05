@@ -4,12 +4,13 @@ import {
   getCompletedWorkData,
   removeCompletedWorkData,
   updateCompletedWorkData,
+  filterCompletedWorkData,
 } from "./thunk";
 
 export const initialState = {
   userData: [],
-  // completedWorkData: [],
-  filteredCompletedData: [],
+  filterCompletedWorkData: [],
+  searchedData: [],
 };
 
 const completedWorkDataSlice = createSlice({
@@ -20,9 +21,9 @@ const completedWorkDataSlice = createSlice({
       const inputValue = action.payload.toLowerCase();
 
       if (inputValue === "") {
-        state.filteredCompletedData = [];
+        state.searchedData = [];
       } else {
-        state.filteredCompletedData = state.userData?.completedWorkData.filter(
+        state.searchedData = state.userData?.completedWorkData.filter(
           (data) => {
             return Object.values(data).some((dataVal) => {
               return String(dataVal).toLowerCase().includes(inputValue);
@@ -97,6 +98,17 @@ const completedWorkDataSlice = createSlice({
         autoClose: 3000,
         theme: "colored",
       });
+    });
+
+    builder.addCase(filterCompletedWorkData.fulfilled, (state, action) => {
+      if (action.payload.status == "failure") {
+        state.alreadyRegisteredError = action.payload.message;
+        state.error = "";
+      } else {
+        // state.filterCompletedWorkData = [...state.users, action.payload.data];
+        state.alreadyRegisteredError = null;
+        state.error = "";
+      }
     });
   },
 });

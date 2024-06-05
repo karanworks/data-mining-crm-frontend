@@ -1,17 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// import {
-//   getAssignedWorkData as getAssignedWorkDataApi,
-//   createAssignedWorkData as createAssignedWorkDataApi,
-//   // updateClient as updateClientApi,
-//   // removeClient as removeClientApi,
-// } from "../../helpers/fakebackend_helper";
-
 import {
   getCompletedWorkData as getCompletedWorkDataApi,
   removeCompletedWorkData as removeCompletedWorkDataApi,
   updateCompletedWorkData as updateCompletedWorkDataApi,
-  exportCompletedWorkData as exportCompletedWorkDataApi,
+  filterCompletedWorkData as filterCompletedWorkDataApi,
   // updateClient as updateClientApi,
   // removeClient as removeClientApi,
 } from "../../helpers/fakebackend_helper";
@@ -52,16 +45,15 @@ export const removeCompletedWorkData = createAsyncThunk(
     }
   }
 );
-// export const exportCompletedWorkData = createAsyncThunk(
-//   "completedData/exportCompletedWorkData",
-//   async () => {
-//     try {
-//       console.log("EXPORT THUNK WAS CALLED");
-//       const response = await exportCompletedWorkDataApi();
+export const filterCompletedWorkData = createAsyncThunk(
+  "completedData/filterCompletedWorkData",
+  async (data) => {
+    try {
+      const response = await filterCompletedWorkDataApi(data);
 
-//       return response.data;
-//     } catch (error) {
-//       console.log("error inside export data completed work data thunk", error);
-//     }
-//   }
-// );
+      return response;
+    } catch (error) {
+      console.log("error inside filter completed work data thunk", error);
+    }
+  }
+);
