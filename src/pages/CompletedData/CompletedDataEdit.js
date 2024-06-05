@@ -263,10 +263,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.companyName ||
-                            data.companyName
-                          }
+                          value={addWorkDataValidation.values.companyName || ""}
                           invalid={
                             addWorkDataValidation.touched.companyName &&
                             addWorkDataValidation.errors.companyName
@@ -293,10 +290,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.contactNo1 ||
-                            data.contactNo1
-                          }
+                          value={addWorkDataValidation.values.contactNo1 || ""}
                           invalid={
                             addWorkDataValidation.touched.contactNo1 &&
                             addWorkDataValidation.errors.contactNo1
@@ -323,10 +317,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.contactNo2 ||
-                            data.contactNo2
-                          }
+                          value={addWorkDataValidation.values.contactNo2 || ""}
                           invalid={
                             addWorkDataValidation.touched.contactNo2 &&
                             addWorkDataValidation.errors.contactNo2
@@ -354,10 +345,7 @@ const CompletedDataEdit = () => {
                           type="email"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.emailId1 ||
-                            data.emailId1
-                          }
+                          value={addWorkDataValidation.values.emailId1 || ""}
                           invalid={
                             addWorkDataValidation.touched.emailId1 &&
                             addWorkDataValidation.errors.emailId1
@@ -384,10 +372,7 @@ const CompletedDataEdit = () => {
                           type="email"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.emailId2 ||
-                            data.emailId2
-                          }
+                          value={addWorkDataValidation.values.emailId2 || ""}
                           invalid={
                             addWorkDataValidation.touched.emailId2 &&
                             addWorkDataValidation.errors.emailId2
@@ -416,9 +401,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.faxNo || data.faxNo
-                          }
+                          value={addWorkDataValidation.values.faxNo || ""}
                           invalid={
                             addWorkDataValidation.touched.faxNo &&
                             addWorkDataValidation.errors.faxNo
@@ -463,9 +446,7 @@ const CompletedDataEdit = () => {
                           type="textarea"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.address || data.address
-                          }
+                          value={addWorkDataValidation.values.address || ""}
                           invalid={
                             addWorkDataValidation.touched.address &&
                             addWorkDataValidation.errors.address
@@ -491,8 +472,7 @@ const CompletedDataEdit = () => {
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
                           value={
-                            addWorkDataValidation.values.companyProfile ||
-                            data.companyProfile
+                            addWorkDataValidation.values.companyProfile || ""
                           }
                           invalid={
                             addWorkDataValidation.touched.companyProfile &&
@@ -522,7 +502,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={addWorkDataValidation.values.city || data.city}
+                          value={addWorkDataValidation.values.city || ""}
                           invalid={
                             addWorkDataValidation.touched.city &&
                             addWorkDataValidation.errors.city
@@ -550,9 +530,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.state || data.state
-                          }
+                          value={addWorkDataValidation.values.state || ""}
                           invalid={
                             addWorkDataValidation.touched.state &&
                             addWorkDataValidation.errors.state
@@ -579,9 +557,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.pinCode || data.pinCode
-                          }
+                          value={addWorkDataValidation.values.pinCode || ""}
                           invalid={
                             addWorkDataValidation.touched.pinCode &&
                             addWorkDataValidation.errors.pinCode
@@ -608,9 +584,7 @@ const CompletedDataEdit = () => {
                           type="text"
                           onChange={addWorkDataValidation.handleChange}
                           onBlur={addWorkDataValidation.handleBlur}
-                          value={
-                            addWorkDataValidation.values.country || data.country
-                          }
+                          value={addWorkDataValidation.values.country || ""}
                           invalid={
                             addWorkDataValidation.touched.country &&
                             addWorkDataValidation.errors.country

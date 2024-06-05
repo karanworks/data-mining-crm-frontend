@@ -637,7 +637,7 @@ export const getCompletedWorkData = () => {
 };
 
 export const removeCompletedWorkData = (dataId) => {
-  return api.create(
+  return api.update(
     `${process.env.REACT_APP_SERVER_URL}/completed-data/delete`,
     {
       dataId,

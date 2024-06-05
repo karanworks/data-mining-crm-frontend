@@ -80,8 +80,8 @@ const completedWorkDataSlice = createSlice({
         });
 
         state.completedWorkData.completedWorkData =
-          state.completedWorkData.completedWorkData.filter((client) => {
-            return !deletedCompletedDataIds.includes(client.id);
+          state.completedWorkData.completedWorkData.filter((data) => {
+            return !deletedCompletedDataIds.includes(data.id);
           });
       } else {
         state.completedWorkData.completedWorkData =
@@ -97,6 +97,33 @@ const completedWorkDataSlice = createSlice({
         theme: "colored",
       });
     });
+
+    // builder.addCase(removeCompletedWorkData.fulfilled, (state, action) => {
+    //   const deletedCompletedData = action.payload.deletedCompletedData;
+
+    //   if (Array.isArray(deletedCompletedData)) {
+    //     const deletedCompletedDataIds = deletedCompletedData?.map((data) => {
+    //       return data.id;
+    //     });
+
+    //     state.completedWorkData.completedWorkData =
+    //       state.completedWorkData.completedWorkData.filter((data) => {
+    //         return !deletedCompletedDataIds.includes(data.id);
+    //       });
+    //   } else {
+    //     state.completedWorkData.completedWorkData =
+    //       state.completedWorkData.completedWorkData.filter(
+    //         (data) => data.id !== deletedCompletedData.id
+    //       );
+    //   }
+
+    //   state.error = "";
+    //   toast.error("Website data has been removed !", {
+    //     position: "bottom-center",
+    //     autoClose: 3000,
+    //     theme: "colored",
+    //   });
+    // });
   },
 });
 
