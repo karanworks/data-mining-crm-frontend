@@ -8,71 +8,6 @@ const CheckFormData = () => {
   const location = useLocation();
   const data = location?.state?.data;
 
-  console.log("DATA IN VIEW FORM ->", data);
-  const fieldData = [
-    {
-      id: 1,
-      fieldName: "Website URL",
-      fieldValue: "value",
-    },
-    {
-      id: 2,
-      fieldName: "Webiste Status",
-      fieldValue: "value",
-    },
-    {
-      id: 3,
-      fieldName: "Company Name",
-      fieldValue: "value",
-    },
-    {
-      id: 4,
-      fieldName: "Company Logo",
-      fieldValue: "value",
-    },
-    {
-      id: 5,
-      fieldName: "Business Type",
-      fieldValue: "value",
-    },
-
-    {
-      id: 6,
-      fieldName: "Address",
-      fieldValue: "value",
-    },
-    {
-      id: 7,
-      fieldName: "City",
-      fieldValue: "value",
-    },
-    {
-      id: 8,
-      fieldName: "State",
-      fieldValue: "value",
-    },
-    {
-      id: 9,
-      fieldName: "Country",
-      fieldValue: "value",
-    },
-    {
-      id: 10,
-      fieldName: "Pin Code",
-      fieldValue: "value",
-    },
-    {
-      id: 11,
-      fieldName: "Contact No",
-      fieldValue: "value",
-    },
-    {
-      id: 12,
-      fieldName: "Fax No",
-      fieldValue: "value",
-    },
-  ];
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -125,68 +60,311 @@ const CheckFormData = () => {
                           <th className="sort" data-sort="entered">
                             Entered
                           </th>
+                          <th className="sort" data-sort="entered">
+                            Action
+                          </th>
                         </tr>
                       </thead>
                       <tbody className="list form-check-all">
                         <tr>
                           <td className="fieldName fw-bold">Website Url</td>
                           <td className="fieldValue">{data.url}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Website Name</td>
                           <td className="fieldValue">{data.companyName}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Profile</td>
                           <td className="fieldValue">{data.companyProfile}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Address</td>
                           <td className="fieldValue">{data.address}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Status</td>
                           <td className="fieldValue">{data.websiteStatus}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Business Type</td>
                           <td className="fieldValue">{data.businessType}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Contact No 1</td>
                           <td className="fieldValue">{data.contactNo1}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Contact No 2</td>
                           <td className="fieldValue">{data.contactNo2}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Email Id 1</td>
                           <td className="fieldValue">{data.emailId1}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Email Id 2</td>
                           <td className="fieldValue">{data.emailId2}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Fax No</td>
                           <td className="fieldValue">{data.faxNo}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">State</td>
                           <td className="fieldValue">{data.state}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">City</td>
                           <td className="fieldValue">{data.city}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Country</td>
                           <td className="fieldValue">{data.country}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Pin Code</td>
                           <td className="fieldValue">{data.pinCode}</td>
+                          <td className="fieldAction">
+                            <div className="d-flex gap-2">
+                              <button
+                                type="button"
+                                class="btn btn-outline-success"
+                              >
+                                <i class="ri-check-fill"></i>
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger "
+                              >
+                                <i class="ri-close-fill"></i>
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                       </tbody>
                     </table>

@@ -1,31 +1,17 @@
 import { Modal, ModalBody, ModalHeader } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { updateUser } from "../../slices/Users/thunk";
 
-function ViewUsersModal({
-  users_view_modal_list,
-  users_view_tog_list,
-  clientUsers,
-  add_users_tog_list,
+function ViewFormsModal({
+  forms_view_modal_list,
+  forms_view_tog_list,
   reportDataForms,
   handleCheckForm,
 }) {
-  const dispatch = useDispatch();
-
-  function handleUserStatusUpdate(user) {
-    const status = user.status === 1 ? 0 : 1;
-
-    dispatch(updateUser({ status, userId: user.id }));
-  }
-
-  console.log("REPORT FORMS IN VIEW MODAL ->", reportDataForms);
-
   return (
     <Modal
-      isOpen={users_view_modal_list}
+      isOpen={forms_view_modal_list}
       toggle={() => {
-        users_view_tog_list();
+        forms_view_tog_list();
       }}
       className="modal-xl"
       centered
@@ -33,7 +19,7 @@ function ViewUsersModal({
       <ModalHeader
         className="bg-light p-3"
         toggle={() => {
-          users_view_tog_list();
+          forms_view_tog_list();
         }}
       >
         Submitted Forms
@@ -103,4 +89,4 @@ function ViewUsersModal({
   );
 }
 
-export default ViewUsersModal;
+export default ViewFormsModal;
