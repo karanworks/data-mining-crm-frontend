@@ -12,7 +12,12 @@ import {
   Row,
   Input,
   Form,
+  ButtonGroup,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
 } from "reactstrap";
+
 import Select from "react-select";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
@@ -43,6 +48,8 @@ const CompletedData = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
 
   const [selectedSingleUser, setSelectedSingleUser] = useState(null);
+
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const [modal_delete, setmodal_delete] = useState(false);
 
@@ -108,20 +115,20 @@ const CompletedData = () => {
 
   const filterValidation = useFormik({
     initialValues: {
-      username: "",
+      // username: "",
       startDate: "",
       endDate: "",
       businessType: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string(),
+      // username: Yup.string(),
       startDate: Yup.string(),
       endDate: Yup.string(),
       businessType: Yup.string(),
     }),
     onSubmit: (values) => {
       console.log("VALUES ->", values);
-      dispatch(filterCompletedWorkData(values));
+      dispatch(filterCompletedWorkData({ ...values, users: selectedUsers }));
       console.log("FILTERED VALUES ->", values);
     },
   });
@@ -249,6 +256,20 @@ const CompletedData = () => {
     return istDayAndTime;
   }
 
+  function handleSelectUser(user) {
+    const alreadyIncluded = selectedUsers?.includes(user.username);
+
+    if (alreadyIncluded) {
+      setSelectedUsers(
+        selectedUsers?.filter((username) => username !== user.username)
+      );
+    } else {
+      setSelectedUsers((prev) => {
+        return [...prev, user.username];
+      });
+    }
+  }
+
   document.title = "Add Client";
   return (
     <React.Fragment>
@@ -302,7 +323,46 @@ const CompletedData = () => {
                                   placeholder="Select Client"
                                 />
                               </div>
-                              <div>
+
+                              <ButtonGroup>
+                                <UncontrolledDropdown>
+                                  <DropdownToggle
+                                    tag="button"
+                                    className="btn btn-light"
+                                  >
+                                    Select Users{" "}
+                                    <i className="mdi mdi-chevron-down"></i>
+                                  </DropdownToggle>
+                                  <DropdownMenu className="dropdown-menu-sm p-2">
+                                    {clientUsers?.map((userOption) => (
+                                      <div className="mb-2" key={userOption.id}>
+                                        <div className="form-check custom-checkbox">
+                                          <Input
+                                            type="checkbox"
+                                            checked={selectedUsers?.includes(
+                                              userOption.username
+                                            )}
+                                            className="form-check-input"
+                                            id={userOption.username}
+                                            name={userOption.username}
+                                            onChange={() => {
+                                              handleSelectUser(userOption);
+                                            }}
+                                          />
+                                          <label
+                                            className="form-check-label"
+                                            htmlFor={userOption.username}
+                                          >
+                                            {userOption.username}
+                                          </label>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </DropdownMenu>
+                                </UncontrolledDropdown>
+                              </ButtonGroup>
+
+                              {/* <div>
                                 <Select
                                   id="clientUser"
                                   name="clientUser"
@@ -317,7 +377,7 @@ const CompletedData = () => {
                                   options={userOptions}
                                   placeholder="Select User"
                                 />
-                              </div>
+                              </div> */}
                               <div>
                                 <Input
                                   id="businessType"
