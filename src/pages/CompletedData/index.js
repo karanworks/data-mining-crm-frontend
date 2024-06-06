@@ -47,8 +47,6 @@ const CompletedData = () => {
 
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
 
-  const [selectedSingleUser, setSelectedSingleUser] = useState(null);
-
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const [modal_delete, setmodal_delete] = useState(false);
@@ -88,22 +86,11 @@ const CompletedData = () => {
     dispatch(getClientUsers(client.email));
   }
 
-  function handleSelectSingleUser(user) {
-    setSelectedSingleUser(user);
-  }
-
   const clientOptions = clients?.map((client) => {
     return {
       value: client.id,
       label: client.companyName,
       email: client.email,
-    };
-  });
-
-  const userOptions = clientUsers?.map((user) => {
-    return {
-      value: user.username,
-      label: user.username,
     };
   });
 
@@ -362,22 +349,6 @@ const CompletedData = () => {
                                 </UncontrolledDropdown>
                               </ButtonGroup>
 
-                              {/* <div>
-                                <Select
-                                  id="clientUser"
-                                  name="clientUser"
-                                  value={selectedSingleUser}
-                                  onChange={(clientUser) => {
-                                    handleSelectSingleUser(clientUser);
-                                    filterValidation.setFieldValue(
-                                      "username",
-                                      clientUser.value
-                                    );
-                                  }}
-                                  options={userOptions}
-                                  placeholder="Select User"
-                                />
-                              </div> */}
                               <div>
                                 <Input
                                   id="businessType"

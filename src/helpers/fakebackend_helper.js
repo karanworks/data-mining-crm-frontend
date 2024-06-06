@@ -628,7 +628,7 @@ export const createAssignedWorkData = (data) => {
 // };
 
 // *****************************************************************
-// ************************ COMPLETED DATA **************************
+// *********************** COMPLETED DATA **************************
 // *****************************************************************
 export const getCompletedWorkData = () => {
   return api.get(`${process.env.REACT_APP_SERVER_URL}/completed-data`);
@@ -671,6 +671,13 @@ export const submitCompletedWorkData = (data) => {
     `${process.env.REACT_APP_SERVER_URL}/completed-data/submit-data`,
     data
   );
+};
+
+// *****************************************************************
+// ***************************** REPORT ****************************
+// *****************************************************************
+export const getReportData = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/report`);
 };
 
 // postForgetPwd

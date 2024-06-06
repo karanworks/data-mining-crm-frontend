@@ -49,7 +49,7 @@ import { searchClients } from "../../slices/AddClient/reducer";
 import { useNavigate } from "react-router-dom";
 import ViewUsersModal from "./ViewUsersModal";
 import AddUsersFormModal from "./AddUsersFormModal";
-// import { getCenters } from "../../slices/Centers/thunk";
+import { getReportData } from "../../slices/Report/thunk";
 
 const Report = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -76,6 +76,9 @@ const Report = () => {
   const { clients, filteredClients, clientUsers } = useSelector(
     (state) => state.Client
   );
+  const { reportData } = useSelector((state) => state.Report);
+
+  console.log("REPORT DATA FOR REPORT PAGE ->", reportData);
 
   const dispatch = useDispatch();
 
@@ -160,6 +163,7 @@ const Report = () => {
   }, [alreadyRegisteredError]);
 
   useEffect(() => {
+    dispatch(getReportData());
     dispatch(getClients());
   }, [dispatch]);
 
@@ -300,17 +304,17 @@ const Report = () => {
     dispatch(updateClient({ status, clientId: client.id }));
   }
 
-  document.title = "Add Client";
+  document.title = "Report";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Add Client" pageTitle="Client" />
+          <BreadCrumb title="Report" pageTitle="Reports" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Add Client</h4>
+                  <h4 className="card-title mb-0">Report</h4>
                 </CardHeader>
 
                 <CardBody>
@@ -402,71 +406,73 @@ const Report = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          <tr>
-                            <th scope="row">
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  // checked={selectedClients.includes(client.id)}
-                                  type="checkbox"
-                                  name="checkbox"
-                                  onChange={() => {
-                                    // handleSelectedClients(client.id);
-                                  }}
-                                />
-                              </div>
-                            </th>
+                          {reportData?.map((data) => (
+                            <tr>
+                              <th scope="row">
+                                <div className="form-check">
+                                  <input
+                                    className="form-check-input"
+                                    // checked={selectedClients.includes(client.id)}
+                                    type="checkbox"
+                                    name="checkbox"
+                                    onChange={() => {
+                                      // handleSelectedClients(client.id);
+                                    }}
+                                  />
+                                </div>
+                              </th>
 
-                            <td className="token_no">2147483647</td>
-                            <td className="client">Someone</td>
-                            <td className="users">34</td>
-                            <td className="type">50</td>
-                            <td className="contact">27</td>
+                              <td className="token_no">{data.token}</td>
+                              <td className="client">{data.clientName}</td>
+                              <td className="users">{data.totalUsers}</td>
+                              <td className="type">{data.totalForms}</td>
+                              <td className="type">{data.checkedFormsCount}</td>
 
-                            <td>
-                              <div className="d-flex gap-2">
-                                <div className="viewUsers">
-                                  <button
-                                    className="btn btn-sm btn-success edit-item-btn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#showModal"
-                                    onClick={() => {
-                                      // users_view_tog_list(client.email);
-                                      // setListClient(client);
-                                    }}
-                                  >
-                                    View Forms
-                                  </button>
+                              <td>
+                                <div className="d-flex gap-2">
+                                  <div className="viewUsers">
+                                    <button
+                                      className="btn btn-sm btn-success edit-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#showModal"
+                                      onClick={() => {
+                                        // users_view_tog_list(client.email);
+                                        // setListClient(client);
+                                      }}
+                                    >
+                                      View Forms
+                                    </button>
+                                  </div>
+                                  <div className="edit">
+                                    <button
+                                      className="btn btn-sm btn-primary edit-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#showModal"
+                                      onClick={() => {
+                                        // handleEditClient(client);
+                                      }}
+                                    >
+                                      Edit
+                                    </button>
+                                  </div>
+                                  <div className="remove">
+                                    <button
+                                      className="btn btn-sm btn-danger remove-item-btn"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#deleteRecordModal"
+                                      onClick={() => {
+                                        // setListClient(client);
+                                        setmodal_delete(true);
+                                        setIsDeletingMultipleUsers(false);
+                                      }}
+                                    >
+                                      Remove
+                                    </button>
+                                  </div>
                                 </div>
-                                <div className="edit">
-                                  <button
-                                    className="btn btn-sm btn-primary edit-item-btn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#showModal"
-                                    onClick={() => {
-                                      // handleEditClient(client);
-                                    }}
-                                  >
-                                    Edit
-                                  </button>
-                                </div>
-                                <div className="remove">
-                                  <button
-                                    className="btn btn-sm btn-danger remove-item-btn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#deleteRecordModal"
-                                    onClick={() => {
-                                      // setListClient(client);
-                                      setmodal_delete(true);
-                                      setIsDeletingMultipleUsers(false);
-                                    }}
-                                  >
-                                    Remove
-                                  </button>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                       <div className="noresult" style={{ display: "none" }}>
