@@ -24,6 +24,7 @@ import CompletedData from "../pages/CompletedData";
 import ViewFilledData from "../pages/CompletedData/ViewFilledData";
 import AddData from "../pages/AddData";
 import CompletedDataEdit from "../pages/CompletedData/CompletedDataEdit";
+import Report from "../pages/Report";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -41,6 +42,7 @@ const authProtectedRoutes = [
   { path: "/completed-data/edit", component: <CompletedDataEdit /> },
   { path: "/completed-data/view-data", component: <ViewFilledData /> },
   { path: "/add-data", component: <AddData /> },
+  { path: "/report", component: <Report /> },
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },

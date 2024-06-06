@@ -13,6 +13,7 @@ import {
   Input,
   Form,
 } from "reactstrap";
+import Select from "react-select";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
@@ -24,8 +25,9 @@ import {
   getCompletedWorkData,
   removeCompletedWorkData,
   filterCompletedWorkData,
+  submitCompletedWorkData,
 } from "../../slices/CompletedData/thunk";
-
+import { getClients, getClientUsers } from "../../slices/AddClient/thunk";
 import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
 import {
@@ -37,6 +39,10 @@ import { useFormik } from "formik";
 
 const CompletedData = () => {
   const [modal_list, setmodal_list] = useState(false);
+
+  const [selectedSingleClient, setSelectedSingleClient] = useState(null);
+
+  const [selectedSingleUser, setSelectedSingleUser] = useState(null);
 
   const [modal_delete, setmodal_delete] = useState(false);
 
@@ -52,6 +58,7 @@ const CompletedData = () => {
   const { userData, searchedData } = useSelector(
     (state) => state.CompletedData
   );
+  const { clients, clientUsers } = useSelector((state) => state.Client);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -69,11 +76,34 @@ const CompletedData = () => {
       });
   }, []);
 
-  console.log("GET USERS ->", allUsers);
+  function handleSelectSingleClient(client) {
+    setSelectedSingleClient(client);
+    dispatch(getClientUsers(client.email));
+  }
+
+  function handleSelectSingleUser(user) {
+    setSelectedSingleUser(user);
+  }
+
+  const clientOptions = clients?.map((client) => {
+    return {
+      value: client.id,
+      label: client.companyName,
+      email: client.email,
+    };
+  });
+
+  const userOptions = clientUsers?.map((user) => {
+    return {
+      value: user.username,
+      label: user.username,
+    };
+  });
 
   useEffect(() => {
     dispatch(getUsers());
     dispatch(getCompletedWorkData());
+    dispatch(getClients());
   }, [dispatch]);
 
   const filterValidation = useFormik({
@@ -89,7 +119,7 @@ const CompletedData = () => {
       endDate: Yup.string(),
       businessType: Yup.string(),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values) => {
       console.log("VALUES ->", values);
       dispatch(filterCompletedWorkData(values));
       console.log("FILTERED VALUES ->", values);
@@ -119,11 +149,16 @@ const CompletedData = () => {
   }
 
   function handleSelectAll() {
-    const allCompletedDataIds = userData?.completedWorkData?.map((data) => {
+    const allCompletedDataIds = (
+      searchedData?.length > 0 ? searchedData : userData?.completedWorkData
+    )?.map((data) => {
       return data.id;
     });
 
-    if (userData?.completedWorkData?.length === selectedCompletedData.length) {
+    if (
+      (searchedData?.length > 0 ? searchedData : userData?.completedWorkData)
+        ?.length === selectedCompletedData.length
+    ) {
       setSelectedCompletedData([]);
     } else {
       setSelectedCompletedData(allCompletedDataIds);
@@ -168,6 +203,13 @@ const CompletedData = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  function handleSubmitFormData() {
+    const forms = userData?.completedWorkData?.filter((form) => {
+      return selectedCompletedData.includes(form.id);
+    });
+    dispatch(submitCompletedWorkData({ forms }));
   }
 
   function handleViewData(data) {
@@ -245,27 +287,36 @@ const CompletedData = () => {
                               style={{ gap: "5px", flexWrap: "wrap" }}
                             >
                               <div>
-                                <Input
-                                  id="selectUser"
-                                  name="selectUser"
-                                  className="form-control"
-                                  type="select"
-                                  placeholder="Select User"
-                                  onChange={(e) =>
+                                <Select
+                                  id="client"
+                                  name="client"
+                                  value={selectedSingleClient}
+                                  onChange={(client) => {
+                                    handleSelectSingleClient(client);
+                                    // addDataValidation.setFieldValue(
+                                    //   "clientId",
+                                    //   client.value
+                                    // );
+                                  }}
+                                  options={clientOptions}
+                                  placeholder="Select Client"
+                                />
+                              </div>
+                              <div>
+                                <Select
+                                  id="clientUser"
+                                  name="clientUser"
+                                  value={selectedSingleUser}
+                                  onChange={(clientUser) => {
+                                    handleSelectSingleUser(clientUser);
                                     filterValidation.setFieldValue(
                                       "username",
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  <option value="">Select User</option>
-
-                                  {allUsers?.map((user, i) => (
-                                    <option value={user.username} key={i}>
-                                      {user.username}
-                                    </option>
-                                  ))}
-                                </Input>
+                                      clientUser.value
+                                    );
+                                  }}
+                                  options={userOptions}
+                                  placeholder="Select User"
+                                />
                               </div>
                               <div>
                                 <Input
@@ -344,15 +395,26 @@ const CompletedData = () => {
                             Export Data
                           </Button>
                           {selectedCompletedData.length > 0 ? (
-                            <Button
-                              color="primary"
-                              className="delete-btn me-1"
-                              onClick={handleSelectedDelete}
-                              id="create-btn"
-                            >
-                              <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Delete Selected Id
-                            </Button>
+                            <>
+                              <Button
+                                color="primary"
+                                className="delete-btn me-1"
+                                onClick={handleSelectedDelete}
+                                id="create-btn"
+                              >
+                                <i className="ri-add-line align-bottom me-1"></i>{" "}
+                                Delete Selected Id
+                              </Button>
+                              <Button
+                                color="primary"
+                                className="submit-data-btn me-1"
+                                onClick={handleSubmitFormData}
+                                id="create-btn"
+                              >
+                                <i className="ri-add-line align-bottom me-1"></i>{" "}
+                                Submit Data
+                              </Button>
+                            </>
                           ) : null}
                         </div>
                       </Col>
@@ -370,9 +432,14 @@ const CompletedData = () => {
                                   id="checkAll"
                                   value="option"
                                   checked={
-                                    userData?.completedWorkData?.length > 0 &&
-                                    userData?.completedWorkData?.length ===
-                                      selectedCompletedData.length
+                                    (searchedData?.length > 0
+                                      ? searchedData
+                                      : userData?.completedWorkData
+                                    )?.length > 0 &&
+                                    (searchedData?.length > 0
+                                      ? searchedData
+                                      : userData?.completedWorkData
+                                    )?.length === selectedCompletedData.length
                                   }
                                   onChange={handleSelectAll}
                                 />

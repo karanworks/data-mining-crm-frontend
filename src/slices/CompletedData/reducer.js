@@ -5,6 +5,7 @@ import {
   removeCompletedWorkData,
   updateCompletedWorkData,
   filterCompletedWorkData,
+  submitCompletedWorkData,
 } from "./thunk";
 
 export const initialState = {
@@ -97,8 +98,6 @@ const completedWorkDataSlice = createSlice({
     });
 
     builder.addCase(filterCompletedWorkData.fulfilled, (state, action) => {
-      console.log("FILTERED DATA ->", action.payload);
-
       if (action.payload.status == "failure") {
         state.alreadyRegisteredError = action.payload.message;
         state.error = "";
@@ -106,6 +105,20 @@ const completedWorkDataSlice = createSlice({
         state.searchedData = [...action.payload.data.filteredData];
         state.alreadyRegisteredError = null;
         state.error = "";
+      }
+    });
+
+    builder.addCase(submitCompletedWorkData.fulfilled, (state, action) => {
+      if (action.payload.status == "failure") {
+        state.alreadyRegisteredError = action.payload.message;
+        state.error = "";
+      } else {
+        state.error = "";
+        toast.success("Forms have been submitted !", {
+          position: "bottom-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
       }
     });
   },

@@ -1,197 +1,366 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
-
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row,
+  Input,
+  Form,
+} from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
-import { useFormik } from "formik";
+import Select from "react-select";
+import { useFormik, validateYupSchema } from "formik";
 import * as Yup from "yup";
-import AddLeadModal from "./AddLeadModal";
-import LeadRemoveModal from "./LeadRemoveModal";
-import { useDispatch } from "react-redux";
+import AddClientFormModal from "./AddClientFormModal";
+import AddClientRemoveModal from "./AddClientRemoveModal";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getUsers,
+  createUser,
+  removeUser,
+  updateUser,
+} from "../../slices/Users/thunk";
 
 import {
-  getLeads,
-  createLead,
-  removeLead,
-  updateLead,
-} from "../../slices/AddLead/thunk";
-import { useSelector } from "react-redux";
-import YoutubeLogo from "./youtube_logo.webp";
-import EventsViewModal from "../Report/EventsViewModal";
-import AddEventModal from "./AddEventModal";
+  getCenterUsers,
+  createCenterUser,
+  removeCenterUser,
+  updateCenterUser,
+} from "../../slices/AddUsers/thunk";
+
 import {
-  createEvent,
-  getEvents,
-  updateEvent,
-  removeEvent,
-} from "../../slices/Report/thunk";
-import EventRemoveModal from "./EventRemoveModal";
+  getClients,
+  createClient,
+  updateClient,
+  removeClient,
+  getClientUsers,
+} from "../../slices/AddClient/thunk";
+
+import { searchClients } from "../../slices/AddClient/reducer";
+
+import { useNavigate } from "react-router-dom";
+import ViewUsersModal from "./ViewUsersModal";
+import AddUsersFormModal from "./AddUsersFormModal";
+// import { getCenters } from "../../slices/Centers/thunk";
 
 const Report = () => {
-  const [events_view_modal, setEvents_view_modal] = useState(false);
-
-  const [event_modal_delete, setEvent_modal_delete] = useState(false);
-
-  const [add_event_view_modal, setAddEvent_view_modal] = useState(false);
-
-  const [isEditingEvent, setIsEditingEvent] = useState(false);
-
-  const [listEventId, setListEventId] = useState(null);
-
-  // needed this for creating event
-  const [selectedClientName, setSelectedClientName] = useState("");
-
-  const [selectedLeadMobileNo, setSelectedLeadMobileNo] = useState("");
-
-  // separater
-
   const [modal_list, setmodal_list] = useState(false);
 
-  const [isEditingLead, setIsEditingLead] = useState(false);
+  const [isEditingClient, setIsEditingClient] = useState(false);
 
   const [modal_delete, setmodal_delete] = useState(false);
 
-  const [listLeadId, setListLeadId] = useState(null);
+  // const [listClientId, setListClientId] = useState(null);
+
+  const [listClient, setListClient] = useState(null);
+
+  const [users_view_modal_list, setUsers_view_modal_list] = useState(false);
+
+  const [add_users_modal_list, setAdd_users_modal_list] = useState(false);
+
+  const [selectedClients, setSelectedClients] = useState([]);
+
+  const [isDeletingMultipleUsers, setIsDeletingMultipleUsers] = useState(false);
+
+  const [roles, setRoles] = useState([]);
+
+  const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
+  const { clients, filteredClients, clientUsers } = useSelector(
+    (state) => state.Client
+  );
 
   const dispatch = useDispatch();
 
-  const { leads, dropdowns, error } = useSelector((state) => state.AddLead);
-  const { leadEvents } = useSelector((state) => state.Report);
-
-  // toggles register / edit lead modal
+  // toggles register / edit user modal
   function tog_list() {
     setmodal_list(!modal_list);
-    setIsEditingLead(false);
+    setIsEditingClient(false);
   }
 
-  // toggles delete lead confirmation modal
+  // toggles delete user confirmation modal
   function tog_delete() {
     setmodal_delete(!modal_delete);
   }
 
-  function events_view_tog_list() {
-    setEvents_view_modal(!events_view_modal);
+  function users_view_tog_list(clientEmail) {
+    setUsers_view_modal_list(!users_view_modal_list);
+    dispatch(getClientUsers(clientEmail));
   }
 
-  function event_tog_delete() {
-    setEvent_modal_delete(!event_modal_delete);
+  function add_users_tog_list() {
+    setAdd_users_modal_list(!add_users_modal_list);
   }
 
-  function add_event_tog_list() {
-    setAddEvent_view_modal(!add_event_view_modal);
-    setIsEditingEvent(false);
+  function handleSelectAll() {
+    const allClientIds = clients?.map((client) => {
+      return client.id;
+    });
+
+    if (clients?.length === selectedClients.length) {
+      setSelectedClients([]);
+    } else {
+      setSelectedClients(allClientIds);
+    }
+  }
+
+  function handleSelectedClients(clientId) {
+    const alreadySelected = selectedClients.includes(clientId);
+
+    if (alreadySelected) {
+      const filteredClients = selectedClients?.filter((id) => {
+        return id !== clientId;
+      });
+
+      setSelectedClients([...filteredClients]);
+    } else {
+      setSelectedClients([...selectedClients, clientId]);
+    }
+  }
+
+  function handleSelectedDelete() {
+    tog_delete();
+    setIsDeletingMultipleUsers(true);
+  }
+
+  function handleDelete() {
+    if (isDeletingMultipleUsers) {
+      dispatch(removeClient({ clientId: selectedClients }));
+    } else {
+      dispatch(removeClient({ clientId: listClient.id }));
+    }
+
+    setmodal_delete(false);
   }
 
   useEffect(() => {
-    dispatch(getLeads());
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/roles`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setRoles(res.data);
+      })
+      .catch((error) => {
+        console.log("error while fetching roles ->", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (alreadyRegisteredError) {
+      setmodal_list(!modal_list);
+    }
+  }, [alreadyRegisteredError]);
+
+  useEffect(() => {
+    dispatch(getClients());
   }, [dispatch]);
 
   // formik setup
   const validation = useFormik({
     initialValues: {
-      clientName: "",
-      projectGenre: "",
-      projectStatus: "",
-      youtubeLink: "",
-      projectDueDate: "",
+      roleId: "",
+      companyName: "",
+      address: "",
+      agreementDate: "",
+      email: "",
+      contactNo: "",
+      noOfUsers: "",
+      userIdDemo: "",
+      userIdLive: "",
+      startTime: "",
+      endTime: "",
+      password: "",
+      image: "",
+      agreementTalk: "",
     },
     validationSchema: Yup.object({
-      clientName: Yup.string().required("Please enter client name"),
-      projectGenre: Yup.string().required("Please enter project genre"),
-      projectStatus: Yup.string().required("Please select project status"),
-      youtubeLink: Yup.string(),
-      projectDueDate: Yup.string().required("Please select project due date"),
+      roleId: Yup.string().required("Please Select Role"),
+      companyName: Yup.string().required("Enter company name"),
+      address: Yup.string().required("Enter Address"),
+      agreementDate: Yup.string().required("Enter agreement date"),
+      email: Yup.string().required("Enter email"),
+      contactNo: Yup.string().required("Enter contact no"),
+      noOfUsers: Yup.string().required("Enter no of user"),
+      startTime: Yup.string().required("Enter start timining"),
+      endTime: Yup.string().required("Enter end timining"),
+      userIdDemo: Yup.string(),
+      userIdLive: Yup.string(),
+      password: Yup.string().required("Enter password"),
+      image: Yup.string(),
+      agreementTalk: Yup.string(),
     }),
     onSubmit: (values) => {
-      isEditingLead && dispatch(updateLead({ values, listLeadId }));
-      // : dispatch(createLead(values));
+      console.log("CLIENT ADD FORM CALLED ->", values);
 
-      setmodal_list(false);
+      if (isEditingClient) {
+        dispatch(updateClient({ values, clientId: listClient.id }));
+      } else {
+        dispatch(createClient(values));
+        dispatch(
+          createUser({
+            email: values.email,
+            noOfUsers: values.noOfUsers,
+            userIdDemo: values.userIdDemo,
+            userIdLive: values.userIdLive,
+            password: values.password,
+          })
+        );
+      }
     },
   });
-  const eventValidation = useFormik({
+  const addUserValidation = useFormik({
     initialValues: {
-      eventName: "",
-      eventDate: "",
+      noOfUsers: "",
     },
     validationSchema: Yup.object({
-      eventName: Yup.string().required("Please enter event name"),
-      eventDate: Yup.string().required("Please enter event date"),
+      noOfUsers: Yup.number().required("Enter no of users"),
     }),
     onSubmit: (values) => {
-      isEditingEvent
-        ? dispatch(updateEvent({ ...values, listEventId }))
-        : dispatch(
-            createEvent({
-              ...values,
-              clientName: selectedClientName,
-              leadMobileNo: selectedLeadMobileNo,
-            })
-          );
+      const { noOfUsers } = values;
 
-      setAddEvent_view_modal(false);
+      console.log("no of users we want to add ->", values);
+      console.log("client we are adding users for ->", listClient);
+      dispatch(
+        createUser({
+          email: listClient.email,
+          noOfUsers,
+          userIdDemo: listClient.userIdDemo,
+          userIdLive: listClient.userIdLive,
+          password: listClient.password,
+        })
+      );
     },
   });
 
-  // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit lead from
+  function addUserFormHandleSubmit(e) {
+    e.preventDefault();
+
+    addUserValidation.handleSubmit();
+
+    setAdd_users_modal_list(false);
+    return false;
+  }
+
+  // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit user from
   function formHandleSubmit(e) {
     e.preventDefault();
+
     validation.handleSubmit();
-    return false;
-  }
-  function eventFormHandleSubmit(e) {
-    e.preventDefault();
-    eventValidation.handleSubmit();
+
+    setmodal_list(false);
     return false;
   }
 
-  // to update the values of register form when editing the lead
-  function handleEditLead(lead) {
-    setIsEditingLead(true);
+  function handleRoleChange(e) {
+    validation.setFieldValue("roleId", e.target.value);
+  }
+
+  // to update the values of register form when editing the user
+  function handleEditClient(clientData) {
+    setIsEditingClient(true);
     setmodal_list(!modal_list);
-    setListLeadId(lead.id);
+    setListClient(clientData);
 
-    validation.values.clientName = lead.clientName;
-    validation.values.projectGenre = lead.projectGenre;
-    validation.values.projectStatus = lead.projectStatus;
-    validation.values.youtubeLink = lead.youtubeLink;
-    // YOUTUBELINK, DUE DATE FIELD REMAINING HERE
-  }
+    // setting the value of role according to roleId because in select element roleId is used as value
+    const roleName = roles.find((role) => role.id === clientData.roleId);
 
-  function handleEditEvent(event) {
-    setIsEditingEvent(true);
-    setListEventId(event.id);
-    setAddEvent_view_modal(!add_event_view_modal);
-
-    eventValidation.setValues({
-      eventName: event.eventName,
-      eventDate: event.eventDate,
+    validation.setValues({
+      companyName: clientData.companyName,
+      address: clientData.address,
+      agreementDate: clientData.agreementDate,
+      email: clientData.email,
+      contactNo: clientData.contactNo,
+      noOfUsers: clientData.noOfUsers,
+      userIdDemo: clientData.userIdDemo,
+      userIdLive: clientData.userIdLive,
+      startTime: clientData.startTime,
+      endTime: clientData.endTime,
+      password: clientData.password,
+      roleId: roleName.id,
     });
   }
 
-  document.title = "Report";
+  function handlefilterClientData(clientData) {}
+
+  function handleFilterData(e) {
+    dispatch(searchClients(e.target.value));
+  }
+
+  function handleClientStatusUpdate(client) {
+    const status = client.status === 1 ? 0 : 1;
+
+    dispatch(updateClient({ status, clientId: client.id }));
+  }
+
+  document.title = "Add Client";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Report" pageTitle="Lead Management" />
+          <BreadCrumb title="Add Client" pageTitle="Client" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Report</h4>
+                  <h4 className="card-title mb-0">Add Client</h4>
                 </CardHeader>
 
                 <CardBody>
-                  <div className="listjs-table" id="campaignList">
+                  <div className="listjs-table" id="userList">
+                    <Row className="g-4 mb-3 d-flex justify-content-between">
+                      {/* <Col className="col-sm-auto ">
+                        <div className="search-box">
+                          <input
+                            type="text"
+                            className="form-control bg-light border-light"
+                            autoComplete="off"
+                            id="searchList"
+                            onChange={handleFilterData}
+                            placeholder="Search Keyword"
+                          />
+                          <i className="ri-search-line search-icon"></i>
+                        </div>
+                      </Col> */}
+
+                      <Col className="col-sm-auto">
+                        <div>
+                          {/* <Button
+                            color="primary"
+                            className="add-btn me-1"
+                            onClick={() => tog_list()}
+                            id="create-btn"
+                          >
+                            <i className="ri-add-line align-bottom me-1"></i>{" "}
+                            Add New Client
+                          </Button> */}
+
+                          {selectedClients.length > 0 ? (
+                            <Button
+                              color="primary"
+                              className="delete-btn me-1"
+                              onClick={handleSelectedDelete}
+                              id="create-btn"
+                            >
+                              <i className="ri-add-line align-bottom me-1"></i>{" "}
+                              Delete Selected Id
+                            </Button>
+                          ) : null}
+                        </div>
+                      </Col>
+                    </Row>
+
                     <div className="table-responsive table-card mt-3 mb-1">
                       <table
                         className="table align-middle table-nowrap"
-                        id="customerTable"
+                        id="userTable"
                       >
                         <thead className="table-light">
                           <tr>
@@ -201,123 +370,120 @@ const Report = () => {
                                   className="form-check-input"
                                   type="checkbox"
                                   id="checkAll"
-                                  value="option"
+                                  checked={
+                                    clients?.length > 0 &&
+                                    clients?.length === selectedClients.length
+                                  }
+                                  onChange={handleSelectAll}
                                 />
                               </div>
                             </th>
-                            <th className="sort" data-sort="client_name">
-                              Client Name
+                            <th className="sort" data-sort="token_no">
+                              Token No
                             </th>
-                            <th className="sort" data-sort="mobile_no">
-                              Mobile No
+                            <th className="sort" data-sort="client">
+                              Client
                             </th>
-                            <th className="sort" data-sort="project_genre">
-                              Project Genre
+                            <th className="sort" data-sort="client">
+                              Total Users
                             </th>
-                            <th className="sort" data-sort="project_due_date">
-                              Project Due Date
+
+                            <th className="sort" data-sort="total_forms">
+                              Total Forms
                             </th>
-                            <th
-                              className="sort"
-                              data-sort="project_youtube_link"
-                            >
-                              Project YouTube Link
+
+                            <th className="sort" data-sort="checked_forms">
+                              Checked Forms
                             </th>
-                            <th className="sort" data-sort="project_status">
-                              Project Status
-                            </th>
+
                             <th className="sort" data-sort="action">
                               Action
                             </th>
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {leads?.map((lead) => (
-                            <tr key={lead?.id}>
-                              <th scope="row">
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="checkAll"
-                                    value="option1"
-                                  />
-                                </div>
-                              </th>
-                              <td className="client-name">{lead.clientName}</td>
-                              <td className="client-name">{lead.mobileNo}</td>
-                              <td className="project-genre">
-                                {lead.projectGenre}
-                              </td>
-                              <td className="project-date">
-                                {lead.projectDueDate}
-                              </td>
-                              <td className="project-youtube-link">
-                                <a href={lead.youtubeLink} target="blank">
-                                  {/* Youtube Link */}
+                          <tr>
+                            <th scope="row">
+                              <div className="form-check">
+                                <input
+                                  className="form-check-input"
+                                  // checked={selectedClients.includes(client.id)}
+                                  type="checkbox"
+                                  name="checkbox"
+                                  onChange={() => {
+                                    // handleSelectedClients(client.id);
+                                  }}
+                                />
+                              </div>
+                            </th>
 
-                                  <img
-                                    src={YoutubeLogo}
-                                    height="50px"
-                                    width="50px"
-                                  />
-                                </a>
-                              </td>
-                              <td className="project-status">
-                                <span className="badge border border-primary text-primary fs-13">
-                                  {" "}
-                                  {lead.projectStatus}
-                                </span>
-                              </td>
-                              <td>
-                                <div className="d-flex gap-2">
-                                  <div className="viewEvents">
-                                    <button
-                                      className="btn btn-sm btn-success e"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#showModal"
-                                      onClick={() => {
-                                        events_view_tog_list();
-                                        dispatch(getEvents(lead.mobileNo));
-                                        setSelectedClientName(lead.clientName);
-                                        setSelectedLeadMobileNo(lead.mobileNo);
-                                      }}
-                                    >
-                                      View Events
-                                    </button>
-                                  </div>
+                            <td className="token_no">2147483647</td>
+                            <td className="client">Someone</td>
+                            <td className="users">34</td>
+                            <td className="type">50</td>
+                            <td className="contact">27</td>
 
-                                  <div className="edit">
-                                    <button
-                                      className="btn btn-sm btn-primary edit-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#showModal"
-                                      onClick={() => {
-                                        handleEditLead(lead);
-                                      }}
-                                    >
-                                      Edit
-                                    </button>
-                                  </div>
-                                  <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteRecordModal"
-                                      onClick={() => {
-                                        setListLeadId(lead.id);
-                                        setmodal_delete(true);
-                                      }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
+                            <td>
+                              <div className="d-flex gap-2">
+                                <div className="viewUsers">
+                                  <button
+                                    className="btn btn-sm btn-success edit-item-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#showModal"
+                                    onClick={() => {
+                                      // users_view_tog_list(client.email);
+                                      // setListClient(client);
+                                    }}
+                                  >
+                                    View Forms
+                                  </button>
                                 </div>
-                              </td>
-                            </tr>
-                          ))}
+                                <div className="edit">
+                                  <button
+                                    className="btn btn-sm btn-primary edit-item-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#showModal"
+                                    onClick={() => {
+                                      // handleEditClient(client);
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                </div>
+                                <div className="remove">
+                                  <button
+                                    className="btn btn-sm btn-danger remove-item-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteRecordModal"
+                                    onClick={() => {
+                                      // setListClient(client);
+                                      setmodal_delete(true);
+                                      setIsDeletingMultipleUsers(false);
+                                    }}
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
+                      <div className="noresult" style={{ display: "none" }}>
+                        <div className="text-center">
+                          <lord-icon
+                            src="https://cdn.lordicon.com/msoeawqm.json"
+                            trigger="loop"
+                            colors="primary:#25a0e2,secondary:#00bd9d"
+                            style={{ width: "75px", height: "75px" }}
+                          ></lord-icon>
+                          <h5 className="mt-2">Sorry! No Result Found</h5>
+                          <p className="text-muted mb-0">
+                            We've searched more than 150+ Orders We did not find
+                            any orders for you search.
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="d-flex justify-content-end">
@@ -344,51 +510,39 @@ const Report = () => {
       </div>
 
       {/* Add Modal */}
-      <AddLeadModal
+      <AddClientFormModal
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
         validation={validation}
-        isEditingLead={isEditingLead}
-        dropdowns={dropdowns}
+        isEditingClient={isEditingClient}
+        alreadyRegisteredError={alreadyRegisteredError}
+        handleRoleChange={handleRoleChange}
+        roles={roles}
+        clients={clients}
       />
 
       {/* Remove Modal */}
-      <LeadRemoveModal
+      <AddClientRemoveModal
         modal_delete={modal_delete}
         tog_delete={tog_delete}
         setmodal_delete={setmodal_delete}
-        handleDeleteCampaign={() => {
-          dispatch(updateLead({ listLeadId, status: 0 }));
-          setmodal_delete(false);
-        }}
+        handleDeleteUser={handleDelete}
       />
 
-      <EventsViewModal
-        events_view_modal={events_view_modal}
-        events_view_tog_list={events_view_tog_list}
-        add_event_tog_list={add_event_tog_list}
-        event_tog_delete={event_tog_delete}
-        setListEventId={setListEventId}
-        leadEvents={leadEvents}
-        handleEditEvent={handleEditEvent}
+      <AddUsersFormModal
+        add_users_modal_list={add_users_modal_list}
+        add_users_tog_list={add_users_tog_list}
+        addUserValidation={addUserValidation}
+        addUserFormHandleSubmit={addUserFormHandleSubmit}
       />
 
-      <EventRemoveModal
-        event_modal_delete={event_modal_delete}
-        event_tog_delete={event_tog_delete}
-        handleDeleteEvent={() => {
-          dispatch(updateEvent({ listEventId, status: 0 }));
-          event_tog_delete();
-        }}
-      />
-
-      <AddEventModal
-        add_event_view_modal={add_event_view_modal}
-        add_event_tog_list={add_event_tog_list}
-        eventValidation={eventValidation}
-        isEditingEvent={isEditingEvent}
-        eventFormHandleSubmit={eventFormHandleSubmit}
+      <ViewUsersModal
+        users_view_modal_list={users_view_modal_list}
+        users_view_tog_list={users_view_tog_list}
+        clientUsers={clientUsers}
+        add_users_tog_list={add_users_tog_list}
+        listClient={listClient}
       />
     </React.Fragment>
   );

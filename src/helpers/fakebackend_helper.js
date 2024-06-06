@@ -666,6 +666,12 @@ export const filterCompletedWorkData = (data) => {
     data
   );
 };
+export const submitCompletedWorkData = (data) => {
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/completed-data/submit-data`,
+    data
+  );
+};
 
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>

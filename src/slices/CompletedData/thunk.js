@@ -5,6 +5,7 @@ import {
   removeCompletedWorkData as removeCompletedWorkDataApi,
   updateCompletedWorkData as updateCompletedWorkDataApi,
   filterCompletedWorkData as filterCompletedWorkDataApi,
+  submitCompletedWorkData as submitCompletedWorkDataApi,
   // updateClient as updateClientApi,
   // removeClient as removeClientApi,
 } from "../../helpers/fakebackend_helper";
@@ -49,12 +50,24 @@ export const filterCompletedWorkData = createAsyncThunk(
   "completedData/filterCompletedWorkData",
   async (data) => {
     try {
-      console.log("GETTING DATA IN THUNK", data);
       const response = await filterCompletedWorkDataApi(data);
 
       return response;
     } catch (error) {
       console.log("error inside filter completed work data thunk", error);
+    }
+  }
+);
+
+export const submitCompletedWorkData = createAsyncThunk(
+  "completedData/submitCompletedWorkData",
+  async (data) => {
+    try {
+      const response = await submitCompletedWorkDataApi(data);
+
+      return response;
+    } catch (error) {
+      console.log("error inside submit completed work data thunk", error);
     }
   }
 );
