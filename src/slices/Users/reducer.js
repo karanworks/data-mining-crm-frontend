@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 export const initialState = {
   users: [], // list of all users
+  allUsers: [], // list of all users (inlcuding that other admins created as well)
   alreadyRegisteredError: null, // if user with same email, mobile number already registered
   error: "",
 };
@@ -18,6 +19,7 @@ const usersSlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.users = action.payload?.data.users;
+        state.allUsers = action.payload?.data.allUsers;
         state.error = "";
       }
     });

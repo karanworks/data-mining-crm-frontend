@@ -25,6 +25,7 @@ import {
   removeCompletedWorkData,
   filterCompletedWorkData,
 } from "../../slices/CompletedData/thunk";
+
 import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
 import {
@@ -47,7 +48,7 @@ const CompletedData = () => {
 
   const [roles, setRoles] = useState([]);
 
-  const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
+  const { users, allUsers } = useSelector((state) => state.Users);
   const { userData, searchedData } = useSelector(
     (state) => state.CompletedData
   );
@@ -68,6 +69,8 @@ const CompletedData = () => {
       });
   }, []);
 
+  console.log("GET USERS ->", allUsers);
+
   useEffect(() => {
     dispatch(getUsers());
     dispatch(getCompletedWorkData());
@@ -75,16 +78,19 @@ const CompletedData = () => {
 
   const filterValidation = useFormik({
     initialValues: {
+      username: "",
       startDate: "",
       endDate: "",
       businessType: "",
     },
     validationSchema: Yup.object({
+      username: Yup.string(),
       startDate: Yup.string(),
       endDate: Yup.string(),
       businessType: Yup.string(),
     }),
     onSubmit: (values, { resetForm }) => {
+      console.log("VALUES ->", values);
       dispatch(filterCompletedWorkData(values));
       console.log("FILTERED VALUES ->", values);
     },
@@ -245,22 +251,18 @@ const CompletedData = () => {
                                   className="form-control"
                                   type="select"
                                   placeholder="Select User"
-
-                                  // onChange={validation.handleChange}
-                                  // onBlur={validation.handleBlur}
-                                  // value={validation.values.role || ""}
-                                  // invalid={
-                                  //   validation.touched.role &&
-                                  //   validation.errors.role
-                                  //     ? true
-                                  //     : false
-                                  // }
+                                  onChange={(e) =>
+                                    filterValidation.setFieldValue(
+                                      "username",
+                                      e.target.value
+                                    )
+                                  }
                                 >
                                   <option value="">Select User</option>
 
-                                  {tempUserData?.map((user, i) => (
-                                    <option value={user.name} key={i}>
-                                      {user.name}
+                                  {allUsers?.map((user, i) => (
+                                    <option value={user.username} key={i}>
+                                      {user.username}
                                     </option>
                                   ))}
                                 </Input>
