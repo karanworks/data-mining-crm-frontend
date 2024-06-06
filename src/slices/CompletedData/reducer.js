@@ -35,10 +35,6 @@ const completedWorkDataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCompletedWorkData.fulfilled, (state, action) => {
-      console.log(
-        "COMPLETED DATA IN REDUCER ->",
-        action.payload?.data.completedWorkData
-      );
       if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {
@@ -101,11 +97,13 @@ const completedWorkDataSlice = createSlice({
     });
 
     builder.addCase(filterCompletedWorkData.fulfilled, (state, action) => {
+      console.log("FILTERED DATA ->", action.payload);
+
       if (action.payload.status == "failure") {
         state.alreadyRegisteredError = action.payload.message;
         state.error = "";
       } else {
-        // state.filterCompletedWorkData = [...state.users, action.payload.data];
+        state.searchedData = [...action.payload.data.filteredData];
         state.alreadyRegisteredError = null;
         state.error = "";
       }

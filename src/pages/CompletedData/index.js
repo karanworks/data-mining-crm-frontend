@@ -499,20 +499,21 @@ const CompletedData = () => {
                           ))}
                         </tbody>
                       </table>
-                      <div className="noresult" style={{ display: "none" }}>
-                        <div className="text-center">
-                          <lord-icon
-                            src="https://cdn.lordicon.com/msoeawqm.json"
-                            trigger="loop"
-                            colors="primary:#25a0e2,secondary:#00bd9d"
-                            style={{ width: "75px", height: "75px" }}
-                          ></lord-icon>
-                          <h5 className="mt-2">Sorry! No Result Found</h5>
-                          <p className="text-muted mb-0">
-                            We've searched more than 150+ Orders We did not find
-                            any orders for you search.
-                          </p>
-                        </div>
+                    </div>
+
+                    <div className="noresult" style={{ display: "none" }}>
+                      <div className="text-center">
+                        <lord-icon
+                          src="https://cdn.lordicon.com/msoeawqm.json"
+                          trigger="loop"
+                          colors="primary:#25a0e2,secondary:#00bd9d"
+                          style={{ width: "75px", height: "75px" }}
+                        ></lord-icon>
+                        <h5 className="mt-2">Sorry! No Result Found</h5>
+                        <p className="text-muted mb-0">
+                          We've searched more than 150+ Orders We did not find
+                          any orders for you search.
+                        </p>
                       </div>
                     </div>
 

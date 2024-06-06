@@ -49,6 +49,7 @@ export const filterCompletedWorkData = createAsyncThunk(
   "completedData/filterCompletedWorkData",
   async (data) => {
     try {
+      console.log("GETTING DATA IN THUNK", data);
       const response = await filterCompletedWorkDataApi(data);
 
       return response;
