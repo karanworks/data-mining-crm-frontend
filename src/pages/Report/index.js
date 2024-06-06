@@ -16,10 +16,9 @@ import {
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { useFormik, validateYupSchema } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddClientFormModal from "./AddClientFormModal";
-import AddClientRemoveModal from "./AddClientRemoveModal";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -28,13 +27,6 @@ import {
   removeUser,
   updateUser,
 } from "../../slices/Users/thunk";
-
-import {
-  getCenterUsers,
-  createCenterUser,
-  removeCenterUser,
-  updateCenterUser,
-} from "../../slices/AddUsers/thunk";
 
 import {
   getClients,
@@ -46,17 +38,15 @@ import {
 
 import { searchClients } from "../../slices/AddClient/reducer";
 
-import { useNavigate } from "react-router-dom";
 import ViewUsersModal from "./ViewUsersModal";
-import AddUsersFormModal from "./AddUsersFormModal";
 import { getReportData } from "../../slices/Report/thunk";
 
 const Report = () => {
-  const [modal_list, setmodal_list] = useState(false);
+  // const [modal_list, setmodal_list] = useState(false);
 
-  const [isEditingClient, setIsEditingClient] = useState(false);
+  // const [isEditingClient, setIsEditingClient] = useState(false);
 
-  const [modal_delete, setmodal_delete] = useState(false);
+  // const [modal_delete, setmodal_delete] = useState(false);
 
   // const [listClientId, setListClientId] = useState(null);
 
@@ -68,11 +58,11 @@ const Report = () => {
 
   const [selectedClients, setSelectedClients] = useState([]);
 
-  const [isDeletingMultipleUsers, setIsDeletingMultipleUsers] = useState(false);
+  // const [isDeletingMultipleUsers, setIsDeletingMultipleUsers] = useState(false);
 
-  const [roles, setRoles] = useState([]);
+  // const [roles, setRoles] = useState([]);
 
-  const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
+  // const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
   const { clients, filteredClients, clientUsers } = useSelector(
     (state) => state.Client
   );
@@ -82,20 +72,20 @@ const Report = () => {
 
   const dispatch = useDispatch();
 
-  // toggles register / edit user modal
-  function tog_list() {
-    setmodal_list(!modal_list);
-    setIsEditingClient(false);
-  }
+  // // toggles register / edit user modal
+  // function tog_list() {
+  //   setmodal_list(!modal_list);
+  //   setIsEditingClient(false);
+  // }
 
   // toggles delete user confirmation modal
-  function tog_delete() {
-    setmodal_delete(!modal_delete);
-  }
+  // function tog_delete() {
+  //   setmodal_delete(!modal_delete);
+  // }
 
-  function users_view_tog_list(clientEmail) {
+  function users_view_tog_list(token) {
     setUsers_view_modal_list(!users_view_modal_list);
-    dispatch(getClientUsers(clientEmail));
+    // dispatch(getClientUsers(clientEmail));
   }
 
   function add_users_tog_list() {
@@ -114,53 +104,53 @@ const Report = () => {
     }
   }
 
-  function handleSelectedClients(clientId) {
-    const alreadySelected = selectedClients.includes(clientId);
+  // function handleSelectedClients(clientId) {
+  //   const alreadySelected = selectedClients.includes(clientId);
 
-    if (alreadySelected) {
-      const filteredClients = selectedClients?.filter((id) => {
-        return id !== clientId;
-      });
+  //   if (alreadySelected) {
+  //     const filteredClients = selectedClients?.filter((id) => {
+  //       return id !== clientId;
+  //     });
 
-      setSelectedClients([...filteredClients]);
-    } else {
-      setSelectedClients([...selectedClients, clientId]);
-    }
-  }
+  //     setSelectedClients([...filteredClients]);
+  //   } else {
+  //     setSelectedClients([...selectedClients, clientId]);
+  //   }
+  // }
 
   function handleSelectedDelete() {
     tog_delete();
     setIsDeletingMultipleUsers(true);
   }
 
-  function handleDelete() {
-    if (isDeletingMultipleUsers) {
-      dispatch(removeClient({ clientId: selectedClients }));
-    } else {
-      dispatch(removeClient({ clientId: listClient.id }));
-    }
+  // function handleDelete() {
+  //   if (isDeletingMultipleUsers) {
+  //     dispatch(removeClient({ clientId: selectedClients }));
+  //   } else {
+  //     dispatch(removeClient({ clientId: listClient.id }));
+  //   }
 
-    setmodal_delete(false);
-  }
+  //   setmodal_delete(false);
+  // }
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/roles`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setRoles(res.data);
-      })
-      .catch((error) => {
-        console.log("error while fetching roles ->", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_SERVER_URL}/roles`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       setRoles(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log("error while fetching roles ->", error);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    if (alreadyRegisteredError) {
-      setmodal_list(!modal_list);
-    }
-  }, [alreadyRegisteredError]);
+  // useEffect(() => {
+  //   if (alreadyRegisteredError) {
+  //     setmodal_list(!modal_list);
+  //   }
+  // }, [alreadyRegisteredError]);
 
   useEffect(() => {
     dispatch(getReportData());
@@ -168,141 +158,141 @@ const Report = () => {
   }, [dispatch]);
 
   // formik setup
-  const validation = useFormik({
-    initialValues: {
-      roleId: "",
-      companyName: "",
-      address: "",
-      agreementDate: "",
-      email: "",
-      contactNo: "",
-      noOfUsers: "",
-      userIdDemo: "",
-      userIdLive: "",
-      startTime: "",
-      endTime: "",
-      password: "",
-      image: "",
-      agreementTalk: "",
-    },
-    validationSchema: Yup.object({
-      roleId: Yup.string().required("Please Select Role"),
-      companyName: Yup.string().required("Enter company name"),
-      address: Yup.string().required("Enter Address"),
-      agreementDate: Yup.string().required("Enter agreement date"),
-      email: Yup.string().required("Enter email"),
-      contactNo: Yup.string().required("Enter contact no"),
-      noOfUsers: Yup.string().required("Enter no of user"),
-      startTime: Yup.string().required("Enter start timining"),
-      endTime: Yup.string().required("Enter end timining"),
-      userIdDemo: Yup.string(),
-      userIdLive: Yup.string(),
-      password: Yup.string().required("Enter password"),
-      image: Yup.string(),
-      agreementTalk: Yup.string(),
-    }),
-    onSubmit: (values) => {
-      console.log("CLIENT ADD FORM CALLED ->", values);
+  // const validation = useFormik({
+  //   initialValues: {
+  //     roleId: "",
+  //     companyName: "",
+  //     address: "",
+  //     agreementDate: "",
+  //     email: "",
+  //     contactNo: "",
+  //     noOfUsers: "",
+  //     userIdDemo: "",
+  //     userIdLive: "",
+  //     startTime: "",
+  //     endTime: "",
+  //     password: "",
+  //     image: "",
+  //     agreementTalk: "",
+  //   },
+  //   validationSchema: Yup.object({
+  //     roleId: Yup.string().required("Please Select Role"),
+  //     companyName: Yup.string().required("Enter company name"),
+  //     address: Yup.string().required("Enter Address"),
+  //     agreementDate: Yup.string().required("Enter agreement date"),
+  //     email: Yup.string().required("Enter email"),
+  //     contactNo: Yup.string().required("Enter contact no"),
+  //     noOfUsers: Yup.string().required("Enter no of user"),
+  //     startTime: Yup.string().required("Enter start timining"),
+  //     endTime: Yup.string().required("Enter end timining"),
+  //     userIdDemo: Yup.string(),
+  //     userIdLive: Yup.string(),
+  //     password: Yup.string().required("Enter password"),
+  //     image: Yup.string(),
+  //     agreementTalk: Yup.string(),
+  //   }),
+  //   onSubmit: (values) => {
+  //     console.log("CLIENT ADD FORM CALLED ->", values);
 
-      if (isEditingClient) {
-        dispatch(updateClient({ values, clientId: listClient.id }));
-      } else {
-        dispatch(createClient(values));
-        dispatch(
-          createUser({
-            email: values.email,
-            noOfUsers: values.noOfUsers,
-            userIdDemo: values.userIdDemo,
-            userIdLive: values.userIdLive,
-            password: values.password,
-          })
-        );
-      }
-    },
-  });
-  const addUserValidation = useFormik({
-    initialValues: {
-      noOfUsers: "",
-    },
-    validationSchema: Yup.object({
-      noOfUsers: Yup.number().required("Enter no of users"),
-    }),
-    onSubmit: (values) => {
-      const { noOfUsers } = values;
+  //     if (isEditingClient) {
+  //       dispatch(updateClient({ values, clientId: listClient.id }));
+  //     } else {
+  //       dispatch(createClient(values));
+  //       dispatch(
+  //         createUser({
+  //           email: values.email,
+  //           noOfUsers: values.noOfUsers,
+  //           userIdDemo: values.userIdDemo,
+  //           userIdLive: values.userIdLive,
+  //           password: values.password,
+  //         })
+  //       );
+  //     }
+  //   },
+  // });
+  // const addUserValidation = useFormik({
+  //   initialValues: {
+  //     noOfUsers: "",
+  //   },
+  //   validationSchema: Yup.object({
+  //     noOfUsers: Yup.number().required("Enter no of users"),
+  //   }),
+  //   onSubmit: (values) => {
+  //     const { noOfUsers } = values;
 
-      console.log("no of users we want to add ->", values);
-      console.log("client we are adding users for ->", listClient);
-      dispatch(
-        createUser({
-          email: listClient.email,
-          noOfUsers,
-          userIdDemo: listClient.userIdDemo,
-          userIdLive: listClient.userIdLive,
-          password: listClient.password,
-        })
-      );
-    },
-  });
+  //     console.log("no of users we want to add ->", values);
+  //     console.log("client we are adding users for ->", listClient);
+  //     dispatch(
+  //       createUser({
+  //         email: listClient.email,
+  //         noOfUsers,
+  //         userIdDemo: listClient.userIdDemo,
+  //         userIdLive: listClient.userIdLive,
+  //         password: listClient.password,
+  //       })
+  //     );
+  //   },
+  // });
 
-  function addUserFormHandleSubmit(e) {
-    e.preventDefault();
+  // function addUserFormHandleSubmit(e) {
+  //   e.preventDefault();
 
-    addUserValidation.handleSubmit();
+  //   addUserValidation.handleSubmit();
 
-    setAdd_users_modal_list(false);
-    return false;
-  }
+  //   setAdd_users_modal_list(false);
+  //   return false;
+  // }
 
   // this function also gets triggered (with onSubmit method of formik) when submitting the register / edit user from
-  function formHandleSubmit(e) {
-    e.preventDefault();
+  // function formHandleSubmit(e) {
+  //   e.preventDefault();
 
-    validation.handleSubmit();
+  //   validation.handleSubmit();
 
-    setmodal_list(false);
-    return false;
-  }
+  //   setmodal_list(false);
+  //   return false;
+  // }
 
-  function handleRoleChange(e) {
-    validation.setFieldValue("roleId", e.target.value);
-  }
+  // function handleRoleChange(e) {
+  //   validation.setFieldValue("roleId", e.target.value);
+  // }
 
   // to update the values of register form when editing the user
-  function handleEditClient(clientData) {
-    setIsEditingClient(true);
-    setmodal_list(!modal_list);
-    setListClient(clientData);
+  // function handleEditClient(clientData) {
+  //   setIsEditingClient(true);
+  //   setmodal_list(!modal_list);
+  //   setListClient(clientData);
 
-    // setting the value of role according to roleId because in select element roleId is used as value
-    const roleName = roles.find((role) => role.id === clientData.roleId);
+  //   // setting the value of role according to roleId because in select element roleId is used as value
+  //   const roleName = roles.find((role) => role.id === clientData.roleId);
 
-    validation.setValues({
-      companyName: clientData.companyName,
-      address: clientData.address,
-      agreementDate: clientData.agreementDate,
-      email: clientData.email,
-      contactNo: clientData.contactNo,
-      noOfUsers: clientData.noOfUsers,
-      userIdDemo: clientData.userIdDemo,
-      userIdLive: clientData.userIdLive,
-      startTime: clientData.startTime,
-      endTime: clientData.endTime,
-      password: clientData.password,
-      roleId: roleName.id,
-    });
-  }
+  //   validation.setValues({
+  //     companyName: clientData.companyName,
+  //     address: clientData.address,
+  //     agreementDate: clientData.agreementDate,
+  //     email: clientData.email,
+  //     contactNo: clientData.contactNo,
+  //     noOfUsers: clientData.noOfUsers,
+  //     userIdDemo: clientData.userIdDemo,
+  //     userIdLive: clientData.userIdLive,
+  //     startTime: clientData.startTime,
+  //     endTime: clientData.endTime,
+  //     password: clientData.password,
+  //     roleId: roleName.id,
+  //   });
+  // }
 
-  function handlefilterClientData(clientData) {}
+  // function handlefilterClientData(clientData) {}
 
-  function handleFilterData(e) {
-    dispatch(searchClients(e.target.value));
-  }
+  // function handleFilterData(e) {
+  //   dispatch(searchClients(e.target.value));
+  // }
 
-  function handleClientStatusUpdate(client) {
-    const status = client.status === 1 ? 0 : 1;
+  // function handleClientStatusUpdate(client) {
+  //   const status = client.status === 1 ? 0 : 1;
 
-    dispatch(updateClient({ status, clientId: client.id }));
-  }
+  //   dispatch(updateClient({ status, clientId: client.id }));
+  // }
 
   document.title = "Report";
   return (
@@ -436,14 +426,14 @@ const Report = () => {
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
                                       onClick={() => {
-                                        // users_view_tog_list(client.email);
+                                        users_view_tog_list(data.token);
                                         // setListClient(client);
                                       }}
                                     >
                                       View Forms
                                     </button>
                                   </div>
-                                  <div className="edit">
+                                  {/* <div className="edit">
                                     <button
                                       className="btn btn-sm btn-primary edit-item-btn"
                                       data-bs-toggle="modal"
@@ -454,8 +444,8 @@ const Report = () => {
                                     >
                                       Edit
                                     </button>
-                                  </div>
-                                  <div className="remove">
+                                  </div> */}
+                                  {/* <div className="remove">
                                     <button
                                       className="btn btn-sm btn-danger remove-item-btn"
                                       data-bs-toggle="modal"
@@ -468,7 +458,7 @@ const Report = () => {
                                     >
                                       Remove
                                     </button>
-                                  </div>
+                                  </div> */}
                                 </div>
                               </td>
                             </tr>
@@ -514,34 +504,6 @@ const Report = () => {
         </Container>
         <ToastContainer />
       </div>
-
-      {/* Add Modal */}
-      <AddClientFormModal
-        modal_list={modal_list}
-        tog_list={tog_list}
-        formHandleSubmit={formHandleSubmit}
-        validation={validation}
-        isEditingClient={isEditingClient}
-        alreadyRegisteredError={alreadyRegisteredError}
-        handleRoleChange={handleRoleChange}
-        roles={roles}
-        clients={clients}
-      />
-
-      {/* Remove Modal */}
-      <AddClientRemoveModal
-        modal_delete={modal_delete}
-        tog_delete={tog_delete}
-        setmodal_delete={setmodal_delete}
-        handleDeleteUser={handleDelete}
-      />
-
-      <AddUsersFormModal
-        add_users_modal_list={add_users_modal_list}
-        add_users_tog_list={add_users_tog_list}
-        addUserValidation={addUserValidation}
-        addUserFormHandleSubmit={addUserFormHandleSubmit}
-      />
 
       <ViewUsersModal
         users_view_modal_list={users_view_modal_list}

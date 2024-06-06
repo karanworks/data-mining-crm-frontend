@@ -23,6 +23,7 @@ function ViewUsersModal({
       toggle={() => {
         users_view_tog_list();
       }}
+      className="modal-xl"
       centered
     >
       <ModalHeader
@@ -31,7 +32,7 @@ function ViewUsersModal({
           users_view_tog_list();
         }}
       >
-        Users
+        Submitted Forms
       </ModalHeader>
 
       <ModalBody style={{ paddingTop: "0px" }}>
@@ -39,49 +40,51 @@ function ViewUsersModal({
           <table className="table table-bordered table-nowrap align-middle mb-0">
             <thead>
               <tr>
-                <th scope="col">S.No</th>
                 <th scope="col">Username</th>
-                <th scope="col">Data Assigned</th>
-                <th scope="col">Completed</th>
+                <th scope="col">Company Info</th>
+                <th scope="col">Business Type</th>
                 <th scope="col">Status</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
 
             <tbody>
-              {clientUsers?.map((user, i) => (
-                <tr key={user.id}>
-                  <td>{i + 1}</td>
-                  <td>{user.username}</td>
-                  <td>{user.dataAssigned}</td>
-                  <td>{user.completed}</td>
-                  <td>
-                    {user.status === 1 ? (
-                      <button
-                        className="btn btn-sm btn-soft-success"
-                        onClick={() => handleUserStatusUpdate(user)}
-                      >
-                        Active
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-sm btn-soft-danger"
-                        onClick={() => handleUserStatusUpdate(user)}
-                      >
-                        Not Active
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              <tr>
+                <td>DEM_1</td>
+                <td>COMPANY INFO GOES HERE</td>
+                <td>Business Type goes here</td>
+                <td>
+                  {/* {data.websiteStatus === "Valid URL" ? ( */}
+                  <span className="badge border border-success text-success">
+                    {/* {data.websiteStatus} */}
+                    Valid Url
+                  </span>
+                  {/* ) : (
+                    <span className="badge border border-danger text-danger">
+                      {data.websiteStatus}
+                    </span> */}
+                  {/* )} */}
+                </td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-success edit-item-btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#showModal"
+                    onClick={() => {}}
+                  >
+                    Check
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <button
+          {/* <button
             className="btn btn-sm btn-primary mt-2"
             onClick={add_users_tog_list}
             style={{ float: "right" }}
           >
             Add Users
-          </button>
+          </button> */}
         </div>
       </ModalBody>
     </Modal>
