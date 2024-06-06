@@ -8,6 +8,8 @@ function ViewUsersModal({
   users_view_tog_list,
   clientUsers,
   add_users_tog_list,
+  reportDataForms,
+  handleCheckForm,
 }) {
   const dispatch = useDispatch();
 
@@ -16,6 +18,8 @@ function ViewUsersModal({
 
     dispatch(updateUser({ status, userId: user.id }));
   }
+
+  console.log("REPORT FORMS IN VIEW MODAL ->", reportDataForms);
 
   return (
     <Modal
@@ -49,33 +53,41 @@ function ViewUsersModal({
             </thead>
 
             <tbody>
-              <tr>
-                <td>DEM_1</td>
-                <td>COMPANY INFO GOES HERE</td>
-                <td>Business Type goes here</td>
-                <td>
-                  {/* {data.websiteStatus === "Valid URL" ? ( */}
-                  <span className="badge border border-success text-success">
-                    {/* {data.websiteStatus} */}
-                    Valid Url
-                  </span>
-                  {/* ) : (
-                    <span className="badge border border-danger text-danger">
-                      {data.websiteStatus}
-                    </span> */}
-                  {/* )} */}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-success edit-item-btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#showModal"
-                    onClick={() => {}}
-                  >
-                    Check
-                  </button>
-                </td>
-              </tr>
+              {reportDataForms?.map((form) => (
+                <tr key={form.id}>
+                  <td>{form.username}</td>
+                  <td className="companyInfo">
+                    <div>
+                      <div>URL - {form.url}</div>
+                      <div>Name - {form.companyName}</div>
+                    </div>
+                  </td>
+                  <td>{form.businessType}</td>
+                  <td>
+                    {form.websiteStatus === "Valid URL" ? (
+                      <span className="badge border border-success text-success">
+                        {form.websiteStatus}
+                      </span>
+                    ) : (
+                      <span className="badge border border-danger text-danger">
+                        {form.websiteStatus}
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-success edit-item-btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#showModal"
+                      onClick={() => {
+                        handleCheckForm(form);
+                      }}
+                    >
+                      Check
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
           {/* <button

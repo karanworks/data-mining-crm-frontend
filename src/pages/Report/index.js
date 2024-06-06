@@ -35,11 +35,10 @@ import {
   removeClient,
   getClientUsers,
 } from "../../slices/AddClient/thunk";
-
 import { searchClients } from "../../slices/AddClient/reducer";
-
 import ViewUsersModal from "./ViewUsersModal";
-import { getReportData } from "../../slices/Report/thunk";
+import { getReportData, getReportDataForms } from "../../slices/Report/thunk";
+import { useNavigate } from "react-router-dom";
 
 const Report = () => {
   // const [modal_list, setmodal_list] = useState(false);
@@ -66,11 +65,12 @@ const Report = () => {
   const { clients, filteredClients, clientUsers } = useSelector(
     (state) => state.Client
   );
-  const { reportData } = useSelector((state) => state.Report);
+  const { reportData, reportDataForms } = useSelector((state) => state.Report);
 
-  console.log("REPORT DATA FOR REPORT PAGE ->", reportData);
+  console.log("REPORT DATA FOR REPORT PAGE ->", reportDataForms);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // // toggles register / edit user modal
   // function tog_list() {
@@ -85,7 +85,7 @@ const Report = () => {
 
   function users_view_tog_list(token) {
     setUsers_view_modal_list(!users_view_modal_list);
-    // dispatch(getClientUsers(clientEmail));
+    dispatch(getReportDataForms(token));
   }
 
   function add_users_tog_list() {
@@ -121,6 +121,10 @@ const Report = () => {
   function handleSelectedDelete() {
     tog_delete();
     setIsDeletingMultipleUsers(true);
+  }
+
+  function handleCheckForm(data) {
+    navigate("/report/check-form-data", { state: { data } });
   }
 
   // function handleDelete() {
@@ -397,7 +401,7 @@ const Report = () => {
                         </thead>
                         <tbody className="list form-check-all">
                           {reportData?.map((data) => (
-                            <tr>
+                            <tr key={data.id}>
                               <th scope="row">
                                 <div className="form-check">
                                   <input
@@ -511,6 +515,8 @@ const Report = () => {
         clientUsers={clientUsers}
         add_users_tog_list={add_users_tog_list}
         listClient={listClient}
+        reportDataForms={reportDataForms}
+        handleCheckForm={handleCheckForm}
       />
     </React.Fragment>
   );

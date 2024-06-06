@@ -6,7 +6,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 //   updateEvent as updateEventApi,
 // } from "../../helpers/fakebackend_helper";
 
-import { getReportData as getReportDataApi } from "../../helpers/fakebackend_helper";
+import {
+  getReportData as getReportDataApi,
+  getReportDataForms as getReportDataFormsApi,
+} from "../../helpers/fakebackend_helper";
 
 export const getReportData = createAsyncThunk(
   "report/getReportData",
@@ -17,6 +20,18 @@ export const getReportData = createAsyncThunk(
       return response;
     } catch (error) {
       console.log("error inside get report data thunk", error);
+    }
+  }
+);
+export const getReportDataForms = createAsyncThunk(
+  "report/getReportDataForms",
+  async (token) => {
+    try {
+      const response = await getReportDataFormsApi(token);
+
+      return response;
+    } catch (error) {
+      console.log("error inside get report data forms thunk", error);
     }
   }
 );

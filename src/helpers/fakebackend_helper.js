@@ -680,6 +680,10 @@ export const getReportData = () => {
   return api.get(`${process.env.REACT_APP_SERVER_URL}/report`);
 };
 
+export const getReportDataForms = (tokenId) => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/report/${tokenId}/forms`);
+};
+
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);

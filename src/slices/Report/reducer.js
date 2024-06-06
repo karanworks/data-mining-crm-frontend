@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getReportData } from "./thunk";
+import { getReportData, getReportDataForms } from "./thunk";
 
 import { toast } from "react-toastify";
 
 export const initialState = {
   reportData: [],
+  reportDataForms: [],
   error: "",
 };
 
@@ -20,6 +21,19 @@ const eventSlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.reportData = action.payload?.data.reportData;
+        state.error = "";
+      }
+    });
+    builder.addCase(getReportDataForms.fulfilled, (state, action) => {
+      console.log(
+        "DATA PAYLOAD ON REPORT FORMS GET REQUEST ->",
+        action.payload
+      );
+
+      if (action.payload.status === "failure") {
+        state.error = action.payload.message;
+      } else {
+        state.reportDataForms = action.payload?.data.reportDataForms;
         state.error = "";
       }
     });

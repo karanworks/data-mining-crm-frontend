@@ -25,6 +25,7 @@ import ViewFilledData from "../pages/CompletedData/ViewFilledData";
 import AddData from "../pages/AddData";
 import CompletedDataEdit from "../pages/CompletedData/CompletedDataEdit";
 import Report from "../pages/Report";
+import CheckFormData from "../pages/Report/CheckFormData";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -43,6 +44,7 @@ const authProtectedRoutes = [
   { path: "/completed-data/view-data", component: <ViewFilledData /> },
   { path: "/add-data", component: <AddData /> },
   { path: "/report", component: <Report /> },
+  { path: "/report/check-form-data", component: <CheckFormData /> },
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },
