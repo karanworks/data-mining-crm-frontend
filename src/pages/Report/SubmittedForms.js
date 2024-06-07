@@ -1,15 +1,7 @@
 import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Row,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -27,8 +19,10 @@ const SubmittedForms = () => {
   const { reportDataForms } = useSelector((state) => state.Report);
 
   function handleCheckForm(data) {
-    navigate("/report/check-form-data", { state: { data } });
+    navigate("/report/check-form-data", { state: { data, token } });
   }
+
+  console.log("SUBMITTED FORMS DATA ->", reportDataForms);
 
   useEffect(() => {
     dispatch(getReportDataForms(token));
@@ -71,7 +65,8 @@ const SubmittedForms = () => {
                             <th scope="col">Username</th>
                             <th scope="col">Company Info</th>
                             <th scope="col">Business Type</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Website Status</th>
+                            <th scope="col">Form Status</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
@@ -95,6 +90,18 @@ const SubmittedForms = () => {
                                 ) : (
                                   <span className="badge border border-danger text-danger">
                                     {form.websiteStatus}
+                                  </span>
+                                )}
+                              </td>
+
+                              <td>
+                                {form.status === 1 ? (
+                                  <span className="badge border border-success text-success">
+                                    Checked
+                                  </span>
+                                ) : (
+                                  <span className="badge border border-danger text-danger">
+                                    Not Checked
                                   </span>
                                 )}
                               </td>

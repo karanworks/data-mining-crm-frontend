@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -17,38 +16,17 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getClients } from "../../slices/AddClient/thunk";
-import ViewFormsModal from "./ViewFormsModal";
-import { getReportData, getReportDataForms } from "../../slices/Report/thunk";
+import { getReportData } from "../../slices/Report/thunk";
 import { useNavigate } from "react-router-dom";
-import { Token } from "prismjs";
 
 const Report = () => {
-  const [listClient, setListClient] = useState(null);
-
-  // const [users_view_modal_list, setUsers_view_modal_list] = useState(false);
-
-  const [forms_view_modal_list, setForms_view_modal_list] = useState(false);
-
-  const [add_users_modal_list, setAdd_users_modal_list] = useState(false);
-
   const [selectedClients, setSelectedClients] = useState([]);
 
-  const { clients, clientUsers } = useSelector((state) => state.Client);
-  const { reportData, reportDataForms } = useSelector((state) => state.Report);
-
-  console.log("REPORT DATA FOR REPORT PAGE ->", reportDataForms);
+  const { clients } = useSelector((state) => state.Client);
+  const { reportData } = useSelector((state) => state.Report);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // function forms_view_tog_list(token) {
-  //   setForms_view_modal_list(!forms_view_modal_list);
-  //   dispatch(getReportDataForms(token));
-  // }
-
-  function add_users_tog_list() {
-    setAdd_users_modal_list(!add_users_modal_list);
-  }
 
   function handleSelectAll() {
     const allClientIds = clients?.map((client) => {
@@ -289,13 +267,6 @@ const Report = () => {
         </Container>
         <ToastContainer />
       </div>
-
-      {/* <ViewFormsModal
-        forms_view_modal_list={forms_view_modal_list}
-        forms_view_tog_list={forms_view_tog_list}
-        reportDataForms={reportDataForms}
-        handleCheckForm={handleCheckForm}
-      /> */}
     </React.Fragment>
   );
 };

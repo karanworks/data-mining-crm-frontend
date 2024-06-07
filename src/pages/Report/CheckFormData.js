@@ -1,12 +1,96 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
-import BreadCrumb from "../../Components/Common/BreadCrumb";
+import React, { useState } from "react";
+import { Row, Col, Card, CardBody } from "reactstrap";
 import { useLocation } from "react-router-dom";
+import { checkFormData } from "../../helpers/fakebackend_helper";
 
 const CheckFormData = () => {
   const location = useLocation();
-  const data = location?.state?.data;
+  const { data, token } = location?.state;
+
+  const initialFormFieldsCheck = {
+    websiteStatus: null,
+    contactNo1: null,
+    contactNo2: null,
+    emailId1: null,
+    emailId2: null,
+    faxNo: null,
+    businessType: null,
+    address: null,
+    companyProfile: null,
+    city: null,
+    state: null,
+    pinCode: null,
+    country: null,
+  };
+
+  console.log("DATA INSIDE CHECK FORM ->", data);
+  console.log("TOKEN INSIDE CHECK FORM ->", token);
+
+  const [formFieldsCheck, setFormFieldsCheck] = useState(
+    initialFormFieldsCheck
+  );
+
+  const handleCorrectField = (fieldName) => {
+    setFormFieldsCheck((prevFields) => ({
+      ...prevFields,
+      [fieldName]: prevFields[fieldName] === 1 ? null : 1,
+    }));
+  };
+
+  const handleWrongField = (fieldName) => {
+    setFormFieldsCheck((prevFields) => ({
+      ...prevFields,
+      [fieldName]: prevFields[fieldName] === 0 ? null : 0,
+    }));
+  };
+
+  const renderButtons = (fieldValue, fieldName) => {
+    const fieldStatus = formFieldsCheck[fieldName];
+
+    const correctButtonStyle = {
+      backgroundColor: fieldStatus === 1 ? "#00BD9D" : "transparent",
+      color: fieldStatus === 1 ? "#fff" : "#00BD9D",
+      border: "1px solid #00BD9D",
+    };
+
+    const wrongButtonStyle = {
+      backgroundColor: fieldStatus === 0 ? "#F06548" : "transparent",
+      color: fieldStatus === 0 ? "#fff" : "#F06548",
+      border: "1px solid #F06548",
+    };
+
+    return fieldValue ? (
+      <div className="d-flex gap-2">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => handleCorrectField(fieldName)}
+          style={correctButtonStyle}
+        >
+          <i className="ri-check-fill"></i>
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => handleWrongField(fieldName)}
+          style={wrongButtonStyle}
+        >
+          <i className="ri-close-fill"></i>
+        </button>
+      </div>
+    ) : null;
+  };
+
+  async function handleSubmit() {
+    const response = await checkFormData({
+      formFields: formFieldsCheck,
+      formId: data.id,
+      token,
+      userId: data.userId,
+    });
+    console.log("RESPONSE AFTER FORM CHECK API CALL ->", response);
+    // console.log("CHECKED FIELDS ->", formFieldsCheck);
+  }
 
   return (
     <React.Fragment>
@@ -69,305 +153,120 @@ const CheckFormData = () => {
                         <tr>
                           <td className="fieldName fw-bold">Website Url</td>
                           <td className="fieldValue">{data.url}</td>
-                          <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
-                          </td>
+                          <td className="fieldAction"></td>
                         </tr>
                         <tr>
-                          <td className="fieldName fw-bold">Website Name</td>
+                          <td className="fieldName fw-bold">Company Name</td>
                           <td className="fieldValue">{data.companyName}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.companyName, "companyName")}
                           </td>
                         </tr>
                         <tr>
-                          <td className="fieldName fw-bold">Profile</td>
+                          <td className="fieldName fw-bold">Company Profile</td>
                           <td className="fieldValue">{data.companyProfile}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(
+                              data.companyProfile,
+                              "companyProfile"
+                            )}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Address</td>
                           <td className="fieldValue">{data.address}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.address, "address")}
                           </td>
                         </tr>
                         <tr>
-                          <td className="fieldName fw-bold">Status</td>
+                          <td className="fieldName fw-bold">Website Status</td>
                           <td className="fieldValue">{data.websiteStatus}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.websiteStatus, "websiteStatus")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Business Type</td>
                           <td className="fieldValue">{data.businessType}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.businessType, "businessType")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Contact No 1</td>
                           <td className="fieldValue">{data.contactNo1}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.contactNo1, "contactNo1")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Contact No 2</td>
                           <td className="fieldValue">{data.contactNo2}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.contactNo2, "contactNo2")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Email Id 1</td>
                           <td className="fieldValue">{data.emailId1}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.emailId1, "emailId1")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Email Id 2</td>
                           <td className="fieldValue">{data.emailId2}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.emailId2, "emailId2")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Fax No</td>
                           <td className="fieldValue">{data.faxNo}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.faxNo, "faxNo")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">State</td>
                           <td className="fieldValue">{data.state}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.state, "state")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">City</td>
                           <td className="fieldValue">{data.city}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.city, "city")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Country</td>
                           <td className="fieldValue">{data.country}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.country, "country")}
                           </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Pin Code</td>
                           <td className="fieldValue">{data.pinCode}</td>
                           <td className="fieldAction">
-                            <div className="d-flex gap-2">
-                              <button
-                                type="button"
-                                class="btn btn-outline-success"
-                              >
-                                <i class="ri-check-fill"></i>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger "
-                              >
-                                <i class="ri-close-fill"></i>
-                              </button>
-                            </div>
+                            {renderButtons(data.pinCode, "pinCode")}
                           </td>
                         </tr>
                       </tbody>
                     </table>
+
+                    <div className="d-flex justify-content-center">
+                      <button
+                        className="btn w-lg btn-primary"
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </CardBody>
