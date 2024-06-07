@@ -81,6 +81,8 @@ const CompletedData = () => {
       });
   }, []);
 
+  console.log("USER DATA ->", userData);
+
   function handleSelectSingleClient(client) {
     setSelectedSingleClient(client);
     dispatch(getClientUsers(client.email));
@@ -274,7 +276,7 @@ const CompletedData = () => {
                   <div className="listjs-table" id="userList">
                     <Row className="g-4 mb-3 d-flex justify-content-between">
                       <Col
-                        className="col-sm-auto w-100 d-flex justify-content-between"
+                        className="col-sm-auto w-100 d-flex"
                         style={{ gap: "5px" }}
                       >
                         <div>
@@ -294,60 +296,67 @@ const CompletedData = () => {
                               className="d-flex"
                               style={{ gap: "5px", flexWrap: "wrap" }}
                             >
-                              <div>
-                                <Select
-                                  id="client"
-                                  name="client"
-                                  value={selectedSingleClient}
-                                  onChange={(client) => {
-                                    handleSelectSingleClient(client);
-                                    // addDataValidation.setFieldValue(
-                                    //   "clientId",
-                                    //   client.value
-                                    // );
-                                  }}
-                                  options={clientOptions}
-                                  placeholder="Select Client"
-                                />
-                              </div>
+                              {userData?.roleId == 1 ? (
+                                <div>
+                                  <Select
+                                    id="client"
+                                    name="client"
+                                    value={selectedSingleClient}
+                                    onChange={(client) => {
+                                      handleSelectSingleClient(client);
+                                      // addDataValidation.setFieldValue(
+                                      //   "clientId",
+                                      //   client.value
+                                      // );
+                                    }}
+                                    options={clientOptions}
+                                    placeholder="Select Client"
+                                  />
+                                </div>
+                              ) : null}
 
-                              <ButtonGroup>
-                                <UncontrolledDropdown>
-                                  <DropdownToggle
-                                    tag="button"
-                                    className="btn btn-light"
-                                  >
-                                    Select Users{" "}
-                                    <i className="mdi mdi-chevron-down"></i>
-                                  </DropdownToggle>
-                                  <DropdownMenu className="dropdown-menu-sm p-2">
-                                    {clientUsers?.map((userOption) => (
-                                      <div className="mb-2" key={userOption.id}>
-                                        <div className="form-check custom-checkbox">
-                                          <Input
-                                            type="checkbox"
-                                            checked={selectedUsers?.includes(
-                                              userOption.username
-                                            )}
-                                            className="form-check-input"
-                                            id={userOption.username}
-                                            name={userOption.username}
-                                            onChange={() => {
-                                              handleSelectUser(userOption);
-                                            }}
-                                          />
-                                          <label
-                                            className="form-check-label"
-                                            htmlFor={userOption.username}
-                                          >
-                                            {userOption.username}
-                                          </label>
+                              {userData?.roleId == 1 ? (
+                                <ButtonGroup>
+                                  <UncontrolledDropdown>
+                                    <DropdownToggle
+                                      tag="button"
+                                      className="btn btn-light"
+                                    >
+                                      Select Users{" "}
+                                      <i className="mdi mdi-chevron-down"></i>
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdown-menu-sm p-2">
+                                      {clientUsers?.map((userOption) => (
+                                        <div
+                                          className="mb-2"
+                                          key={userOption.id}
+                                        >
+                                          <div className="form-check custom-checkbox">
+                                            <Input
+                                              type="checkbox"
+                                              checked={selectedUsers?.includes(
+                                                userOption.username
+                                              )}
+                                              className="form-check-input"
+                                              id={userOption.username}
+                                              name={userOption.username}
+                                              onChange={() => {
+                                                handleSelectUser(userOption);
+                                              }}
+                                            />
+                                            <label
+                                              className="form-check-label"
+                                              htmlFor={userOption.username}
+                                            >
+                                              {userOption.username}
+                                            </label>
+                                          </div>
                                         </div>
-                                      </div>
-                                    ))}
-                                  </DropdownMenu>
-                                </UncontrolledDropdown>
-                              </ButtonGroup>
+                                      ))}
+                                    </DropdownMenu>
+                                  </UncontrolledDropdown>
+                                </ButtonGroup>
+                              ) : null}
 
                               <div>
                                 <Input

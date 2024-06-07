@@ -5,6 +5,9 @@ import {
   checkFormData,
   recheckFormData,
 } from "../../helpers/fakebackend_helper";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CheckFormData = () => {
   const location = useLocation();
@@ -25,9 +28,6 @@ const CheckFormData = () => {
     pinCode: null,
     country: null,
   };
-
-  console.log("DATA INSIDE CHECK FORM ->", data);
-  console.log("TOKEN INSIDE CHECK FORM ->", token);
 
   const [recheckFields, setRecheckFields] = useState(null);
   const [formFieldsCheck, setFormFieldsCheck] = useState(
@@ -51,7 +51,7 @@ const CheckFormData = () => {
     if (recheckFields) {
       const recheckFormFieldValues = {};
       recheckFields.forEach((form) => {
-        recheckFormFieldValues[form.fieldName] = form.status;
+        recheckFormFieldValues[form.fieldName] = form.correct;
       });
       setFormFieldsCheck(recheckFormFieldValues);
     }
@@ -115,7 +115,11 @@ const CheckFormData = () => {
       token,
       userId: data.userId,
     });
-    console.log("RESPONSE AFTER FORM CHECK API CALL ->", response);
+    toast.success("Form has been checked !", {
+      position: "bottom-center",
+      autoClose: 3000,
+      theme: "colored",
+    });
   }
 
   return (
@@ -300,6 +304,7 @@ const CheckFormData = () => {
           </Col>
         </Row>
       </div>
+      <ToastContainer />
     </React.Fragment>
   );
 };
