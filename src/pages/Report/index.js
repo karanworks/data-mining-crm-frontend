@@ -20,6 +20,7 @@ import { getClients } from "../../slices/AddClient/thunk";
 import ViewFormsModal from "./ViewFormsModal";
 import { getReportData, getReportDataForms } from "../../slices/Report/thunk";
 import { useNavigate } from "react-router-dom";
+import { Token } from "prismjs";
 
 const Report = () => {
   const [listClient, setListClient] = useState(null);
@@ -66,14 +67,9 @@ const Report = () => {
     setIsDeletingMultipleUsers(true);
   }
 
-  function handleCheckForm(data) {
-    navigate("/report/check-form-data", { state: { data } });
-  }
-
   function handleViewForms(token) {
-    dispatch(getReportDataForms(token));
     navigate("/report/view-form-data", {
-      state: { data: reportDataForms },
+      state: { data: token },
     });
   }
 
@@ -184,8 +180,8 @@ const Report = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {reportData?.map((data) => (
-                            <tr key={data.id}>
+                          {reportData?.map((data, i) => (
+                            <tr key={i}>
                               <th scope="row">
                                 <div className="form-check">
                                   <input

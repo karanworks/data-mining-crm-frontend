@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -13,13 +13,26 @@ import {
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getReportDataForms } from "../../slices/Report/thunk";
+import { useNavigate } from "react-router-dom";
 
 const SubmittedForms = () => {
   const location = useLocation();
-  const data = location?.state?.data;
-  // const handleCheckForm = location?.state?.handleCheckForm;
+  const token = location?.state?.data;
 
-  console.log("DATA FOR SUBMITTED FORMS ->", data);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { reportDataForms } = useSelector((state) => state.Report);
+
+  function handleCheckForm(data) {
+    navigate("/report/check-form-data", { state: { data } });
+  }
+
+  useEffect(() => {
+    dispatch(getReportDataForms(token));
+  }, [dispatch]);
 
   document.title = "Report";
   return (
@@ -64,7 +77,7 @@ const SubmittedForms = () => {
                         </thead>
 
                         <tbody>
-                          {data?.map((form) => (
+                          {reportDataForms?.map((form) => (
                             <tr key={form.id}>
                               <td>{form.username}</td>
                               <td className="companyInfo">
