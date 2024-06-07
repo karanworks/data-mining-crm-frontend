@@ -30,15 +30,8 @@ const CheckFormData = () => {
   console.log("TOKEN INSIDE CHECK FORM ->", token);
 
   const [recheckFields, setRecheckFields] = useState(null);
-
-  const recheckFormFieldValues = {};
-
-  recheckFields?.forEach((form) => {
-    recheckFormFieldValues[form.fieldName] = form.status;
-  });
-
   const [formFieldsCheck, setFormFieldsCheck] = useState(
-    recheckFields ? recheckFormFieldValues : initialFormFieldsCheck
+    initialFormFieldsCheck
   );
 
   useEffect(() => {
@@ -53,6 +46,16 @@ const CheckFormData = () => {
     }
     fetchRecheckForms();
   }, [data]);
+
+  useEffect(() => {
+    if (recheckFields) {
+      const recheckFormFieldValues = {};
+      recheckFields.forEach((form) => {
+        recheckFormFieldValues[form.fieldName] = form.status;
+      });
+      setFormFieldsCheck(recheckFormFieldValues);
+    }
+  }, [recheckFields]);
 
   const handleCorrectField = (fieldName) => {
     setFormFieldsCheck((prevFields) => ({
@@ -101,14 +104,6 @@ const CheckFormData = () => {
         >
           <i className="ri-close-fill"></i>
         </button>
-        {/* 
-        <div class="custom-btn">
-          <input type="checkbox" id="correctBtn" />
-          <label for="correctBtn">
-            {" "}
-            <i className="ri-check-fill"></i>
-          </label>
-        </div> */}
       </div>
     ) : null;
   };
@@ -121,7 +116,6 @@ const CheckFormData = () => {
       userId: data.userId,
     });
     console.log("RESPONSE AFTER FORM CHECK API CALL ->", response);
-    // console.log("CHECKED FIELDS ->", formFieldsCheck);
   }
 
   return (
