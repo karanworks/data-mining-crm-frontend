@@ -5,46 +5,31 @@ Website: https://themesbrand.com/
 Contact: support@themesbrand.com
 File: Custom Css File
 */
-
-//************************* DIALPAD *************************
-
-.dialpad-container {
-  margin-top: 10px;
+/* Hide the default checkbox */
+.custom-btn input[type="checkbox"] {
+  display: none;
 }
 
-.dialpad-mobile-number-delete-btn {
-  &:hover {
-    background: none;
-  }
+/* Style the label as a button */
+.custom-btn label {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  background-color: #f0f0f0;
+  color: #000;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.dialpad-key-container {
-  width: 50px;
-  height: 50px;
+/* Style for checked state */
+.custom-btn input[type="checkbox"]:checked + label {
+  background-color: #007bff;
+  color: #fff;
 }
 
-.dialpad-dial-key-container {
-  margin-top: 10px;
-
-  .dialpad-dial-key {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-.oncall-control-btn {
-  .oncall-btn-icon {
-    color: #3caae5;
-  }
-  &:hover {
-    .oncall-btn-icon {
-      color: white;
-    }
-  }
-}
-
-//************************* PLAY RECORDING MODAL *************************
-
-.recording-audio-element::-webkit-media-controls-panel {
-  background: white;
+/* Style for hover effect */
+.custom-btn label:hover {
+  background-color: #e0e0e0;
 }

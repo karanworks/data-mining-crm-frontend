@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Card, CardBody } from "reactstrap";
 import { useLocation } from "react-router-dom";
-import { checkFormData } from "../../helpers/fakebackend_helper";
+import {
+  checkFormData,
+  recheckFormData,
+} from "../../helpers/fakebackend_helper";
 
 const CheckFormData = () => {
   const location = useLocation();
@@ -26,9 +29,30 @@ const CheckFormData = () => {
   console.log("DATA INSIDE CHECK FORM ->", data);
   console.log("TOKEN INSIDE CHECK FORM ->", token);
 
+  const [recheckFields, setRecheckFields] = useState(null);
+
+  const recheckFormFieldValues = {};
+
+  recheckFields?.forEach((form) => {
+    recheckFormFieldValues[form.fieldName] = form.status;
+  });
+
   const [formFieldsCheck, setFormFieldsCheck] = useState(
-    initialFormFieldsCheck
+    recheckFields ? recheckFormFieldValues : initialFormFieldsCheck
   );
+
+  useEffect(() => {
+    async function fetchRecheckForms() {
+      const response = await recheckFormData({
+        userId: data?.userId,
+        formId: data?.id,
+        token,
+      });
+
+      setRecheckFields(response.data.recheckFormData);
+    }
+    fetchRecheckForms();
+  }, [data]);
 
   const handleCorrectField = (fieldName) => {
     setFormFieldsCheck((prevFields) => ({
@@ -77,6 +101,14 @@ const CheckFormData = () => {
         >
           <i className="ri-close-fill"></i>
         </button>
+        {/* 
+        <div class="custom-btn">
+          <input type="checkbox" id="correctBtn" />
+          <label for="correctBtn">
+            {" "}
+            <i className="ri-check-fill"></i>
+          </label>
+        </div> */}
       </div>
     ) : null;
   };

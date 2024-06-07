@@ -694,6 +694,12 @@ export const checkFormData = (data) => {
     data
   );
 };
+export const recheckFormData = (data) => {
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/check-form-data/recheck`,
+    data
+  );
+};
 
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
