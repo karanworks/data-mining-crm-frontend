@@ -16,7 +16,6 @@ import CompletedDataReducer from "./CompletedData/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
-import ForgetPasswordReducer from "./auth/forgetpwd/reducer";
 import ProfileReducer from "./auth/profile/reducer";
 
 const rootReducer = combineReducers({
@@ -31,7 +30,6 @@ const rootReducer = combineReducers({
   AddData: AddDataReducer,
   AddWorkData: AddWorkDataReducer,
   CompletedData: CompletedDataReducer,
-  ForgetPassword: ForgetPasswordReducer,
   Profile: ProfileReducer,
 });
 

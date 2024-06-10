@@ -1,5 +1,4 @@
 //Include Both Helper File with needed methods
-import { getFirebaseBackend } from "../../../helpers/firebase_helper";
 import { postLogin } from "../../../helpers/fakebackend_helper";
 
 import {

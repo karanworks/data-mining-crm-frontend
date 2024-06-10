@@ -4,12 +4,10 @@ import { getLoggedinUser } from "../helpers/api_helper";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
-import { useSelector } from "react-redux";
 
 const Navdata = () => {
   const history = useNavigate();
 
-  // const menuDataOfUser = useSelector((state) => state.Login.user.menus);
   const userData = getLoggedinUser();
   const menuDataOfUser = userData.data.menus;
 
@@ -25,17 +23,6 @@ const Navdata = () => {
 
   const [isSettings, setIsSettings] = useState(false);
 
-  const [isCenters, setIsCenters] = useState(false);
-
-  const [isDashboard, setIsDashboard] = useState(false);
-
-  const [isApplications, setIsApplications] = useState(false);
-
-  const [isCalls, setIsCalls] = useState(false);
-
-  const [isUploads, setIsUploads] = useState(false);
-
-  //
   const [isAuth, setIsAuth] = useState(false);
   const [isPages, setIsPages] = useState(false);
 
@@ -58,9 +45,6 @@ const Navdata = () => {
   useEffect(() => {
     document.body.classList.remove("twocolumn-panel");
 
-    // if (iscurrentState !== "AdminTools") {
-    //   setIsAdminTools(false);
-    // }
     if (iscurrentState !== "Settings") {
       setIsSettings(false);
     }
@@ -79,27 +63,6 @@ const Navdata = () => {
     if (iscurrentState !== "Reports") {
       setIsReports(false);
     }
-    // if (iscurrentState !== "LeadManagement") {
-    //   setIsLeadManagement(false);
-    // }
-    if (iscurrentState !== "Centers") {
-      setIsCenters(false);
-    }
-    // if (iscurrentState !== "Payments") {
-    //   setIsPayments(false);
-    // }
-    if (iscurrentState !== "Dashboard") {
-      setIsDashboard(false);
-    }
-    if (iscurrentState !== "Applications") {
-      setIsApplications(false);
-    }
-    if (iscurrentState !== "Calls") {
-      setIsCalls(false);
-    }
-    if (iscurrentState !== "Uploads") {
-      setIsUploads(false);
-    }
 
     if (iscurrentState !== "Auth") {
       setIsAuth(false);
@@ -110,47 +73,27 @@ const Navdata = () => {
   }, [
     history,
     iscurrentState,
-    // isAdminTools,
     isSettings,
     isManagement,
     isClient,
     isWork,
     isReports,
-    // isLeadManagement,
-    isCenters,
-    // isPayments,
-    isDashboard,
-    isApplications,
-    isCalls,
-    isUploads,
     isAuth,
     isPages,
   ]);
 
   const parentMenuStates = {
-    // AdminTools: isAdminTools,
     Management: isManagement,
     Client: isClient,
     Work: isWork,
     Reports: isReports,
     Settings: isSettings,
-    Centers: isCenters,
-    // LeadManagement: isLeadManagement,
-    // Payments: isPayments,
-    Dashboard: isDashboard,
-    Applications: isApplications,
-    Calls: isCalls,
-    Uploads: isUploads,
   };
 
   const handleClick = (menuLabelId) => {
     return function (e) {
       e.preventDefault();
       switch (menuLabelId) {
-        // case "AdminTools":
-        //   setIsAdminTools(!isAdminTools);
-        //   setIscurrentState(menuLabelId);
-        //   updateIconSidebar(e);
         case "Management":
           setIsManagement(!isManagement);
           setIscurrentState(menuLabelId);
@@ -169,34 +112,6 @@ const Navdata = () => {
           updateIconSidebar(e);
         case "Settings":
           setIsSettings(!isSettings);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-        // case "LeadManagement":
-        //   setIsLeadManagement(!isLeadManagement);
-        //   setIscurrentState(menuLabelId);
-        //   updateIconSidebar(e);
-        case "Centers":
-          setIsCenters(!isCenters);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-        // case "Payments":
-        //   setIsPayments(!isPayments);
-        //   setIscurrentState(menuLabelId);
-        //   updateIconSidebar(e);
-        case "Dashboard":
-          setIsDashboard(!isDashboard);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-        case "Applications":
-          setIsApplications(!isApplications);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-        case "Calls":
-          setIsCalls(!isCalls);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-        case "Uploads":
-          setIsUploads(!isUploads);
           setIscurrentState(menuLabelId);
           updateIconSidebar(e);
       }

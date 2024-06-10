@@ -5,7 +5,6 @@ import { Navigate } from "react-router-dom";
 
 //login
 import Login from "../pages/Authentication/Login";
-import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
 import Logout from "../pages/Authentication/Logout";
 import Register from "../pages/Authentication/Register";
 
@@ -27,6 +26,7 @@ import CompletedDataEdit from "../pages/CompletedData/CompletedDataEdit";
 import Report from "../pages/Report";
 import CheckFormData from "../pages/Report/CheckFormData";
 import SubmittedForms from "../pages/Report/SubmittedForms";
+import CountReport from "../pages/CountReport";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -40,6 +40,7 @@ const authProtectedRoutes = [
   { path: "/terms-and-conditions", component: <TermsAndConditions /> },
   { path: "/add-work-data", component: <AddWorkData /> },
   { path: "/add-client", component: <AddClient /> },
+  { path: "/count-report", component: <CountReport /> },
   { path: "/completed-data", component: <CompletedData /> },
   { path: "/completed-data/edit", component: <CompletedDataEdit /> },
   { path: "/completed-data/view-data", component: <ViewFilledData /> },
@@ -65,7 +66,6 @@ const publicRoutes = [
   // Authentication Page
   { path: "/logout", component: <Logout /> },
   { path: "/login", component: <Login /> },
-  { path: "/forgot-password", component: <ForgetPasswordPage /> },
   { path: "/register", component: <Register /> },
 ];
 
