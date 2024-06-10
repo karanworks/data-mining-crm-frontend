@@ -64,7 +64,6 @@ const CountReport = () => {
       endDate: Yup.string(),
     }),
     onSubmit: (values) => {
-      console.log("FILTER INPUT VALUES ->", selectedUsers);
       dispatch(filterReportData({ ...values, users: selectedUsers }));
     },
   });
@@ -171,7 +170,7 @@ const CountReport = () => {
                               ) : null}
 
                               {userData?.roleId == 1 ? (
-                                <ButtonGroup>
+                                <ButtonGroup type="button">
                                   <UncontrolledDropdown>
                                     <DropdownToggle
                                       tag="button"

@@ -22,7 +22,6 @@ export const filterReportData = createAsyncThunk(
   async (data) => {
     try {
       const response = await filterReportDataApi(data);
-      console.log("FILTER REPORT DATA IN THUNK ->", response);
       return response;
     } catch (error) {
       console.log("error inside get count report data thunk", error);
