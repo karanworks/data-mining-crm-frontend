@@ -27,6 +27,9 @@ import Report from "../pages/Report";
 import CheckFormData from "../pages/Report/CheckFormData";
 import SubmittedForms from "../pages/Report/SubmittedForms";
 import CountReport from "../pages/CountReport";
+import WorkingUsers from "../pages/CountReport/WorkingUsers";
+import AssignedData from "../pages/CountReport/AssignedData";
+import CountReportCompletedData from "../pages/CountReport/CountReportCompletedData";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -41,6 +44,12 @@ const authProtectedRoutes = [
   { path: "/add-work-data", component: <AddWorkData /> },
   { path: "/add-client", component: <AddClient /> },
   { path: "/count-report", component: <CountReport /> },
+  { path: "/count-report/working-users", component: <WorkingUsers /> },
+  { path: "/count-report/assigned-data", component: <AssignedData /> },
+  {
+    path: "/count-report/completed-data",
+    component: <CountReportCompletedData />,
+  },
   { path: "/completed-data", component: <CompletedData /> },
   { path: "/completed-data/edit", component: <CompletedDataEdit /> },
   { path: "/completed-data/view-data", component: <ViewFilledData /> },

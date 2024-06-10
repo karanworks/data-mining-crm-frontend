@@ -113,6 +113,16 @@ const CountReport = () => {
     dispatch(getCountReportData());
   }, [dispatch]);
 
+  function handleViewWorkingUsers(data) {
+    navigate("/count-report/working-users", { state: { data } });
+  }
+  function handleViewAssignedData(data) {
+    navigate("/count-report/assigned-data", { state: { data } });
+  }
+  function handleViewCompletedData(data) {
+    navigate("/count-report/completed-data", { state: { data } });
+  }
+
   document.title = "Count Report";
   return (
     <React.Fragment>
@@ -263,20 +273,6 @@ const CountReport = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            {/* <th scope="col" style={{ width: "50px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="checkAll"
-                                  checked={
-                                    clients?.length > 0 &&
-                                    clients?.length === selectedClients.length
-                                  }
-                                  onChange={handleSelectAll}
-                                />
-                              </div>
-                            </th> */}
                             <th className="sort" data-sort="client">
                               Client
                             </th>
@@ -312,28 +308,41 @@ const CountReport = () => {
                             : countReportData
                           )?.map((data) => (
                             <tr key={data.id}>
-                              {/* <th scope="row">
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  // checked={selectedClients.includes(client.id)}
-                                  type="checkbox"
-                                  name="checkbox"
-                                  onChange={() => {
-                                    // handleSelectedClients(client.id);
-                                  }}
-                                />
-                              </div>
-                            </th> */}
-
                               <td className="client">{data.companyName}</td>
-                              <td className="wokring-users">
+                              <td
+                                className="wokring-users"
+                                onClick={() =>
+                                  handleViewWorkingUsers(data.totalUsers)
+                                }
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                              >
                                 {data.totalUsers.length}
                               </td>
-                              <td className="assigned-data">
+
+                              <td
+                                className="assigned-data"
+                                onClick={() =>
+                                  handleViewAssignedData(data.totalAssignedData)
+                                }
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                              >
                                 {data.totalAssignedData.length}
                               </td>
-                              <td className="completed-data">
+                              <td
+                                className="completed-data"
+                                onClick={() =>
+                                  handleViewCompletedData(
+                                    data.totalCompletedData
+                                  )
+                                }
+                                style={{
+                                  cursor: "pointer",
+                                }}
+                              >
                                 {data.totalCompletedData.length}
                               </td>
                               <td className="for-checking">
