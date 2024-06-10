@@ -156,45 +156,10 @@ export const removeClient = (clientId) => {
     clientId,
   });
 };
-// export const removeClient = (clientId) => {
-//   console.log("CLIENTS ARRAY IN FAKE BACKEND ->", clientId);
-//   return api.delete(
-//     `${process.env.REACT_APP_SERVER_URL}/client/${clientId}/delete`
-//   );
-// };
 
 export const getClientUsers = (clientEmail) => {
   return api.get(
     `${process.env.REACT_APP_SERVER_URL}/client/${clientEmail}/users`
-  );
-};
-
-// *****************************************************************
-// *********************** BANK CODE *******************************
-// *****************************************************************
-export const getBankCodes = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/bank-codes`);
-};
-
-export const createBankCode = (data) => {
-  console.log("BANK CODE CREATE API CALL ->", data);
-  return api.create(
-    `${process.env.REACT_APP_SERVER_URL}/bank-code/create`,
-    data
-  );
-};
-
-export const updateBankCode = (bankCodeId, data) => {
-  console.log("BANK CODE UPDATE API CALL ->", bankCodeId, data);
-  return api.update(
-    `${process.env.REACT_APP_SERVER_URL}/bank-code/${bankCodeId}/edit`,
-    data
-  );
-};
-
-export const removeBankCode = (bankCodeId) => {
-  return api.delete(
-    `${process.env.REACT_APP_SERVER_URL}/bank-code/${bankCodeId}/delete`
   );
 };
 
@@ -246,19 +211,6 @@ export const getAssignedWorkData = () => {
 export const createAssignedWorkData = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/add-work-data`, data);
 };
-
-// export const updateAssignedWorkData = (centerId, centerUserId, data) => {
-//   return api.update(
-//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/edit`,
-//     data
-//   );
-// };
-
-// export const removeAssignedData = (centerId, centerUserId) => {
-//   return api.delete(
-//     `${process.env.REACT_APP_SERVER_URL}/center/${centerId}/center-user/${centerUserId}/delete`
-//   );
-// };
 
 // *****************************************************************
 // *********************** COMPLETED DATA **************************
@@ -338,8 +290,15 @@ export const recheckFormData = (data) => {
 // ************************ COUNT REPORT ***************************
 // *****************************************************************
 
-export const countReport = () => {
+export const getCountReportData = () => {
   return api.get(`${process.env.REACT_APP_SERVER_URL}/count-report`);
+};
+
+export const filterReportData = (data) => {
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/count-report/filter-data`,
+    data
+  );
 };
 
 // postForgetPwd

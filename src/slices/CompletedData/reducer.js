@@ -49,16 +49,6 @@ const completedWorkDataSlice = createSlice({
         state.alreadyRegisteredError = action.payload.message;
         state.error = "";
       } else {
-        // const updatedClientId = action.payload.data.updatedClient.id;
-        // state.clients = state.clients.map((client) => {
-        //   if (client.id == updatedClientId) {
-        //     client = action.payload.data.updatedClient;
-        //     return client;
-        //   } else {
-        //     return client;
-        //   }
-        // });
-
         state.alreadyRegisteredError = null;
         state.error = "";
 

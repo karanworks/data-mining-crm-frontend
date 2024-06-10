@@ -43,8 +43,6 @@ import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
 import { useFormik } from "formik";
 
 const CompletedData = () => {
-  const [modal_list, setmodal_list] = useState(false);
-
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
 
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -59,7 +57,6 @@ const CompletedData = () => {
 
   const [roles, setRoles] = useState([]);
 
-  const { users, allUsers } = useSelector((state) => state.Users);
   const { userData, searchedData } = useSelector(
     (state) => state.CompletedData
   );
@@ -80,8 +77,6 @@ const CompletedData = () => {
         console.log("error while fetching roles ->", error);
       });
   }, []);
-
-  console.log("USER DATA ->", userData);
 
   function handleSelectSingleClient(client) {
     setSelectedSingleClient(client);
@@ -116,9 +111,7 @@ const CompletedData = () => {
       businessType: Yup.string(),
     }),
     onSubmit: (values) => {
-      console.log("VALUES ->", values);
       dispatch(filterCompletedWorkData({ ...values, users: selectedUsers }));
-      console.log("FILTERED VALUES ->", values);
     },
   });
 
@@ -259,7 +252,7 @@ const CompletedData = () => {
     }
   }
 
-  document.title = "Add Client";
+  document.title = "Completed Data";
   return (
     <React.Fragment>
       <div className="page-content">
@@ -539,16 +532,6 @@ const CompletedData = () => {
                                 <div>
                                   <div>URL - {data.url}</div>
                                   <div>Name - {data.companyName}</div>
-                                  {/* <div>Contact 1 - {data.contactNo1}</div>
-                                  <div>Contact 2 - {data.contactNo2}</div>
-                                  <div>Email 1 - {data.emailId1}</div>
-                                  <div>Email 2 - {data.emailId2}</div>
-                                  <div>Fax - {data.faxNo}</div>
-                                  <div>
-                                    <span>{data.state}-</span>
-                                    <span>{data.pinCode}, </span>
-                                    <span>{data.country}</span>
-                                  </div> */}
                                 </div>
                               </td>
                               <td className="businessType">

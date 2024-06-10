@@ -2,58 +2,116 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
+  Input,
   Button,
+  Form,
   Card,
   CardBody,
   CardHeader,
   Col,
   Container,
   Row,
+  ButtonGroup,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
-
 import { useDispatch, useSelector } from "react-redux";
-
-import { getClients } from "../../slices/AddClient/thunk";
+import Flatpickr from "react-flatpickr";
+import { getClients, getClientUsers } from "../../slices/AddClient/thunk";
 import { getReportData } from "../../slices/Report/thunk";
 import { useNavigate } from "react-router-dom";
+import { searchCompletedData } from "../../slices/CompletedData/reducer";
+import { searchData } from "../../slices/CountReport/reducer";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  getCompletedWorkData,
+  filterCompletedWorkData,
+} from "../../slices/CompletedData/thunk";
+import {
+  getCountReportData,
+  filterReportData,
+} from "../../slices/CountReport/thunk";
+import Select from "react-select";
 
 const CountReport = () => {
-  const [selectedClients, setSelectedClients] = useState([]);
+  const [selectedSingleClient, setSelectedSingleClient] = useState(null);
 
-  const { clients } = useSelector((state) => state.Client);
-  const { reportData } = useSelector((state) => state.Report);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const { clients, clientUsers } = useSelector((state) => state.Client);
+  const { countReportData, searchedData } = useSelector(
+    (state) => state.CountReport
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleSelectAll() {
-    const allClientIds = clients?.map((client) => {
-      return client.id;
-    });
+  console.log("SELECTED USERS ->", selectedUsers);
 
-    if (clients?.length === selectedClients.length) {
-      setSelectedClients([]);
+  const { userData } = useSelector((state) => state.CompletedData);
+
+  const filterValidation = useFormik({
+    initialValues: {
+      startDate: "",
+      endDate: "",
+    },
+    validationSchema: Yup.object({
+      startDate: Yup.string(),
+      endDate: Yup.string(),
+    }),
+    onSubmit: (values) => {
+      console.log("FILTER INPUT VALUES ->", selectedUsers);
+      dispatch(filterReportData({ ...values, users: selectedUsers }));
+    },
+  });
+
+  function filterHandleSubmit(e) {
+    e.preventDefault();
+    filterValidation.handleSubmit();
+    return false;
+  }
+
+  function handleSelectSingleClient(client) {
+    setSelectedSingleClient(client);
+    dispatch(getClientUsers(client.email));
+  }
+
+  function handleSelectUser(user) {
+    const alreadyIncluded = selectedUsers?.includes(user.username);
+
+    if (alreadyIncluded) {
+      setSelectedUsers(
+        selectedUsers?.filter((username) => username !== user.username)
+      );
     } else {
-      setSelectedClients(allClientIds);
+      setSelectedUsers((prev) => {
+        return [...prev, user.username];
+      });
     }
   }
 
-  function handleSelectedDelete() {
-    tog_delete();
-    setIsDeletingMultipleUsers(true);
-  }
+  const clientOptions = clients?.map((client) => {
+    return {
+      value: client.id,
+      label: client.companyName,
+      email: client.email,
+    };
+  });
 
-  function handleViewForms(token) {
-    navigate("/report/view-form-data", {
-      state: { data: token },
-    });
+  function handleFilterData(e) {
+    // dispatch(searchCompletedData(e.target.value));
+    dispatch(searchData(e.target.value));
   }
 
   useEffect(() => {
     dispatch(getReportData());
+    dispatch(getCompletedWorkData());
     dispatch(getClients());
+    dispatch(getCountReportData());
   }, [dispatch]);
 
   document.title = "Count Report";
@@ -72,43 +130,129 @@ const CountReport = () => {
                 <CardBody>
                   <div className="listjs-table" id="userList">
                     <Row className="g-4 mb-3 d-flex justify-content-between">
-                      {/* <Col className="col-sm-auto ">
-                        <div className="search-box">
-                          <input
-                            type="text"
-                            className="form-control bg-light border-light"
-                            autoComplete="off"
-                            id="searchList"
-                            onChange={handleFilterData}
-                            placeholder="Search Keyword"
-                          />
-                          <i className="ri-search-line search-icon"></i>
-                        </div>
-                      </Col> */}
-
-                      <Col className="col-sm-auto">
+                      <Col
+                        className="col-sm-auto w-100 d-flex"
+                        style={{ gap: "5px" }}
+                      >
                         <div>
-                          {/* <Button
-                            color="primary"
-                            className="add-btn me-1"
-                            onClick={() => tog_list()}
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add New Client
-                          </Button> */}
+                          <Input
+                            id="searchKeyword"
+                            name="searchKeyword"
+                            className="form-control"
+                            type="text"
+                            placeholder="Search Keyword"
+                            onChange={handleFilterData}
+                          />
+                        </div>
 
-                          {selectedClients.length > 0 ? (
-                            <Button
-                              color="primary"
-                              className="delete-btn me-1"
-                              onClick={handleSelectedDelete}
-                              id="create-btn"
+                        <div className="d-flex">
+                          <Form onSubmit={(e) => filterHandleSubmit(e)}>
+                            <div
+                              className="d-flex"
+                              style={{ gap: "5px", flexWrap: "wrap" }}
                             >
-                              <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Delete Selected Id
-                            </Button>
-                          ) : null}
+                              {userData?.roleId == 1 ? (
+                                <div>
+                                  <Select
+                                    id="client"
+                                    name="client"
+                                    value={selectedSingleClient}
+                                    onChange={(client) => {
+                                      handleSelectSingleClient(client);
+                                      // addDataValidation.setFieldValue(
+                                      //   "clientId",
+                                      //   client.value
+                                      // );
+                                    }}
+                                    options={clientOptions}
+                                    placeholder="Select Client"
+                                  />
+                                </div>
+                              ) : null}
+
+                              {userData?.roleId == 1 ? (
+                                <ButtonGroup>
+                                  <UncontrolledDropdown>
+                                    <DropdownToggle
+                                      tag="button"
+                                      className="btn btn-light"
+                                    >
+                                      Select Users{" "}
+                                      <i className="mdi mdi-chevron-down"></i>
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdown-menu-sm p-2">
+                                      {clientUsers?.map((userOption) => (
+                                        <div
+                                          className="mb-2"
+                                          key={userOption.id}
+                                        >
+                                          <div className="form-check custom-checkbox">
+                                            <Input
+                                              type="checkbox"
+                                              checked={selectedUsers?.includes(
+                                                userOption.username
+                                              )}
+                                              className="form-check-input"
+                                              id={userOption.username}
+                                              name={userOption.username}
+                                              onChange={() => {
+                                                handleSelectUser(userOption);
+                                              }}
+                                            />
+                                            <label
+                                              className="form-check-label"
+                                              htmlFor={userOption.username}
+                                            >
+                                              {userOption.username}
+                                            </label>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </DropdownMenu>
+                                  </UncontrolledDropdown>
+                                </ButtonGroup>
+                              ) : null}
+
+                              <div>
+                                <Flatpickr
+                                  className="form-control border dash-filter-picker"
+                                  options={{
+                                    mode: "range",
+                                    dateFormat: "d M, Y",
+                                  }}
+                                  onChange={(d) => {
+                                    const formattedStartDate = new Date(
+                                      d[0]
+                                    ).toLocaleDateString("en-GB");
+                                    const formattedEndDate = new Date(
+                                      d[1]
+                                    ).toLocaleDateString("en-GB");
+
+                                    filterValidation.setFieldValue(
+                                      "startDate",
+                                      formattedStartDate
+                                    );
+                                    filterValidation.setFieldValue(
+                                      "endDate",
+                                      formattedEndDate
+                                    );
+                                  }}
+                                  placeholder="Date range"
+                                />
+                              </div>
+
+                              <div>
+                                <Button
+                                  color="primary"
+                                  className="add-btn me-1"
+                                  id="filter-btn"
+                                  type="submit"
+                                >
+                                  <i className="ri-equalizer-line"></i> Apply
+                                </Button>
+                              </div>
+                            </div>
+                          </Form>
                         </div>
                       </Col>
                     </Row>
@@ -156,16 +300,20 @@ const CountReport = () => {
                             </th>
 
                             <th className="sort" data-sort="correct">
-                              Correct
+                              Correct Fields
                             </th>
-                            <th className="sort" data-sort="errors">
-                              Errors
+                            <th className="sort" data-sort="incorrect">
+                              Incorrect Fields
                             </th>
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          <tr>
-                            {/* <th scope="row">
+                          {(searchedData?.length > 0
+                            ? searchedData
+                            : countReportData
+                          )?.map((data) => (
+                            <tr key={data.id}>
+                              {/* <th scope="row">
                               <div className="form-check">
                                 <input
                                   className="form-check-input"
@@ -179,15 +327,28 @@ const CountReport = () => {
                               </div>
                             </th> */}
 
-                            <td className="client">Client Name</td>
-                            <td className="wokring-users">8</td>
-                            <td className="assigned-data">10</td>
-                            <td className="completed-data">8</td>
-                            <td className="for-checking">2</td>
-                            <td className="verified-data">1</td>
-                            <td className="error">1</td>
-                            <td className="correct">1</td>
-                          </tr>
+                              <td className="client">{data.companyName}</td>
+                              <td className="wokring-users">
+                                {data.totalUsers.length}
+                              </td>
+                              <td className="assigned-data">
+                                {data.totalAssignedData.length}
+                              </td>
+                              <td className="completed-data">
+                                {data.totalCompletedData.length}
+                              </td>
+                              <td className="for-checking">
+                                {data.forChecking.length}
+                              </td>
+                              <td className="verified-data">
+                                {data.verifiedData.length}
+                              </td>
+                              <td className="correct">{data.correct.length}</td>
+                              <td className="incorrect">
+                                {data.incorrect.length}
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>

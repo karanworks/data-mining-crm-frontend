@@ -1,68 +1,31 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// import {
-//   getClients as getClientsApi,
-//   createClient as createClientApi,
-//   updateClient as updateClientApi,
-//   removeClient as removeClientApi,
-//   getClientUsers as getClientUsersApi,
-// } from "../../helpers/fakebackend_helper";
 import {
-  getAssignedWorkData as getAssignedWorkDataApi,
-  createAssignedWorkData as createAssignedWorkDataApi,
-  // updateClient as updateClientApi,
-  // removeClient as removeClientApi,
+  getCountReportData as getCountReportDataApi,
+  filterReportData as filterReportDataApi,
 } from "../../helpers/fakebackend_helper";
 
-export const getAssignedWorkData = createAsyncThunk(
-  "assignedWorkData/getAssignedWorkData",
+export const getCountReportData = createAsyncThunk(
+  "countReport/getCountReportData",
   async () => {
     try {
-      const response = await getAssignedWorkDataApi();
+      const response = await getCountReportDataApi();
+      console.log("COUNT REPORT DATA IN THUNK ->", response);
       return response;
     } catch (error) {
-      console.log("error inside get assigned work data thunk", error);
+      console.log("error inside get count report data thunk", error);
     }
   }
 );
-
-export const createAssignedWorkData = createAsyncThunk(
-  "assignedWorkData/createAssignedWorkData",
-  async (values, { dispatch }) => {
+export const filterReportData = createAsyncThunk(
+  "countReport/filterReportData",
+  async (data) => {
     try {
-      const response = await createAssignedWorkDataApi(values);
-
-      if (response.status === "success") {
-        dispatch(getAssignedWorkData());
-      }
+      const response = await filterReportDataApi(data);
+      console.log("FILTER REPORT DATA IN THUNK ->", response);
       return response;
     } catch (error) {
-      console.log("error inside create assigned work data thunk", error);
+      console.log("error inside get count report data thunk", error);
     }
   }
 );
-
-// export const updateClient = createAsyncThunk(
-//   "client/updateClient",
-//   async ({ clientId, values, status }) => {
-//     try {
-//       const response = await updateClientApi(clientId, values, status);
-//       return response;
-//     } catch (error) {
-//       console.log("error inside update client thunk", error);
-//     }
-//   }
-// );
-
-// export const removeClient = createAsyncThunk(
-//   "client/removeClient",
-//   async ({ clientId }) => {
-//     try {
-//       const response = await removeClientApi(clientId);
-
-//       return response.data;
-//     } catch (error) {
-//       console.log("error inside remove client thunk", error);
-//     }
-//   }
-// );
