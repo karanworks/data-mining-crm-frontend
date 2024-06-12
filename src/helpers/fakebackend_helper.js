@@ -301,6 +301,21 @@ export const filterReportData = (data) => {
   );
 };
 
+// *****************************************************************
+// ************************** INVOICE ******************************
+// *****************************************************************
+
+export const getInvoiceData = (token) => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/report/${token}/invoice`);
+};
+
+export const createInvoice = (data) => {
+  return api.create(
+    `${process.env.REACT_APP_SERVER_URL}/report/:reportId/invoice`,
+    data
+  );
+};
+
 // postForgetPwd
 export const postFakeForgetPwd = (data) =>
   api.create(url.POST_FAKE_PASSWORD_FORGET, data);

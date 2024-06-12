@@ -12,37 +12,28 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { getClients } from "../../slices/AddClient/thunk";
 import { getReportData } from "../../slices/Report/thunk";
 import { useNavigate } from "react-router-dom";
+import InvoiceModal from "./InvoiceModal";
+import { getInvoiceData } from "../../helpers/fakebackend_helper";
 
 const Report = () => {
-  const [selectedClients, setSelectedClients] = useState([]);
+  const [modal_list, setModal_list] = useState(false);
 
-  const { clients } = useSelector((state) => state.Client);
+  const [invoiceData, setInvoiceData] = useState(null);
+
+  const [totalCorrectIncorrectFieldsData, setTotalCorrectIncorrectFieldsData] =
+    useState(null);
+
   const { reportData } = useSelector((state) => state.Report);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleSelectAll() {
-    const allClientIds = clients?.map((client) => {
-      return client.id;
-    });
-
-    if (clients?.length === selectedClients.length) {
-      setSelectedClients([]);
-    } else {
-      setSelectedClients(allClientIds);
-    }
-  }
-
-  function handleSelectedDelete() {
-    tog_delete();
-    setIsDeletingMultipleUsers(true);
+  function tog_list() {
+    setModal_list(!modal_list);
   }
 
   function handleViewForms(token) {
@@ -55,6 +46,13 @@ const Report = () => {
     dispatch(getReportData());
     dispatch(getClients());
   }, [dispatch]);
+
+  async function handleGetInvoiceData(data) {
+    // report id has to be given
+    const response = await getInvoiceData(data.token);
+    console.log("RESPONSE AFTER GETTING INVOICE DATA ->", response);
+    setTotalCorrectIncorrectFieldsData(response.data);
+  }
 
   document.title = "Report";
   return (
@@ -71,48 +69,6 @@ const Report = () => {
 
                 <CardBody>
                   <div className="listjs-table" id="userList">
-                    <Row className="g-4 mb-3 d-flex justify-content-between">
-                      {/* <Col className="col-sm-auto ">
-                        <div className="search-box">
-                          <input
-                            type="text"
-                            className="form-control bg-light border-light"
-                            autoComplete="off"
-                            id="searchList"
-                            onChange={handleFilterData}
-                            placeholder="Search Keyword"
-                          />
-                          <i className="ri-search-line search-icon"></i>
-                        </div>
-                      </Col> */}
-
-                      <Col className="col-sm-auto">
-                        <div>
-                          {/* <Button
-                            color="primary"
-                            className="add-btn me-1"
-                            onClick={() => tog_list()}
-                            id="create-btn"
-                          >
-                            <i className="ri-add-line align-bottom me-1"></i>{" "}
-                            Add New Client
-                          </Button> */}
-
-                          {selectedClients.length > 0 ? (
-                            <Button
-                              color="primary"
-                              className="delete-btn me-1"
-                              onClick={handleSelectedDelete}
-                              id="create-btn"
-                            >
-                              <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Delete Selected Id
-                            </Button>
-                          ) : null}
-                        </div>
-                      </Col>
-                    </Row>
-
                     <div className="table-responsive table-card mt-3 mb-1">
                       <table
                         className="table align-middle table-nowrap"
@@ -120,20 +76,6 @@ const Report = () => {
                       >
                         <thead className="table-light">
                           <tr>
-                            <th scope="col" style={{ width: "50px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="checkAll"
-                                  checked={
-                                    clients?.length > 0 &&
-                                    clients?.length === selectedClients.length
-                                  }
-                                  onChange={handleSelectAll}
-                                />
-                              </div>
-                            </th>
                             <th className="sort" data-sort="token_no">
                               Token No
                             </th>
@@ -160,20 +102,6 @@ const Report = () => {
                         <tbody className="list form-check-all">
                           {reportData?.map((data, i) => (
                             <tr key={i}>
-                              <th scope="row">
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    // checked={selectedClients.includes(client.id)}
-                                    type="checkbox"
-                                    name="checkbox"
-                                    onChange={() => {
-                                      // handleSelectedClients(client.id);
-                                    }}
-                                  />
-                                </div>
-                              </th>
-
                               <td className="token_no">{data.token}</td>
                               <td className="client">{data.clientName}</td>
                               <td className="users">{data.totalUsers}</td>
@@ -196,18 +124,20 @@ const Report = () => {
                                       View Forms
                                     </button>
                                   </div>
-                                  {/* <div className="edit">
+                                  <div className="edit">
                                     <button
                                       className="btn btn-sm btn-primary edit-item-btn"
                                       data-bs-toggle="modal"
                                       data-bs-target="#showModal"
                                       onClick={() => {
-                                        // handleEditClient(client);
+                                        tog_list();
+                                        setInvoiceData(data);
+                                        handleGetInvoiceData(data);
                                       }}
                                     >
-                                      Edit
+                                      Create Invoice
                                     </button>
-                                  </div> */}
+                                  </div>
                                   {/* <div className="remove">
                                     <button
                                       className="btn btn-sm btn-danger remove-item-btn"
@@ -267,6 +197,12 @@ const Report = () => {
         </Container>
         <ToastContainer />
       </div>
+      <InvoiceModal
+        modal_list={modal_list}
+        tog_list={tog_list}
+        invoiceData={invoiceData}
+        totalCorrectIncorrectFieldsData={totalCorrectIncorrectFieldsData}
+      />
     </React.Fragment>
   );
 };
