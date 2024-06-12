@@ -7,16 +7,19 @@ function InvoiceModal({
   tog_list,
   invoiceData,
   totalCorrectIncorrectFieldsData,
+  createInvoice,
   // users_view_modal_list,
   // users_view_tog_list,
   // clientUsers,
   // add_users_tog_list,
 }) {
   const [invoice, setInvoice] = useState({
+    client: "",
     token: "",
     formRate: "",
     noOfUsers: "",
     totalForms: "",
+    costPerField: "",
     correctFields: "",
     incorrectFields: "",
     totalAmount: "",
@@ -26,16 +29,22 @@ function InvoiceModal({
   const [totalAmount, setTotalAmount] = useState("");
 
   useEffect(() => {
-    setInvoice({ ...invoice, token: invoiceData?.token });
-  }, [invoiceData]);
+    setInvoice({
+      ...invoice,
+      token: invoiceData?.token,
+      client: invoiceData?.clientName,
+      correctFields: totalCorrectIncorrectFieldsData?.correctFields,
+      incorrectFields: totalCorrectIncorrectFieldsData?.incorrectFields,
+      totalAmount,
+      costPerField,
+    });
+  }, [invoiceData, costPerField, totalAmount]);
 
   function handleForRateChange(e) {
     setInvoice({
       ...invoiceData,
-      formRate: e.target.value,
+      formRate: parseInt(e.target.value),
     });
-
-    console.log("FORM RATE ->", e.target.value);
 
     const costPerFieldInForm = parseFloat(
       parseInt(e.target.value) / 14
@@ -47,6 +56,11 @@ function InvoiceModal({
         costPerFieldInForm * totalCorrectIncorrectFieldsData.correctFields
       )
     );
+  }
+
+  async function handleCreatePayment() {
+    const response = await createInvoice(invoice);
+    console.log("RESPONSE AFTER CREATING INVOICE ->", response);
   }
 
   return (
@@ -124,6 +138,7 @@ function InvoiceModal({
           <button
             className="btn btn-sm btn-success mt-2"
             style={{ float: "right" }}
+            onClick={handleCreatePayment}
           >
             Create Invoice
           </button>

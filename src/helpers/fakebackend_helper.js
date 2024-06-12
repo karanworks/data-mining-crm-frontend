@@ -311,9 +311,16 @@ export const getInvoiceData = (token) => {
 
 export const createInvoice = (data) => {
   return api.create(
-    `${process.env.REACT_APP_SERVER_URL}/report/:reportId/invoice`,
+    `${process.env.REACT_APP_SERVER_URL}/report/${data.token}/invoice`,
     data
   );
+};
+// *****************************************************************
+// ************************** INVOICE ******************************
+// *****************************************************************
+
+export const getPayments = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/payment`);
 };
 
 // postForgetPwd

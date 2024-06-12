@@ -32,6 +32,7 @@ import AssignedData from "../pages/CountReport/AssignedData";
 import CountReportCompletedData from "../pages/CountReport/CountReportCompletedData";
 import ForChecking from "../pages/CountReport/ForChecking";
 import VerifiedData from "../pages/CountReport/VerifiedData";
+import Payment from "../pages/Payment";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -50,6 +51,7 @@ const authProtectedRoutes = [
   { path: "/count-report/assigned-data", component: <AssignedData /> },
   { path: "/count-report/for-checking", component: <ForChecking /> },
   { path: "/count-report/verified-data", component: <VerifiedData /> },
+  { path: "/payment", component: <Payment /> },
   {
     path: "/count-report/completed-data",
     component: <CountReportCompletedData />,

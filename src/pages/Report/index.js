@@ -17,7 +17,10 @@ import { getClients } from "../../slices/AddClient/thunk";
 import { getReportData } from "../../slices/Report/thunk";
 import { useNavigate } from "react-router-dom";
 import InvoiceModal from "./InvoiceModal";
-import { getInvoiceData } from "../../helpers/fakebackend_helper";
+import {
+  getInvoiceData,
+  createInvoice,
+} from "../../helpers/fakebackend_helper";
 
 const Report = () => {
   const [modal_list, setModal_list] = useState(false);
@@ -50,7 +53,6 @@ const Report = () => {
   async function handleGetInvoiceData(data) {
     // report id has to be given
     const response = await getInvoiceData(data.token);
-    console.log("RESPONSE AFTER GETTING INVOICE DATA ->", response);
     setTotalCorrectIncorrectFieldsData(response.data);
   }
 
@@ -202,6 +204,7 @@ const Report = () => {
         tog_list={tog_list}
         invoiceData={invoiceData}
         totalCorrectIncorrectFieldsData={totalCorrectIncorrectFieldsData}
+        createInvoice={createInvoice}
       />
     </React.Fragment>
   );
