@@ -41,7 +41,7 @@ const WorkingUsers = () => {
                             <th scope="col">Username</th>
                             <th scope="col">Data Assigned</th>
                             <th scope="col">Completed</th>
-                            <th scope="col">Status</th>
+                            {/* <th scope="col">Status</th> */}
                           </tr>
                         </thead>
 
@@ -52,7 +52,7 @@ const WorkingUsers = () => {
                               <td>{user.username}</td>
                               <td>{user.dataAssigned}</td>
                               <td>{user.completed}</td>
-                              <td>
+                              {/* <td>
                                 {user.status === 1 ? (
                                   <button
                                     className="btn btn-sm btn-soft-success"
@@ -68,7 +68,7 @@ const WorkingUsers = () => {
                                     Not Active
                                   </button>
                                 )}
-                              </td>
+                              </td> */}
                             </tr>
                           ))}
                         </tbody>

@@ -30,6 +30,8 @@ import CountReport from "../pages/CountReport";
 import WorkingUsers from "../pages/CountReport/WorkingUsers";
 import AssignedData from "../pages/CountReport/AssignedData";
 import CountReportCompletedData from "../pages/CountReport/CountReportCompletedData";
+import ForChecking from "../pages/CountReport/ForChecking";
+import VerifiedData from "../pages/CountReport/VerifiedData";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -46,6 +48,8 @@ const authProtectedRoutes = [
   { path: "/count-report", component: <CountReport /> },
   { path: "/count-report/working-users", component: <WorkingUsers /> },
   { path: "/count-report/assigned-data", component: <AssignedData /> },
+  { path: "/count-report/for-checking", component: <ForChecking /> },
+  { path: "/count-report/verified-data", component: <VerifiedData /> },
   {
     path: "/count-report/completed-data",
     component: <CountReportCompletedData />,
