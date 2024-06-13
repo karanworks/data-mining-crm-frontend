@@ -67,7 +67,7 @@ const UserProfile = () => {
       <div className="page-content">
         <Container fluid>
           <Row>
-            <Col lg="12">
+            <Col lg="3">
               {error && error ? <Alert color="danger">{error}</Alert> : null}
               <Card>
                 <CardBody>
@@ -93,74 +93,78 @@ const UserProfile = () => {
 
           <h4 className="card-title mb-4">Change Password</h4>
 
-          <Card>
-            <CardBody>
-              <Form
-                className="form-horizontal"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  validation.handleSubmit();
-                  return false;
-                }}
-              >
-                <div className="form-group">
-                  <Label className="form-label">Current Password</Label>
-                  <Input
-                    name="currentPassword"
-                    // value={name}
-                    className="form-control"
-                    placeholder="Enter Current Password"
-                    type="text"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.currentPassword || ""}
-                    invalid={
-                      validation.touched.currentPassword &&
-                      validation.errors.currentPassword
-                        ? true
-                        : false
-                    }
-                  />
-                  {validation.touched.currentPassword &&
-                  validation.errors.currentPassword ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.currentPassword}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-                <div className="form-group">
-                  <Label className="form-label">New Password</Label>
-                  <Input
-                    name="newPassword"
-                    // value={name}
-                    className="form-control"
-                    placeholder="Enter New Password"
-                    type="text"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.newPassword || ""}
-                    invalid={
-                      validation.touched.newPassword &&
-                      validation.errors.newPassword
-                        ? true
-                        : false
-                    }
-                  />
-                  {validation.touched.newPassword &&
-                  validation.errors.newPassword ? (
-                    <FormFeedback type="invalid">
-                      {validation.errors.newPassword}
-                    </FormFeedback>
-                  ) : null}
-                </div>
-                <div className="text-center mt-4">
-                  <Button type="submit" color="danger">
-                    Update Password
-                  </Button>
-                </div>
-              </Form>
-            </CardBody>
-          </Card>
+          <Row>
+            <Col lg="3">
+              <Card>
+                <CardBody>
+                  <Form
+                    className="form-horizontal"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      validation.handleSubmit();
+                      return false;
+                    }}
+                  >
+                    <div className="form-group mb-2">
+                      <Label className="form-label">Current Password</Label>
+                      <Input
+                        name="currentPassword"
+                        // value={name}
+                        className="form-control"
+                        placeholder="Enter Current Password"
+                        type="text"
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values.currentPassword || ""}
+                        invalid={
+                          validation.touched.currentPassword &&
+                          validation.errors.currentPassword
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.currentPassword &&
+                      validation.errors.currentPassword ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.currentPassword}
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+                    <div className="form-group mb-2">
+                      <Label className="form-label">New Password</Label>
+                      <Input
+                        name="newPassword"
+                        // value={name}
+                        className="form-control"
+                        placeholder="Enter New Password"
+                        type="text"
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values.newPassword || ""}
+                        invalid={
+                          validation.touched.newPassword &&
+                          validation.errors.newPassword
+                            ? true
+                            : false
+                        }
+                      />
+                      {validation.touched.newPassword &&
+                      validation.errors.newPassword ? (
+                        <FormFeedback type="invalid">
+                          {validation.errors.newPassword}
+                        </FormFeedback>
+                      ) : null}
+                    </div>
+                    <div className="text-center mt-4">
+                      <Button type="submit" color="danger">
+                        Update Password
+                      </Button>
+                    </div>
+                  </Form>
+                </CardBody>
+              </Card>
+            </Col>{" "}
+          </Row>
         </Container>
       </div>
       <ToastContainer />
