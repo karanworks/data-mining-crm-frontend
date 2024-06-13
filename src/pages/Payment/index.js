@@ -39,6 +39,7 @@ import Select from "react-select";
 import { getPayments } from "../../helpers/fakebackend_helper";
 import InvoicePdf from "./InvoicePdf";
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
+import { formatNumber } from "../../utils/commaFormattingForAmount";
 
 const Payment = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
@@ -308,7 +309,7 @@ const Payment = () => {
                         </thead>
                         <tbody className="list form-check-all">
                           {paymentInvoices?.map((invoice) => (
-                            <tr>
+                            <tr key={invoice.id}>
                               <td className="client">{invoice.client}</td>
                               <td className="assigned-data">{invoice.token}</td>
                               <td className="working-users">
@@ -327,7 +328,7 @@ const Payment = () => {
                                 </div>
                               </td>
                               <td className="for-checking">
-                                ₹{invoice.totalAmount}
+                                ₹{formatNumber(invoice.totalAmount)}
                               </td>
                               <td className="verified-data">
                                 <button

@@ -52,9 +52,9 @@ function InvoiceModal({
 
     setCostPerField(costPerFieldInForm);
     setTotalAmount(
-      Math.round(
+      parseFloat(
         costPerFieldInForm * totalCorrectIncorrectFieldsData.correctFields
-      )
+      ).toFixed(2)
     );
   }
 
