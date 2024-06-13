@@ -5,7 +5,7 @@ import SimpleBar from "simplebar-react";
 import logoSm from "../assets/images/logo-sm.png";
 import logoDark from "../assets/images/logo-dark.png";
 import logoLight from "../assets/images/logo-light.png";
-import webwersLogo from "../assets/images/webwersLogo.png";
+import ascentLogo from "../assets/images/ascentLogo.png";
 
 //Import Components
 import VerticalLayout from "./VerticalLayouts";
@@ -51,7 +51,7 @@ const Sidebar = ({ layoutType }) => {
             </span>
             <span className="logo-lg">
               <img
-                src={webwersLogo}
+                src={ascentLogo}
                 alt=""
                 style={{ height: "100%", width: "100%" }}
               />
@@ -64,7 +64,7 @@ const Sidebar = ({ layoutType }) => {
             </span>
             <span className="logo-lg">
               <img
-                src={webwersLogo}
+                src={ascentLogo}
                 alt=""
                 style={{ height: "100%", width: "100%" }}
               />

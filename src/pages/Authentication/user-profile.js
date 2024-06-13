@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { isEmpty } from "lodash";
-
 import {
   Container,
   Row,
@@ -18,71 +16,52 @@ import {
 // Formik Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
 import avatar from "../../assets/images/users/avatar-1.jpg";
 // actions
-import { editProfile, resetProfileFlag } from "../../slices/thunks";
 import { createSelector } from "reselect";
+import { changePassword } from "../../slices/Profile/thunk";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
 
   const [email, setemail] = useState("admin@gmail.com");
-  const [idx, setidx] = useState("1");
 
   const [userName, setUserName] = useState("Admin");
 
-  const selectLayoutState = (state) => state.Profile;
-  const userprofileData = createSelector(selectLayoutState, (state) => ({
-    user: state.user,
-    success: state.success,
-    error: state.error,
-  }));
-  // Inside your component
-  const { user, success, error } = useSelector(userprofileData);
+  const { error } = useSelector((state) => state.Profile);
 
   useEffect(() => {
     if (sessionStorage.getItem("authUser")) {
       const obj = JSON.parse(sessionStorage.getItem("authUser"));
 
-      if (!isEmpty(user)) {
-        obj.data.first_name = user.first_name;
-        sessionStorage.removeItem("authUser");
-        sessionStorage.setItem("authUser", JSON.stringify(obj));
-      }
-
-      // default code
-      // setUserName(obj.data.first_name);
       setUserName(obj.data.username);
       setemail(obj.data.email);
-      setidx(obj.data._id || "1");
-
-      setTimeout(() => {
-        dispatch(resetProfileFlag());
-      }, 3000);
     }
-  }, [dispatch, user]);
+  }, [dispatch]);
 
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
     initialValues: {
-      first_name: userName || "Admin",
-      idx: idx || "",
+      currentPassword: "",
+      newPassword: "",
     },
     validationSchema: Yup.object({
-      first_name: Yup.string().required("Please Enter Your UserName"),
+      currentPassword: Yup.string().required(
+        "Please Enter Your Current Password"
+      ),
+      newPassword: Yup.string().required("Please Enter Your New Password"),
     }),
-    onSubmit: (values) => {
-      dispatch(editProfile(values));
+    onSubmit: (values, { resetForm }) => {
+      dispatch(changePassword(values));
+      resetForm();
     },
   });
 
-  document.title = "Profile | Velzon - React Admin & Dashboard Template";
+  document.title = "Profile";
   return (
     <React.Fragment>
       <div className="page-content">
@@ -90,10 +69,6 @@ const UserProfile = () => {
           <Row>
             <Col lg="12">
               {error && error ? <Alert color="danger">{error}</Alert> : null}
-              {success ? (
-                <Alert color="success">Username Updated To {userName}</Alert>
-              ) : null}
-
               <Card>
                 <CardBody>
                   <div className="d-flex">
@@ -108,7 +83,6 @@ const UserProfile = () => {
                       <div className="text-muted">
                         <h5>{userName || "Admin"}</h5>
                         <p className="mb-1">Email Id : {email}</p>
-                        <p className="mb-0">Id No : #{idx}</p>
                       </div>
                     </div>
                   </div>
@@ -117,7 +91,7 @@ const UserProfile = () => {
             </Col>
           </Row>
 
-          <h4 className="card-title mb-4">Change User Name</h4>
+          <h4 className="card-title mb-4">Change Password</h4>
 
           <Card>
             <CardBody>
@@ -130,34 +104,58 @@ const UserProfile = () => {
                 }}
               >
                 <div className="form-group">
-                  <Label className="form-label">User Name</Label>
+                  <Label className="form-label">Current Password</Label>
                   <Input
-                    name="first_name"
+                    name="currentPassword"
                     // value={name}
                     className="form-control"
-                    placeholder="Enter User Name"
+                    placeholder="Enter Current Password"
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={validation.values.first_name || ""}
+                    value={validation.values.currentPassword || ""}
                     invalid={
-                      validation.touched.first_name &&
-                      validation.errors.first_name
+                      validation.touched.currentPassword &&
+                      validation.errors.currentPassword
                         ? true
                         : false
                     }
                   />
-                  {validation.touched.first_name &&
-                  validation.errors.first_name ? (
+                  {validation.touched.currentPassword &&
+                  validation.errors.currentPassword ? (
                     <FormFeedback type="invalid">
-                      {validation.errors.first_name}
+                      {validation.errors.currentPassword}
                     </FormFeedback>
                   ) : null}
-                  <Input name="idx" value={idx} type="hidden" />
+                </div>
+                <div className="form-group">
+                  <Label className="form-label">New Password</Label>
+                  <Input
+                    name="newPassword"
+                    // value={name}
+                    className="form-control"
+                    placeholder="Enter New Password"
+                    type="text"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.newPassword || ""}
+                    invalid={
+                      validation.touched.newPassword &&
+                      validation.errors.newPassword
+                        ? true
+                        : false
+                    }
+                  />
+                  {validation.touched.newPassword &&
+                  validation.errors.newPassword ? (
+                    <FormFeedback type="invalid">
+                      {validation.errors.newPassword}
+                    </FormFeedback>
+                  ) : null}
                 </div>
                 <div className="text-center mt-4">
                   <Button type="submit" color="danger">
-                    Update User Name
+                    Update Password
                   </Button>
                 </div>
               </Form>
@@ -165,6 +163,7 @@ const UserProfile = () => {
           </Card>
         </Container>
       </div>
+      <ToastContainer />
     </React.Fragment>
   );
 };

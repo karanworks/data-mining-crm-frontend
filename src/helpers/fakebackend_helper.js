@@ -50,6 +50,14 @@ export const updateUser = (userId, data, status) => {
   });
 };
 
+export const changePassword = (data) => {
+  console.log("CHANGE PASSWORD ->", data);
+  return api.update(
+    `${process.env.REACT_APP_SERVER_URL}/change-password`,
+    data
+  );
+};
+
 // *****************************************************************
 // **************************** MAPPING ****************************
 // *****************************************************************

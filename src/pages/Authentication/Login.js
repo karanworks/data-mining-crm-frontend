@@ -14,8 +14,7 @@ import {
   Spinner,
 } from "reactstrap";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
-import webwersLogo from "../../assets/images/webwersLogo.png";
-import axios from "axios";
+import ascentLogo from "../../assets/images/ascentLogo.jpg";
 import { useNavigate } from "react-router-dom";
 
 //redux
@@ -104,9 +103,9 @@ const Login = (props) => {
                 <Card className="mt-4">
                   <CardBody className="p-4">
                     <div className="text-center">
-                      <img src={webwersLogo} style={{ height: "150px" }} />
+                      <img src={ascentLogo} style={{ height: "100px" }} />
                       {/* <h5 className="text-primary">Welcome Back !</h5> */}
-                      <p className="text-muted">WebWers Admin Login</p>
+                      <p className="text-muted">Ascent Admin Login</p>
                     </div>
                     {error && error ? (
                       <Alert color="danger"> {error} </Alert>

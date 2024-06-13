@@ -14,10 +14,10 @@ import AddDataReducer from "./AddData/reducer";
 import AddWorkDataReducer from "./AddWorkData/reducer";
 import CompletedDataReducer from "./CompletedData/reducer";
 import CountReportReducer from "./CountReport/reducer";
+import ProfileReducer from "./Profile/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
-import ProfileReducer from "./auth/profile/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
