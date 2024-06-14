@@ -26,12 +26,12 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 function AddClientFormModal({
-  modal_list, // modal state
-  tog_list, // to change modal state
-  formHandleSubmit, // submit function for form
-  validation, // to get the values from formik
-  isEditingClient, // state of whether we are editing the user or not, if we are editing the user then form fields will have the values of that user
-  alreadyRegisteredError, // gives error if user already registered with same - id, email, agentMobile
+  modal_list,
+  tog_list,
+  formHandleSubmit,
+  validation,
+  isEditingClient,
+  alreadyRegisteredError,
   handleRoleChange,
   roles,
   clients,
