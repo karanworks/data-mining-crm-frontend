@@ -72,9 +72,9 @@ const authProtectedRoutes = [
   {
     path: "/",
     exact: true,
-    component: <Navigate to="/home" />,
+    component: <Navigate to="/count-report" />,
   },
-  { path: "*", component: <Navigate to="/home" /> },
+  { path: "*", component: <Navigate to="/count-report" /> },
 ];
 
 const publicRoutes = [

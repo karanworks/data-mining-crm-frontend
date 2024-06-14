@@ -17,7 +17,7 @@ import {
   DropdownToggle,
   UncontrolledDropdown,
 } from "reactstrap";
-
+import Loader from "../../Components/Common/Loader";
 import Select from "react-select";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
@@ -55,7 +55,7 @@ const CompletedData = () => {
 
   const [listData, setListData] = useState(null);
 
-  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { userData, searchedData } = useSelector(
     (state) => state.CompletedData
@@ -64,19 +64,6 @@ const CompletedData = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/roles`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setRoles(res.data);
-      })
-      .catch((error) => {
-        console.log("error while fetching roles ->", error);
-      });
-  }, []);
 
   function handleSelectSingleClient(client) {
     setSelectedSingleClient(client);
@@ -92,8 +79,9 @@ const CompletedData = () => {
   });
 
   useEffect(() => {
+    setLoading(true);
     dispatch(getUsers());
-    dispatch(getCompletedWorkData());
+    dispatch(getCompletedWorkData()).finally(() => setLoading(false));
     dispatch(getClients());
   }, [dispatch]);
 
@@ -501,94 +489,109 @@ const CompletedData = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {(searchedData?.length > 0
-                            ? searchedData
-                            : userData?.completedWorkData
-                          )?.map((data) => (
-                            <tr key={data.id}>
-                              <th scope="row">
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="checkbox"
-                                    checked={selectedCompletedData.includes(
-                                      data.id
-                                    )}
-                                    onChange={() => {
-                                      handleSelectedCompletedData(data.id);
-                                    }}
-                                  />
-                                </div>
-                              </th>
-
-                              <td className="username">{data.username}</td>
-                              <td className="dateAndTime">
-                                <span className="badge border border-primary text-primary fs-12">
-                                  {handleISTTimeZone(data.createdAt)}
-                                </span>
-                              </td>
-                              <td className="companyInfo">
-                                <div>
-                                  <div>URL - {data.url}</div>
-                                  <div>Name - {data.companyName}</div>
-                                </div>
-                              </td>
-                              <td className="businessType">
-                                {data.businessType}
-                              </td>
-                              <td className="status">
-                                {data.websiteStatus === "Valid URL" ? (
-                                  <span className="badge border border-success text-success">
-                                    {data.websiteStatus}
-                                  </span>
-                                ) : (
-                                  <span className="badge border border-danger text-danger">
-                                    {data.websiteStatus}
-                                  </span>
-                                )}
-                              </td>
-
-                              <td>
-                                <div className="d-flex gap-2">
-                                  <div className="edit">
-                                    <button
-                                      className="btn btn-sm btn-primary edit-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#showModal"
-                                      onClick={() => {
-                                        handleEditData(data);
-                                      }}
-                                    >
-                                      Edit
-                                    </button>
-                                  </div>
-                                  <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteRecordModal"
-                                      onClick={() => {
-                                        setListData(data);
-                                        setmodal_delete(true);
-                                      }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
-                                  <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-success remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      onClick={() => handleViewData(data)}
-                                    >
-                                      View
-                                    </button>
-                                  </div>
-                                </div>
+                          {loading ? (
+                            <tr>
+                              <td
+                                colSpan={6}
+                                style={{
+                                  border: "none",
+                                  textAlign: "center",
+                                  verticalAlign: "middle",
+                                }}
+                              >
+                                <Loader />
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            (searchedData?.length > 0
+                              ? searchedData
+                              : userData?.completedWorkData
+                            )?.map((data) => (
+                              <tr key={data.id}>
+                                <th scope="row">
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="checkbox"
+                                      checked={selectedCompletedData.includes(
+                                        data.id
+                                      )}
+                                      onChange={() => {
+                                        handleSelectedCompletedData(data.id);
+                                      }}
+                                    />
+                                  </div>
+                                </th>
+
+                                <td className="username">{data.username}</td>
+                                <td className="dateAndTime">
+                                  <span className="badge border border-primary text-primary fs-12">
+                                    {handleISTTimeZone(data.createdAt)}
+                                  </span>
+                                </td>
+                                <td className="companyInfo">
+                                  <div>
+                                    <div>URL - {data.url}</div>
+                                    <div>Name - {data.companyName}</div>
+                                  </div>
+                                </td>
+                                <td className="businessType">
+                                  {data.businessType}
+                                </td>
+                                <td className="status">
+                                  {data.websiteStatus === "Valid URL" ? (
+                                    <span className="badge border border-success text-success">
+                                      {data.websiteStatus}
+                                    </span>
+                                  ) : (
+                                    <span className="badge border border-danger text-danger">
+                                      {data.websiteStatus}
+                                    </span>
+                                  )}
+                                </td>
+
+                                <td>
+                                  <div className="d-flex gap-2">
+                                    <div className="edit">
+                                      <button
+                                        className="btn btn-sm btn-primary edit-item-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#showModal"
+                                        onClick={() => {
+                                          handleEditData(data);
+                                        }}
+                                      >
+                                        Edit
+                                      </button>
+                                    </div>
+                                    <div className="remove">
+                                      <button
+                                        className="btn btn-sm btn-danger remove-item-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteRecordModal"
+                                        onClick={() => {
+                                          setListData(data);
+                                          setmodal_delete(true);
+                                        }}
+                                      >
+                                        Remove
+                                      </button>
+                                    </div>
+                                    <div className="remove">
+                                      <button
+                                        className="btn btn-sm btn-success remove-item-btn"
+                                        data-bs-toggle="modal"
+                                        onClick={() => handleViewData(data)}
+                                      >
+                                        View
+                                      </button>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>

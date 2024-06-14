@@ -29,7 +29,7 @@ export const loginUser = (user, history) => async (dispatch) => {
       data = finallogin.data;
       if (finallogin.status === "success") {
         dispatch(loginSuccess(data));
-        history("/home");
+        history("/count-report");
       } else {
         console.log("else condition while logging in ", finallogin);
         dispatch(apiError(finallogin));
