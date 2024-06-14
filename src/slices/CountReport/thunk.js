@@ -10,7 +10,6 @@ export const getCountReportData = createAsyncThunk(
   async () => {
     try {
       const response = await getCountReportDataApi();
-      console.log("COUNT REPORT DATA IN THUNK ->", response);
       return response;
     } catch (error) {
       console.log("error inside get count report data thunk", error);

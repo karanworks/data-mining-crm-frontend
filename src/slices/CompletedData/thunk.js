@@ -6,8 +6,6 @@ import {
   updateCompletedWorkData as updateCompletedWorkDataApi,
   filterCompletedWorkData as filterCompletedWorkDataApi,
   submitCompletedWorkData as submitCompletedWorkDataApi,
-  // updateClient as updateClientApi,
-  // removeClient as removeClientApi,
 } from "../../helpers/fakebackend_helper";
 
 export const getCompletedWorkData = createAsyncThunk(

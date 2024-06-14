@@ -240,12 +240,12 @@ const CompletedData = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Add Client" pageTitle="Client" />
+          <BreadCrumb title="Completed Data" pageTitle="Work" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Add Client</h4>
+                  <h4 className="card-title mb-0">Completed Data</h4>
                 </CardHeader>
 
                 <CardBody>

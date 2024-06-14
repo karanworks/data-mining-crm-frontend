@@ -3,9 +3,9 @@ import { getUsers, createUser, removeUser, updateUser } from "./thunk";
 import { toast } from "react-toastify";
 
 export const initialState = {
-  users: [], // list of all users
-  allUsers: [], // list of all users (inlcuding that other admins created as well)
-  alreadyRegisteredError: null, // if user with same email, mobile number already registered
+  users: [],
+  allUsers: [],
+  alreadyRegisteredError: null,
   error: "",
 };
 

@@ -9,7 +9,6 @@ import UsersReducer from "./Users/reducer";
 import MappingReducer from "./Mapping/reducer";
 import ReportReducer from "./Report/reducer";
 import AddClientReducer from "./AddClient/reducer";
-import AddUsersReducer from "./AddUsers/reducer";
 import AddDataReducer from "./AddData/reducer";
 import AddWorkDataReducer from "./AddWorkData/reducer";
 import CompletedDataReducer from "./CompletedData/reducer";
@@ -27,7 +26,6 @@ const rootReducer = combineReducers({
   Mapping: MappingReducer,
   Report: ReportReducer,
   Client: AddClientReducer,
-  AddUsers: AddUsersReducer,
   AddData: AddDataReducer,
   AddWorkData: AddWorkDataReducer,
   CompletedData: CompletedDataReducer,

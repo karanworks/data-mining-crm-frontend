@@ -39,59 +39,6 @@ const addWorkDataSlice = createSlice({
         });
       }
     });
-
-    // builder.addCase(updateClient.fulfilled, (state, action) => {
-    //   if (action.payload.status == "failure") {
-    //     state.alreadyRegisteredError = action.payload.message;
-    //     state.error = "";
-    //   } else {
-    //     const updatedClientId = action.payload.data.updatedClient.id;
-    //     state.clients = state.clients.map((client) => {
-    //       if (client.id == updatedClientId) {
-    //         client = action.payload.data.updatedClient;
-    //         return client;
-    //       } else {
-    //         return client;
-    //       }
-    //     });
-
-    //     state.alreadyRegisteredError = null;
-    //     state.error = "";
-
-    //     toast.success("Client details updated !", {
-    //       position: "bottom-center",
-    //       autoClose: 3000,
-    //       theme: "colored",
-    //     });
-    //   }
-    // });
-
-    // builder.addCase(removeClient.fulfilled, (state, action) => {
-    //   const deletedClient = action.payload.deletedClient;
-
-    //   console.log("DELETED CLIENT FROM BACKEND ->", deletedClient);
-
-    //   if (Array.isArray(deletedClient)) {
-    //     const deletedClientIds = deletedClient?.map((client) => {
-    //       return client.id;
-    //     });
-
-    //     state.clients = state.clients.filter((client) => {
-    //       return !deletedClientIds.includes(client.id);
-    //     });
-    //   } else {
-    //     state.clients = state.clients.filter(
-    //       (client) => client.id !== deletedClient.id
-    //     );
-    //   }
-
-    //   state.error = "";
-    //   toast.error("Client has been removed !", {
-    //     position: "bottom-center",
-    //     autoClose: 3000,
-    //     theme: "colored",
-    //   });
-    // });
   },
 });
 
