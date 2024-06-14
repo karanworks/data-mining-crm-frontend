@@ -21,11 +21,14 @@ import {
   getInvoiceData,
   createInvoice,
 } from "../../helpers/fakebackend_helper";
+import Loader from "../../Components/Common/Loader";
 
 const Report = () => {
   const [modal_list, setModal_list] = useState(false);
 
   const [invoiceData, setInvoiceData] = useState(null);
+
+  const [loading, setLoading] = useState(false);
 
   const [totalCorrectIncorrectFieldsData, setTotalCorrectIncorrectFieldsData] =
     useState(null);
@@ -46,7 +49,8 @@ const Report = () => {
   }
 
   useEffect(() => {
-    dispatch(getReportData());
+    setLoading(true);
+    dispatch(getReportData()).finally(() => setLoading(false));
     dispatch(getClients());
   }, [dispatch]);
 
@@ -102,45 +106,61 @@ const Report = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {reportData?.map((data, i) => (
-                            <tr key={i}>
-                              <td className="token_no">{data.token}</td>
-                              <td className="client">{data.clientName}</td>
-                              <td className="users">{data.totalUsers}</td>
-                              <td className="type">{data.totalForms}</td>
-                              <td className="type">{data.checkedFormsCount}</td>
+                          {loading ? (
+                            <tr>
+                              <td
+                                colSpan={6}
+                                style={{
+                                  border: "none",
+                                  textAlign: "center",
+                                  verticalAlign: "middle",
+                                }}
+                              >
+                                <Loader />
+                              </td>
+                            </tr>
+                          ) : (
+                            reportData?.map((data, i) => (
+                              <tr key={i}>
+                                <td className="token_no">{data.token}</td>
+                                <td className="client">{data.clientName}</td>
+                                <td className="users">{data.totalUsers}</td>
+                                <td className="type">{data.totalForms}</td>
+                                <td className="type">
+                                  {data.checkedFormsCount}
+                                </td>
 
-                              <td>
-                                <div className="d-flex gap-2">
-                                  <div className="viewUsers">
-                                    <button
-                                      className="btn btn-sm btn-success edit-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#showModal"
-                                      onClick={() => {
-                                        // forms_view_tog_list(data.token);
-                                        // setListClient(client);
-                                        handleViewForms(data.token);
-                                      }}
-                                    >
-                                      View Forms
-                                    </button>
-                                  </div>
-                                  <div className="edit">
-                                    <button
-                                      className="btn btn-sm btn-primary edit-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#showModal"
-                                      onClick={() => {
-                                        tog_list();
-                                        setInvoiceData(data);
-                                        handleGetInvoiceData(data);
-                                      }}
-                                    >
-                                      Create Invoice
-                                    </button>
-                                  </div>
-                                  {/* <div className="remove">
+                                <td>
+                                  <div className="d-flex gap-2">
+                                    <div className="viewUsers">
+                                      <button
+                                        className="btn btn-sm btn-success edit-item-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#showModal"
+                                        onClick={() => {
+                                          // forms_view_tog_list(data.token);
+                                          // setListClient(client);
+                                          handleViewForms(data.token);
+                                        }}
+                                      >
+                                        View Forms
+                                      </button>
+                                    </div>
+                                    <div className="edit">
+                                      <button
+                                        className="btn btn-sm btn-primary edit-item-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#showModal"
+                                        onClick={() => {
+                                          tog_list();
+                                          setInvoiceData(data);
+                                          handleGetInvoiceData(data);
+                                        }}
+                                      >
+                                        Create Invoice
+                                      </button>
+                                    </div>
+                                    {/* <div className="remove">
                                     <button
                                       className="btn btn-sm btn-danger remove-item-btn"
                                       data-bs-toggle="modal"
@@ -154,10 +174,11 @@ const Report = () => {
                                       Remove
                                     </button>
                                   </div> */}
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                       <div className="noresult" style={{ display: "none" }}>

@@ -36,11 +36,14 @@ import {
   filterReportData,
 } from "../../slices/CountReport/thunk";
 import Select from "react-select";
+import Loader from "../../Components/Common/Loader";
 
 const CountReport = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
 
   const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   const { clients, clientUsers } = useSelector((state) => state.Client);
   const { countReportData, searchedData } = useSelector(
@@ -107,10 +110,11 @@ const CountReport = () => {
   }
 
   useEffect(() => {
+    setLoading(true);
     dispatch(getReportData());
     dispatch(getCompletedWorkData());
     dispatch(getClients());
-    dispatch(getCountReportData());
+    dispatch(getCountReportData()).finally(() => setLoading(false));
   }, [dispatch]);
 
   function handleViewWorkingUsers(data) {
@@ -309,83 +313,102 @@ const CountReport = () => {
                           </tr>
                         </thead>
                         <tbody className="list form-check-all">
-                          {(searchedData?.length > 0
-                            ? searchedData
-                            : countReportData
-                          )?.map((data) => (
-                            <tr key={data.id}>
-                              <td className="client">{data.companyName}</td>
-                              <td className="working-users">
-                                <span
-                                  onClick={() =>
-                                    handleViewWorkingUsers(data.totalUsers)
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {data.totalUsers.length}
-                                </span>
-                              </td>
-
-                              <td className="assigned-data">
-                                <span
-                                  onClick={() =>
-                                    handleViewAssignedData(
-                                      data.totalAssignedData
-                                    )
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {data.totalAssignedData.length}
-                                </span>
-                              </td>
-                              <td className="completed-data">
-                                <span
-                                  onClick={() =>
-                                    handleViewCompletedData(
-                                      data.totalCompletedData
-                                    )
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {data.totalCompletedData.length}
-                                </span>
-                              </td>
-                              <td className="for-checking">
-                                <span
-                                  onClick={() =>
-                                    handleViewForCheckingData(data.forChecking)
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {data.forChecking.length}
-                                </span>
-                              </td>
-                              <td className="verified-data">
-                                <span
-                                  onClick={() =>
-                                    handleViewVerifiedData(data.verifiedData)
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  {data.verifiedData.length}
-                                </span>
-                              </td>
-                              <td className="correct">{data.correct.length}</td>
-                              <td className="incorrect">
-                                {data.incorrect.length}
+                          {loading ? (
+                            <tr>
+                              <td
+                                colSpan={8}
+                                style={{
+                                  border: "none",
+                                  textAlign: "center",
+                                  verticalAlign: "middle",
+                                }}
+                              >
+                                <Loader />
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            (searchedData?.length > 0
+                              ? searchedData
+                              : countReportData
+                            )?.map((data) => (
+                              <tr key={data.id}>
+                                <td className="client">{data.companyName}</td>
+                                <td className="working-users">
+                                  <span
+                                    onClick={() =>
+                                      handleViewWorkingUsers(data.totalUsers)
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {data.totalUsers.length}
+                                  </span>
+                                </td>
+
+                                <td className="assigned-data">
+                                  <span
+                                    onClick={() =>
+                                      handleViewAssignedData(
+                                        data.totalAssignedData
+                                      )
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {data.totalAssignedData.length}
+                                  </span>
+                                </td>
+                                <td className="completed-data">
+                                  <span
+                                    onClick={() =>
+                                      handleViewCompletedData(
+                                        data.totalCompletedData
+                                      )
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {data.totalCompletedData.length}
+                                  </span>
+                                </td>
+                                <td className="for-checking">
+                                  <span
+                                    onClick={() =>
+                                      handleViewForCheckingData(
+                                        data.forChecking
+                                      )
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {data.forChecking.length}
+                                  </span>
+                                </td>
+                                <td className="verified-data">
+                                  <span
+                                    onClick={() =>
+                                      handleViewVerifiedData(data.verifiedData)
+                                    }
+                                    style={{
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {data.verifiedData.length}
+                                  </span>
+                                </td>
+                                <td className="correct">
+                                  {data.correct.length}
+                                </td>
+                                <td className="incorrect">
+                                  {data.incorrect.length}
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>
