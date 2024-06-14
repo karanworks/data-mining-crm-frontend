@@ -10,31 +10,16 @@ import {
   Col,
   Container,
   Row,
-  Input,
-  Form,
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
-import Select from "react-select";
-import { useFormik, validateYupSchema } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddClientFormModal from "./AddClientFormModal";
 import AddClientRemoveModal from "./AddClientRemoveModal";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getUsers,
-  createUser,
-  removeUser,
-  updateUser,
-} from "../../slices/Users/thunk";
-
-import {
-  getCenterUsers,
-  createCenterUser,
-  removeCenterUser,
-  updateCenterUser,
-} from "../../slices/AddUsers/thunk";
+import { createUser } from "../../slices/Users/thunk";
 
 import {
   getClients,
@@ -46,11 +31,9 @@ import {
 
 import { searchClients } from "../../slices/AddClient/reducer";
 
-import { useNavigate } from "react-router-dom";
 import ViewUsersModal from "./ViewUsersModal";
 import AddUsersFormModal from "./AddUsersFormModal";
 import Loader from "../../Components/Common/Loader";
-// import { getCenters } from "../../slices/Centers/thunk";
 
 const AddClient = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -58,8 +41,6 @@ const AddClient = () => {
   const [isEditingClient, setIsEditingClient] = useState(false);
 
   const [modal_delete, setmodal_delete] = useState(false);
-
-  // const [listClientId, setListClientId] = useState(null);
 
   const [listClient, setListClient] = useState(null);
 
@@ -202,8 +183,6 @@ const AddClient = () => {
       agreementTalk: Yup.string(),
     }),
     onSubmit: (values) => {
-      console.log("CLIENT ADD FORM CALLED ->", values);
-
       if (isEditingClient) {
         dispatch(updateClient({ values, clientId: listClient.id }));
       } else {
@@ -230,8 +209,6 @@ const AddClient = () => {
     onSubmit: (values) => {
       const { noOfUsers } = values;
 
-      console.log("no of users we want to add ->", values);
-      console.log("client we are adding users for ->", listClient);
       dispatch(
         createUser({
           email: listClient.email,
@@ -291,8 +268,6 @@ const AddClient = () => {
       roleId: roleName.id,
     });
   }
-
-  function handlefilterClientData(clientData) {}
 
   function handleFilterData(e) {
     dispatch(searchClients(e.target.value));

@@ -8,10 +8,6 @@ function InvoiceModal({
   invoiceData,
   totalCorrectIncorrectFieldsData,
   createInvoice,
-  // users_view_modal_list,
-  // users_view_tog_list,
-  // clientUsers,
-  // add_users_tog_list,
 }) {
   const [invoice, setInvoice] = useState({
     client: "",

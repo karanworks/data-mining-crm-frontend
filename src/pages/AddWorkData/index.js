@@ -39,13 +39,9 @@ const AddWorkData = () => {
   const [selectedSingleBusinessType, setSelectedSingleBusinessType] =
     useState(null);
 
-  const [files, setFiles] = useState([]);
-
   const { assignedWorkData } = useSelector((state) => state.AddWorkData);
 
   const dispatch = useDispatch();
-
-  console.log("WORK DATA NEEDED TO BE FILLED ->", assignedWorkData);
 
   function handleSelectSingleWebsiteStatus(status) {
     setSelectedSingleWebsiteStatus(status);
@@ -217,10 +213,6 @@ const AddWorkData = () => {
           <BreadCrumb title="Add Work Data" pageTitle="Work" />
           <Row>
             <Col xs={12}>
-              {/* <Form
-                className="row g-3"
-                onSubmit={(e) => addWorkDataFormHandleSubmit(e)}
-              > */}
               <Card>
                 <CardHeader className="align-items-center d-flex">
                   <h4 className="card-title mb-0 flex-grow-1">
@@ -251,14 +243,6 @@ const AddWorkData = () => {
                           <Label htmlFor="companyLogo" className="form-label">
                             Company Logo
                           </Label>
-                          {/* <FilePond
-                            files={files}
-                            onupdatefiles={setFiles}
-                            allowMultiple={false}
-                            maxFiles={1}
-                            name="files"
-                            className="filepond"
-                          /> */}
 
                           <div>
                             <input
@@ -668,7 +652,6 @@ const AddWorkData = () => {
                   </div>
                 </div>
               </Card>
-              {/* </Form> */}
             </Col>
           </Row>
         </Container>

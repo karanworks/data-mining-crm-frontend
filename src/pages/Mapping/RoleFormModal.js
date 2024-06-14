@@ -11,10 +11,10 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 
 function RoleFormModal({
-  modal_list, // modal state
-  tog_list, // to change modal state
-  formHandleSubmit, // submit function for form
-  roleValidation, // to get the values from formik
+  modal_list,
+  tog_list,
+  formHandleSubmit,
+  roleValidation,
   editRole,
 }) {
   return (

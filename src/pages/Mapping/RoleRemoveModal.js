@@ -1,10 +1,6 @@
 import { Button, Modal, ModalBody } from "reactstrap";
 
-function RoleRemoveModal({
-  modal_delete, // delete role confirmation modal
-  setmodal_delete, // change user confirmation modal state
-  handleDeleteRole, // function to delete a role
-}) {
+function RoleRemoveModal({ modal_delete, setmodal_delete, handleDeleteRole }) {
   return (
     <Modal
       isOpen={modal_delete}

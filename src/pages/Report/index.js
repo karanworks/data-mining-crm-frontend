@@ -160,20 +160,6 @@ const Report = () => {
                                         Create Invoice
                                       </button>
                                     </div>
-                                    {/* <div className="remove">
-                                    <button
-                                      className="btn btn-sm btn-danger remove-item-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#deleteRecordModal"
-                                      onClick={() => {
-                                        // setListClient(client);
-                                        setmodal_delete(true);
-                                        setIsDeletingMultipleUsers(false);
-                                      }}
-                                    >
-                                      Remove
-                                    </button>
-                                  </div> */}
                                   </div>
                                 </td>
                               </tr>

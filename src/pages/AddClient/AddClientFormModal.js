@@ -11,7 +11,6 @@ import {
   Col,
 } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
-import Select from "react-select";
 import { useState } from "react";
 import Flatpickr from "react-flatpickr";
 
@@ -32,9 +31,7 @@ function AddClientFormModal({
   validation,
   isEditingClient,
   alreadyRegisteredError,
-  handleRoleChange,
   roles,
-  clients,
 }) {
   const [imageFile, setImageFile] = useState([]);
   const [agreementTalkFile, setAgreementTalkFile] = useState([]);
@@ -187,12 +184,6 @@ function AddClientFormModal({
                     dateFormat: "d M, Y",
                   }}
                   value={validation.values.agreementDate || ""}
-                  // invalid={
-                  //   validation.touched.agreementDate &&
-                  //   validation.errors.agreementDate
-                  //     ? true
-                  //     : false
-                  // }
                 />
 
                 {validation.touched.agreementDate &&

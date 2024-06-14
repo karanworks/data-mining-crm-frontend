@@ -12,9 +12,7 @@ import Register from "../pages/Authentication/Register";
 import UserProfile from "../pages/Authentication/user-profile";
 
 //APi Key
-import AddUsers from "../pages/AddUsers";
 import Mapping from "../pages/Mapping";
-import Home from "../pages/Home";
 import ReportUpload from "../pages/ReportUpload";
 import TermsAndConditions from "../pages/TermsAndConditions";
 import AddWorkData from "../pages/AddWorkData";
@@ -36,9 +34,7 @@ import Payment from "../pages/Payment";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
-  { path: "/home", component: <Home /> },
   { path: "/roles", component: <Mapping /> },
-  { path: "/add-users", component: <AddUsers /> },
   { path: "/report-upload", component: <ReportUpload /> },
 
   // SEPARATOR FOR DATA MINING PROJECT

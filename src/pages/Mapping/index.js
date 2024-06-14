@@ -35,12 +35,10 @@ const Mapping = () => {
   const [selectedRoleId, setSelectedRoleId] = useState(0);
   const [modal_delete, setmodal_delete] = useState(false);
 
-  const { user } = useSelector((state) => state.Login.user);
   const { roles, menus, menusByRole, error } = useSelector(
     (state) => state.Mapping
   );
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const checkedSubmenuLabels = [];

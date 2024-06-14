@@ -13,9 +13,7 @@ import {
   Alert,
   Spinner,
 } from "reactstrap";
-import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import ascentLogo from "../../assets/images/ascentLogo.jpg";
-import { useNavigate } from "react-router-dom";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -30,12 +28,10 @@ import { useFormik } from "formik";
 import { loginUser, resetLoginFlag } from "../../slices/thunks";
 
 import { createSelector } from "reselect";
-import { loginSuccess } from "../../slices/auth/login/reducer";
 //import images
 
 const Login = (props) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const selectLayoutState = (state) => state;
   const loginpageData = createSelector(selectLayoutState, (state) => ({
     user: state.Account.user,
@@ -44,35 +40,17 @@ const Login = (props) => {
     errorMsg: state.Login.errorMsg,
   }));
   // Inside your component
-  const { user, error, loading, errorMsg } = useSelector(loginpageData);
+  const { error, loading, errorMsg } = useSelector(loginpageData);
 
-  const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
-
-  // useEffect(() => {
-  //   if (user && user) {
-  //     const updatedUserData =
-  //       process.env.REACT_APP_DEFAULTAUTH === "firebase"
-  //         ? user.multiFactor.user.email
-  //         : user.user.email;
-  //     const updatedUserPassword =
-  //       process.env.REACT_APP_DEFAULTAUTH === "firebase"
-  //         ? ""
-  //         : user.user.confirm_password;
-  //     setUserLogin({
-  //       email: updatedUserData,
-  //       password: updatedUserPassword,
-  //     });
-  //   }
-  // }, [user]);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      usernameOrEmail: userLogin.email || "",
-      password: userLogin.password || "",
+      usernameOrEmail: "",
+      password: "",
     },
     validationSchema: Yup.object({
       usernameOrEmail: Yup.string().required("Please Enter Your Email"),
@@ -95,157 +73,135 @@ const Login = (props) => {
   document.title = "Login";
   return (
     <React.Fragment>
-      <ParticlesAuth>
-        <div className="auth-page-content">
-          <Container>
-            <Row className="justify-content-center">
-              <Col md={8} lg={6} xl={5}>
-                <Card className="mt-4">
-                  <CardBody className="p-4">
-                    <div className="text-center">
-                      <img src={ascentLogo} style={{ height: "100px" }} />
-                      {/* <h5 className="text-primary">Welcome Back !</h5> */}
-                      <p className="text-muted">Ascent Admin Login</p>
-                    </div>
-                    {error && error ? (
-                      <Alert color="danger"> {error} </Alert>
-                    ) : null}
-                    <div className="p-2 mt-4">
-                      <Form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          validation.handleSubmit();
-                          return false;
-                        }}
-                        action="#"
-                      >
-                        <div className="mb-3">
-                          <Label
-                            htmlFor="usernameOrEmail"
-                            className="form-label"
-                          >
-                            Email Or Username
-                          </Label>
+      <div className="auth-page-content">
+        <Container>
+          <Row className="justify-content-center">
+            <Col md={8} lg={6} xl={5}>
+              <Card className="mt-4">
+                <CardBody className="p-4">
+                  <div className="text-center">
+                    <img src={ascentLogo} style={{ height: "100px" }} />
+                    <p className="text-muted">Ascent Admin Login</p>
+                  </div>
+                  {error && error ? (
+                    <Alert color="danger"> {error} </Alert>
+                  ) : null}
+                  <div className="p-2 mt-4">
+                    <Form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        validation.handleSubmit();
+                        return false;
+                      }}
+                      action="#"
+                    >
+                      <div className="mb-3">
+                        <Label htmlFor="usernameOrEmail" className="form-label">
+                          Email Or Username
+                        </Label>
+                        <Input
+                          name="usernameOrEmail"
+                          className="form-control"
+                          placeholder="Enter Username Or Email"
+                          type="text"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.usernameOrEmail || ""}
+                          invalid={
+                            validation.touched.usernameOrEmail &&
+                            validation.errors.usernameOrEmail
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.touched.usernameOrEmail &&
+                        validation.errors.usernameOrEmail ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.usernameOrEmail}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-3">
+                        <div className="float-end">
+                          <Link to="/forgot-password" className="text-muted">
+                            Forgot password?
+                          </Link>
+                        </div>
+                        <Label className="form-label" htmlFor="password-input">
+                          Password
+                        </Label>
+                        <div className="position-relative auth-pass-inputgroup mb-3">
                           <Input
-                            name="usernameOrEmail"
-                            className="form-control"
-                            placeholder="Enter Username Or Email"
-                            type="text"
+                            name="password"
+                            value={validation.values.password || ""}
+                            type={passwordShow ? "text" : "password"}
+                            className="form-control pe-5"
+                            placeholder="Enter Password"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
-                            value={validation.values.usernameOrEmail || ""}
                             invalid={
-                              validation.touched.usernameOrEmail &&
-                              validation.errors.usernameOrEmail
+                              validation.touched.password &&
+                              validation.errors.password
                                 ? true
                                 : false
                             }
                           />
-                          {validation.touched.usernameOrEmail &&
-                          validation.errors.usernameOrEmail ? (
+                          {validation.touched.password &&
+                          validation.errors.password ? (
                             <FormFeedback type="invalid">
-                              {validation.errors.usernameOrEmail}
+                              {validation.errors.password}
                             </FormFeedback>
                           ) : null}
-                        </div>
-
-                        <div className="mb-3">
-                          <div className="float-end">
-                            <Link to="/forgot-password" className="text-muted">
-                              Forgot password?
-                            </Link>
-                          </div>
-                          <Label
-                            className="form-label"
-                            htmlFor="password-input"
+                          <button
+                            className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
+                            onClick={() => setPasswordShow(!passwordShow)}
+                            type="button"
+                            id="password-addon"
                           >
-                            Password
-                          </Label>
-                          <div className="position-relative auth-pass-inputgroup mb-3">
-                            <Input
-                              name="password"
-                              value={validation.values.password || ""}
-                              type={passwordShow ? "text" : "password"}
-                              className="form-control pe-5"
-                              placeholder="Enter Password"
-                              onChange={validation.handleChange}
-                              onBlur={validation.handleBlur}
-                              invalid={
-                                validation.touched.password &&
-                                validation.errors.password
-                                  ? true
-                                  : false
-                              }
-                            />
-                            {validation.touched.password &&
-                            validation.errors.password ? (
-                              <FormFeedback type="invalid">
-                                {validation.errors.password}
-                              </FormFeedback>
-                            ) : null}
-                            <button
-                              className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted"
-                              onClick={() => setPasswordShow(!passwordShow)}
-                              type="button"
-                              id="password-addon"
-                            >
-                              <i className="ri-eye-fill align-middle"></i>
-                            </button>
-                          </div>
+                            <i className="ri-eye-fill align-middle"></i>
+                          </button>
                         </div>
+                      </div>
 
-                        <div className="form-check">
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="auth-remember-check"
-                          />
-                          <Label
-                            className="form-check-label"
-                            htmlFor="auth-remember-check"
-                          >
-                            Remember me
-                          </Label>
-                        </div>
+                      <div className="form-check">
+                        <Input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="auth-remember-check"
+                        />
+                        <Label
+                          className="form-check-label"
+                          htmlFor="auth-remember-check"
+                        >
+                          Remember me
+                        </Label>
+                      </div>
 
-                        <div className="mt-4">
-                          <Button
-                            color="success"
-                            disabled={error ? null : loading ? true : false}
-                            className="btn btn-success w-100"
-                            type="submit"
-                          >
-                            {loading ? (
-                              <Spinner size="sm" className="me-2">
-                                Loading...
-                              </Spinner>
-                            ) : null}
-                            Login
-                          </Button>
-                        </div>
-                      </Form>
-                    </div>
-                  </CardBody>
-                </Card>
-
-                {/* <div className="mt-4 text-center">
-                  <p className="mb-0">
-                    Don't have an account ?{" "}
-                    <Link
-                      to="/register"
-                      className="fw-semibold text-primary text-decoration-underline"
-                    >
-                      {" "}
-                      Signup{" "}
-                    </Link>{" "}
-                  </p>
-                </div> */}
-              </Col>
-            </Row>
-          </Container>
-        </div>
-      </ParticlesAuth>
+                      <div className="mt-4">
+                        <Button
+                          color="success"
+                          disabled={error ? null : loading ? true : false}
+                          className="btn btn-success w-100"
+                          type="submit"
+                        >
+                          {loading ? (
+                            <Spinner size="sm" className="me-2">
+                              Loading...
+                            </Spinner>
+                          ) : null}
+                          Login
+                        </Button>
+                      </div>
+                    </Form>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </React.Fragment>
   );
 };

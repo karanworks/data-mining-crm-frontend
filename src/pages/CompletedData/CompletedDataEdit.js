@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   Card,
-  CardBody,
   CardHeader,
   Col,
   Container,
-  Form,
   FormFeedback,
   Input,
-  InputGroup,
   Label,
   Row,
 } from "reactstrap";
@@ -63,49 +60,6 @@ const CompletedDataEdit = () => {
     dispatch(getAssignedWorkData());
   }, [dispatch]);
 
-  //   const addWorkDataValidation = useFormik({
-  //     initialValues: {
-  //       websiteStatus: "",
-  //       companyName: "",
-  //       contactNo1: "",
-  //       contactNo2: "",
-  //       emailId1: "",
-  //       emailId2: "",
-  //       faxNo: "",
-  //       businessType: "",
-  //       address: "",
-  //       companyProfile: "",
-  //       city: "",
-  //       state: "",
-  //       pinCode: "",
-  //       country: "",
-  //     },
-  //     validationSchema: Yup.object({
-  //       websiteStatus: Yup.string().required("Select website status"),
-  //       companyName: Yup.string().required("Enter company name"),
-  //       contactNo1: Yup.string(),
-  //       contactNo2: Yup.string(),
-  //       emailId1: Yup.string(),
-  //       emailId2: Yup.string(),
-  //       faxNo: Yup.string(),
-  //       businessType: Yup.string(),
-  //       address: Yup.string(),
-  //       companyProfile: Yup.string(),
-  //       city: Yup.string(),
-  //       state: Yup.string(),
-  //       pinCode: Yup.string(),
-  //       country: Yup.string(),
-  //     }),
-  //     onSubmit: (values) => {
-  //       dispatch(
-  //         updateCompletedWorkData({
-  //           ...values,
-  //           urlId: data.id,
-  //           url: data.url,
-  //         })
-  //       );
-  //     },
-  //   });
   const addWorkDataValidation = useFormik({
     initialValues: {
       websiteStatus: "",

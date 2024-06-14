@@ -1,9 +1,9 @@
 import { Button, Modal, ModalBody } from "reactstrap";
 
 function AddUserRemoveModal({
-  modal_delete, // delete user confirmation modal
-  setmodal_delete, // change user confirmation modal state
-  handleDeleteUser, // function to delete a user
+  modal_delete,
+  setmodal_delete,
+  handleDeleteUser,
 }) {
   return (
     <Modal

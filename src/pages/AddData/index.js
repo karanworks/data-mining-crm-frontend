@@ -160,7 +160,6 @@ const AddData = () => {
                           }}
                           maxFiles={1}
                           name="data"
-                          // server={`${process.env.REACT_APP_SERVER_URL}/add-data`}
                           className="filepond"
                           required={true}
                         />

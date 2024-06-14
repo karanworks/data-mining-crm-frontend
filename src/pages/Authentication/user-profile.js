@@ -23,7 +23,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import avatar from "../../assets/images/users/avatar-1.jpg";
 // actions
-import { createSelector } from "reselect";
 import { changePassword } from "../../slices/Profile/thunk";
 
 const UserProfile = () => {
@@ -109,7 +108,6 @@ const UserProfile = () => {
                       <Label className="form-label">Current Password</Label>
                       <Input
                         name="currentPassword"
-                        // value={name}
                         className="form-control"
                         placeholder="Enter Current Password"
                         type="text"
@@ -134,7 +132,6 @@ const UserProfile = () => {
                       <Label className="form-label">New Password</Label>
                       <Input
                         name="newPassword"
-                        // value={name}
                         className="form-control"
                         placeholder="Enter New Password"
                         type="text"

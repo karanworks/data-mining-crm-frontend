@@ -35,10 +35,7 @@ import {
 import { getClients, getClientUsers } from "../../slices/AddClient/thunk";
 import { searchCompletedData } from "../../slices/CompletedData/reducer";
 import { useNavigate } from "react-router-dom";
-import {
-  tempUserData,
-  tempBusinessTypeData,
-} from "../../common/data/completedData";
+import { tempBusinessTypeData } from "../../common/data/completedData";
 import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
 import { useFormik } from "formik";
 
@@ -87,13 +84,11 @@ const CompletedData = () => {
 
   const filterValidation = useFormik({
     initialValues: {
-      // username: "",
       startDate: "",
       endDate: "",
       businessType: "",
     },
     validationSchema: Yup.object({
-      // username: Yup.string(),
       startDate: Yup.string(),
       endDate: Yup.string(),
       businessType: Yup.string(),

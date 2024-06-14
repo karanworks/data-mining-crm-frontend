@@ -53,8 +53,6 @@ const CountReport = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("SELECTED USERS ->", selectedUsers);
-
   const { userData } = useSelector((state) => state.CompletedData);
 
   const filterValidation = useFormik({
@@ -105,7 +103,6 @@ const CountReport = () => {
   });
 
   function handleFilterData(e) {
-    // dispatch(searchCompletedData(e.target.value));
     dispatch(searchData(e.target.value));
   }
 

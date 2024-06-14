@@ -22,8 +22,6 @@ const SubmittedForms = () => {
     navigate("/report/check-form-data", { state: { data, token } });
   }
 
-  console.log("SUBMITTED FORMS DATA ->", reportDataForms);
-
   useEffect(() => {
     dispatch(getReportDataForms(token));
   }, [dispatch]);
@@ -43,21 +41,7 @@ const SubmittedForms = () => {
 
                 <CardBody>
                   <div className="listjs-table" id="userList">
-                    <Row className="g-4 mb-3 d-flex justify-content-between">
-                      {/* <Col className="col-sm-auto ">
-                        <div className="search-box">
-                          <input
-                            type="text"
-                            className="form-control bg-light border-light"
-                            autoComplete="off"
-                            id="searchList"
-                            onChange={handleFilterData}
-                            placeholder="Search Keyword"
-                          />
-                          <i className="ri-search-line search-icon"></i>
-                        </div>
-                      </Col> */}
-                    </Row>
+                    <Row className="g-4 mb-3 d-flex justify-content-between"></Row>
                     <div className="table-responsive mt-2">
                       <table className="table table-bordered table-nowrap align-middle mb-0">
                         <thead>
@@ -121,13 +105,6 @@ const SubmittedForms = () => {
                           ))}
                         </tbody>
                       </table>
-                      {/* <button
-            className="btn btn-sm btn-primary mt-2"
-            onClick={add_users_tog_list}
-            style={{ float: "right" }}
-          >
-            Add Users
-          </button> */}
                     </div>
 
                     <div className="d-flex justify-content-end">
