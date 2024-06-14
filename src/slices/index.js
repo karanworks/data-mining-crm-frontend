@@ -14,6 +14,7 @@ import AddWorkDataReducer from "./AddWorkData/reducer";
 import CompletedDataReducer from "./CompletedData/reducer";
 import CountReportReducer from "./CountReport/reducer";
 import ProfileReducer from "./Profile/reducer";
+import CheckFormReducer from "./CheckForm/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   AddWorkData: AddWorkDataReducer,
   CompletedData: CompletedDataReducer,
   CountReport: CountReportReducer,
+  CheckForm: CheckFormReducer,
   Profile: ProfileReducer,
 });
 

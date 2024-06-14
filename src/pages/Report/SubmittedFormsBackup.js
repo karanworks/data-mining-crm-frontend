@@ -18,15 +18,15 @@ const SubmittedForms = () => {
 
   const { reportDataForms } = useSelector((state) => state.Report);
 
-  function handleCheckForm(id) {
-    navigate("/report/check-form-data", {
-      state: { data: reportDataForms, id, token },
-    });
+  function handleCheckForm(data) {
+    navigate("/report/check-form-data", { state: { data, token } });
   }
 
   useEffect(() => {
     dispatch(getReportDataForms(token));
   }, [dispatch]);
+
+  console.log("REPORT DATA FORMS ->", reportDataForms);
 
   document.title = "Report";
   return (
@@ -97,7 +97,7 @@ const SubmittedForms = () => {
                                   data-bs-toggle="modal"
                                   data-bs-target="#showModal"
                                   onClick={() => {
-                                    handleCheckForm(form.id, form.token);
+                                    handleCheckForm(form);
                                   }}
                                 >
                                   Check

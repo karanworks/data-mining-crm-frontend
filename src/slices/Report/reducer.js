@@ -9,7 +9,7 @@ export const initialState = {
   error: "",
 };
 
-const eventSlice = createSlice({
+const reportSlice = createSlice({
   name: "report",
   initialState,
   reducers: {},
@@ -33,5 +33,4 @@ const eventSlice = createSlice({
   },
 });
 
-export const { getLeadEvents } = eventSlice.actions;
-export default eventSlice.reducer;
+export default reportSlice.reducer;
