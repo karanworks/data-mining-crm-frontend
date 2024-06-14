@@ -176,7 +176,7 @@ const AddWorkData = () => {
       emailId1: Yup.string(),
       emailId2: Yup.string(),
       faxNo: Yup.string(),
-      businessType: Yup.string(),
+      businessType: Yup.string().required("Select business type"),
       address: Yup.string(),
       companyProfile: Yup.string(),
       city: Yup.string(),
@@ -204,6 +204,12 @@ const AddWorkData = () => {
 
     return false;
   }
+
+  console.log("ADD WORK DATA ERROR CHECKING ->", addWorkDataValidation.errors);
+  console.log(
+    "ADD WORK DATA TOUCHED CHECKING ->",
+    addWorkDataValidation.touched
+  );
 
   document.title = "Add Work Data";
   return (
@@ -271,11 +277,39 @@ const AddWorkData = () => {
                             options={statusOptions}
                             placeholder="Select Website Status"
                           />
-                          {addWorkDataValidation.touched.websiteStatus &&
-                          addWorkDataValidation.errors.websiteStatus ? (
-                            <FormFeedback type="invalid">
+                          {addWorkDataValidation.errors.websiteStatus ? (
+                            <span
+                              style={{ fontSize: "12.25px", color: "#f06548" }}
+                            >
                               {addWorkDataValidation.errors.websiteStatus}
-                            </FormFeedback>
+                            </span>
+                          ) : null}
+                        </Col>
+                        <Col md={6}>
+                          <Label htmlFor="businessType" className="form-label">
+                            Business Type
+                          </Label>
+                          <Select
+                            id="businessType"
+                            name="businessType"
+                            value={selectedSingleBusinessType}
+                            onChange={(businessType) => {
+                              handleSelectSingleBusinessType(businessType);
+                              addWorkDataValidation.setFieldValue(
+                                "businessType",
+                                businessType.value
+                              );
+                            }}
+                            options={businessTypeOptions}
+                            placeholder="Select Business Type"
+                          />
+
+                          {addWorkDataValidation.errors.businessType ? (
+                            <span
+                              style={{ fontSize: "12.25px", color: "#f06548" }}
+                            >
+                              {addWorkDataValidation.errors.businessType}
+                            </span>
                           ) : null}
                         </Col>
 
@@ -449,25 +483,6 @@ const AddWorkData = () => {
                               {addWorkDataValidation.errors.faxNo}
                             </FormFeedback>
                           ) : null}
-                        </Col>
-                        <Col md={6}>
-                          <Label htmlFor="businessType" className="form-label">
-                            Business Type
-                          </Label>
-                          <Select
-                            id="businessType"
-                            name="businessType"
-                            value={selectedSingleBusinessType}
-                            onChange={(businessType) => {
-                              handleSelectSingleBusinessType(businessType);
-                              addWorkDataValidation.setFieldValue(
-                                "businessType",
-                                businessType.value
-                              );
-                            }}
-                            options={businessTypeOptions}
-                            placeholder="Select Business Type"
-                          />
                         </Col>
 
                         <Col md={6}>
