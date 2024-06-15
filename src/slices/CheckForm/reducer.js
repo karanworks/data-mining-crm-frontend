@@ -4,8 +4,6 @@ import { formCheck, formRecheck } from "./thunk";
 
 export const initialState = {
   checkedFormsIds: [],
-  // recheckFormData: [],
-  isEditingAform: false,
   recheckFields: [],
 };
 
@@ -30,7 +28,6 @@ const checkFormSlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.recheckFields = action.payload?.data?.recheckFormData;
-        state.isEditingAform = true;
         state.error = "";
       }
     });

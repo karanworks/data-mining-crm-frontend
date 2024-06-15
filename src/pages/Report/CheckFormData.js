@@ -50,11 +50,13 @@ const CheckFormData = () => {
 
   const [noDataToCheck, setNoDataToCheck] = useState(false);
 
+  const [isEditingForm, setIsEditingForm] = useState(false);
+
   useEffect(() => {
     // set the selected form according to token
     const selectedFormData = data.find((form) => form.id == id);
 
-    if (isEditingAForm) {
+    if (isEditingForm) {
       setAllFormsData([
         data?.filter((form) => !checkedFormsIds.includes(form.id)),
       ]);
@@ -83,12 +85,15 @@ const CheckFormData = () => {
   useEffect(() => {
     // if the form has been already filled then modified value will be updated here
 
-    if (recheckFields) {
+    if (recheckFields.length) {
       const recheckFormFieldValues = {};
       recheckFields.forEach((form) => {
         recheckFormFieldValues[form.fieldName] = form.correct;
       });
+      console.log("EDITING A FORM");
+
       setFormFieldsCheck(recheckFormFieldValues);
+      setIsEditingForm(true);
     }
   }, [recheckFields]);
 
@@ -161,16 +166,30 @@ const CheckFormData = () => {
       })
     );
 
-    console.log("EDITING FORM STATUS ->", isEditingAForm);
-
-    if (isEditingAForm) {
-      console.log("IS EDITING A FORM LOGGED");
+    if (isEditingForm) {
       toast.success("Form has been updated !", {
         position: "bottom-center",
         autoClose: 3000,
         theme: "colored",
       });
 
+      setIsEditingForm(false);
+      // RESET THE FIELDS
+      // setFormFieldsCheck({
+      //   websiteStatus: null,
+      //   contactNo1: null,
+      //   contactNo2: null,
+      //   emailId1: null,
+      //   emailId2: null,
+      //   faxNo: null,
+      //   businessType: null,
+      //   address: null,
+      //   companyProfile: null,
+      //   city: null,
+      //   state: null,
+      //   pinCode: null,
+      //   country: null,
+      // });
       setTimeout(() => {
         navigate("/report");
       }, 1000);
@@ -189,6 +208,13 @@ const CheckFormData = () => {
         setNoDataToCheck(true);
       }
 
+      toast.success("Form has been checked !", {
+        position: "bottom-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+
+      // RESET THE FIELDS
       setFormFieldsCheck({
         websiteStatus: null,
         contactNo1: null,
@@ -203,11 +229,6 @@ const CheckFormData = () => {
         state: null,
         pinCode: null,
         country: null,
-      });
-      toast.success("Form has been checked !", {
-        position: "bottom-center",
-        autoClose: 3000,
-        theme: "colored",
       });
     }
   }
