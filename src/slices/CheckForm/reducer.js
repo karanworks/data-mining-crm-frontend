@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getReportData, getReportDataForms } from "./thunk";
 import { formCheck, formRecheck } from "./thunk";
 
 export const initialState = {
@@ -12,6 +11,7 @@ const checkFormSlice = createSlice({
   initialState,
   reducers: {
     checkedForm(state, action) {
+      console.log("CHECKED FORM REDUCER CALLED ->", action.payload);
       state.checkedFormsIds = [...state.checkedFormsIds, action.payload];
     },
   },
@@ -27,6 +27,7 @@ const checkFormSlice = createSlice({
       if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {
+        console.log("RECHECK FORM DATA ->", action.payload?.data);
         state.recheckFields = action.payload?.data?.recheckFormData;
         state.error = "";
       }
@@ -34,5 +35,5 @@ const checkFormSlice = createSlice({
   },
 });
 
-export const { checkedForm } = checkFormSlice.actions;
+export const { checkedForm, resetRecheckFields } = checkFormSlice.actions;
 export default checkFormSlice.reducer;

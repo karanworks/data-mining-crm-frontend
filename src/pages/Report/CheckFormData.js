@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Card, CardBody } from "reactstrap";
 import { useLocation } from "react-router-dom";
-import {
-  checkFormData,
-  recheckFormData,
-} from "../../helpers/fakebackend_helper";
+
 import { formCheck, formRecheck } from "../../slices/CheckForm/thunk";
 import { checkedForm } from "../../slices/CheckForm/reducer";
 import { toast } from "react-toastify";
@@ -15,11 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 const CheckFormData = () => {
   const location = useLocation();
-  const { data, id, token } = location?.state;
+  const { data, id, token, reportDataForms } = location?.state;
 
-  const { checkedFormsIds, recheckFields, isEditingAForm } = useSelector(
+  const { checkedFormsIds, recheckFields } = useSelector(
     (state) => state.CheckForm
   );
+
+  console.log("DATA HERE ->", data);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,9 +53,10 @@ const CheckFormData = () => {
 
   useEffect(() => {
     // set the selected form according to token
-    const selectedFormData = data.find((form) => form.id == id);
+    const selectedFormData = reportDataForms.find((form) => form.id == id);
 
     if (isEditingForm) {
+      console.log("EDITING A FORM IF CONDITION");
       setAllFormsData([
         data?.filter((form) => !checkedFormsIds.includes(form.id)),
       ]);
@@ -69,8 +69,9 @@ const CheckFormData = () => {
   useEffect(() => {
     // check if form has already been filled by making an api call
     async function fetchRecheckForms() {
-      const selectedFormData = data.find((form) => form.id == id);
+      const selectedFormData = reportDataForms?.find((form) => form.id == id);
 
+      console.log("SELECTED FORM DATA FOR RECHECK ->", selectedFormData);
       dispatch(
         formRecheck({
           userId: selectedFormData?.userId,
@@ -79,21 +80,39 @@ const CheckFormData = () => {
         })
       );
     }
+
     fetchRecheckForms();
   }, [data]);
 
   useEffect(() => {
     // if the form has been already filled then modified value will be updated here
-
     if (recheckFields.length) {
       const recheckFormFieldValues = {};
       recheckFields.forEach((form) => {
         recheckFormFieldValues[form.fieldName] = form.correct;
       });
-      console.log("EDITING A FORM");
+
+      console.log("RECHECK FORM FIELDS ->", recheckFormFieldValues);
 
       setFormFieldsCheck(recheckFormFieldValues);
       setIsEditingForm(true);
+    } else {
+      setFormFieldsCheck({
+        websiteStatus: null,
+        contactNo1: null,
+        contactNo2: null,
+        emailId1: null,
+        emailId2: null,
+        faxNo: null,
+        businessType: null,
+        address: null,
+        companyProfile: null,
+        city: null,
+        state: null,
+        pinCode: null,
+        country: null,
+      });
+      setIsEditingForm(false);
     }
   }, [recheckFields]);
 
@@ -152,7 +171,8 @@ const CheckFormData = () => {
     let selectedFormData;
 
     if (id === selectedForm.id) {
-      selectedFormData = allFormsData.find((form) => form.id == id);
+      selectedFormData = reportDataForms.find((form) => form.id == id);
+      console.log("SELECTED FORM WHILE EDITING ->", allFormsData);
     } else {
       selectedFormData = allFormsData[0];
     }
@@ -166,6 +186,7 @@ const CheckFormData = () => {
       })
     );
 
+    console.log("IS EDITING A FORM ->", isEditingForm);
     if (isEditingForm) {
       toast.success("Form has been updated !", {
         position: "bottom-center",
@@ -174,22 +195,7 @@ const CheckFormData = () => {
       });
 
       setIsEditingForm(false);
-      // RESET THE FIELDS
-      // setFormFieldsCheck({
-      //   websiteStatus: null,
-      //   contactNo1: null,
-      //   contactNo2: null,
-      //   emailId1: null,
-      //   emailId2: null,
-      //   faxNo: null,
-      //   businessType: null,
-      //   address: null,
-      //   companyProfile: null,
-      //   city: null,
-      //   state: null,
-      //   pinCode: null,
-      //   country: null,
-      // });
+
       setTimeout(() => {
         navigate("/report");
       }, 1000);
@@ -197,7 +203,6 @@ const CheckFormData = () => {
       const removeSubmittedForm = allFormsData.filter(
         (form) => form.id !== selectedForm.id
       );
-
       dispatch(checkedForm(selectedForm?.id));
 
       if (removeSubmittedForm.length) {
