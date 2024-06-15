@@ -56,7 +56,6 @@ const CheckFormData = () => {
     const selectedFormData = reportDataForms.find((form) => form.id == id);
 
     if (isEditingForm) {
-      console.log("EDITING A FORM IF CONDITION");
       setAllFormsData([
         data?.filter((form) => !checkedFormsIds.includes(form.id)),
       ]);
@@ -71,7 +70,6 @@ const CheckFormData = () => {
     async function fetchRecheckForms() {
       const selectedFormData = reportDataForms?.find((form) => form.id == id);
 
-      console.log("SELECTED FORM DATA FOR RECHECK ->", selectedFormData);
       dispatch(
         formRecheck({
           userId: selectedFormData?.userId,
@@ -91,8 +89,6 @@ const CheckFormData = () => {
       recheckFields.forEach((form) => {
         recheckFormFieldValues[form.fieldName] = form.correct;
       });
-
-      console.log("RECHECK FORM FIELDS ->", recheckFormFieldValues);
 
       setFormFieldsCheck(recheckFormFieldValues);
       setIsEditingForm(true);
@@ -172,7 +168,6 @@ const CheckFormData = () => {
 
     if (id === selectedForm.id) {
       selectedFormData = reportDataForms.find((form) => form.id == id);
-      console.log("SELECTED FORM WHILE EDITING ->", allFormsData);
     } else {
       selectedFormData = allFormsData[0];
     }
@@ -186,7 +181,6 @@ const CheckFormData = () => {
       })
     );
 
-    console.log("IS EDITING A FORM ->", isEditingForm);
     if (isEditingForm) {
       toast.success("Form has been updated !", {
         position: "bottom-center",
@@ -198,7 +192,7 @@ const CheckFormData = () => {
 
       setTimeout(() => {
         navigate("/report");
-      }, 1000);
+      }, 2000);
     } else {
       const removeSubmittedForm = allFormsData.filter(
         (form) => form.id !== selectedForm.id
