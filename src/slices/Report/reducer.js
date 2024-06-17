@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 export const initialState = {
   reportData: [],
   reportDataForms: [],
+  uncheckedForms: [],
   error: "",
 };
 
@@ -27,6 +28,7 @@ const reportSlice = createSlice({
         state.error = action.payload.message;
       } else {
         state.reportDataForms = action.payload?.data.reportDataForms;
+        state.uncheckedForms = action.payload?.data.uncheckedForms;
         state.error = "";
       }
     });

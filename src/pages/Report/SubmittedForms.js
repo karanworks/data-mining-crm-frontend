@@ -16,11 +16,13 @@ const SubmittedForms = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { reportDataForms } = useSelector((state) => state.Report);
+  const { reportDataForms, uncheckedForms } = useSelector(
+    (state) => state.Report
+  );
 
   function handleCheckForm(id) {
     navigate("/report/check-form-data", {
-      state: { data: reportDataForms, id, token },
+      state: { data: uncheckedForms, id, token, reportDataForms },
     });
   }
 
