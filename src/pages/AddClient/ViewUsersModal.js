@@ -52,8 +52,8 @@ function ViewUsersModal({
                 <tr key={user.id}>
                   <td>{i + 1}</td>
                   <td>{user.username}</td>
-                  <td>{user.dataAssigned}</td>
-                  <td>{user.completed}</td>
+                  <td>{user.dataAssigned.length}</td>
+                  <td>{user.completedData.length}</td>
                   <td>
                     {user.status === 1 ? (
                       <button

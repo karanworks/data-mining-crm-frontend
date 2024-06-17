@@ -10,6 +10,8 @@ const WorkingUsers = () => {
   const location = useLocation();
   const data = location.state?.data;
 
+  console.log("DATA ASSIGNED FOR SINGLE USER ->", data);
+
   document.title = "Working Users";
   return (
     <React.Fragment>
@@ -42,8 +44,8 @@ const WorkingUsers = () => {
                             <tr key={user.id}>
                               <td>{i + 1}</td>
                               <td>{user.username}</td>
-                              <td>{user.dataAssigned}</td>
-                              <td>{user.completed}</td>
+                              <td>{user.dataAssigned.length}</td>
+                              <td>{user.completedData.length}</td>
                             </tr>
                           ))}
                         </tbody>
