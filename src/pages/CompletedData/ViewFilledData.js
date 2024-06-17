@@ -130,63 +130,168 @@ const ViewFilledData = () => {
                       <tbody className="list form-check-all">
                         <tr>
                           <td className="fieldName fw-bold">Website Url</td>
-                          <td className="fieldValue">{data.url}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.url}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Website Name</td>
-                          <td className="fieldValue">{data.companyName}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.companyName}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Profile</td>
-                          <td className="fieldValue">{data.companyProfile}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.companyProfile}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Address</td>
-                          <td className="fieldValue">{data.address}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.address}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Status</td>
-                          <td className="fieldValue">{data.websiteStatus}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.websiteStatus}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Business Type</td>
-                          <td className="fieldValue">{data.businessType}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.businessType}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Contact No 1</td>
-                          <td className="fieldValue">{data.contactNo1}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.contactNo1}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Contact No 2</td>
-                          <td className="fieldValue">{data.contactNo2}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.contactNo2}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Email Id 1</td>
-                          <td className="fieldValue">{data.emailId1}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.emailId1}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Email Id 2</td>
-                          <td className="fieldValue">{data.emailId2}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.emailId2}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Fax No</td>
-                          <td className="fieldValue">{data.faxNo}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.faxNo}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">State</td>
-                          <td className="fieldValue">{data.state}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.state}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">City</td>
-                          <td className="fieldValue">{data.city}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.city}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Country</td>
-                          <td className="fieldValue">{data.country}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.country}
+                          </td>
                         </tr>
                         <tr>
                           <td className="fieldName fw-bold">Pin Code</td>
-                          <td className="fieldValue">{data.pinCode}</td>
+                          <td
+                            className="fieldValue"
+                            style={{
+                              whiteSpace: "normal",
+                            }}
+                          >
+                            {data.pinCode}
+                          </td>
                         </tr>
                       </tbody>
                     </table>

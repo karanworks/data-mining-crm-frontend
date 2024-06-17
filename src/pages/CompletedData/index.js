@@ -38,6 +38,7 @@ import { useNavigate } from "react-router-dom";
 import { tempBusinessTypeData } from "../../common/data/completedData";
 import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
 import { useFormik } from "formik";
+import { getLoggedinUser } from "../../helpers/api_helper";
 
 const CompletedData = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
@@ -61,6 +62,7 @@ const CompletedData = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const loggedInUser = getLoggedinUser();
 
   function handleSelectSingleClient(client) {
     setSelectedSingleClient(client);
@@ -548,18 +550,22 @@ const CompletedData = () => {
 
                                 <td>
                                   <div className="d-flex gap-2">
-                                    <div className="edit">
-                                      <button
-                                        className="btn btn-sm btn-primary edit-item-btn"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#showModal"
-                                        onClick={() => {
-                                          handleEditData(data);
-                                        }}
-                                      >
-                                        Edit
-                                      </button>
-                                    </div>
+                                    
+
+                                    {loggedInUser.data.isPremiumMember ? (
+                                      <div className="edit">
+                                        <button
+                                          className="btn btn-sm btn-primary edit-item-btn"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#showModal"
+                                          onClick={() => {
+                                            handleEditData(data);
+                                          }}
+                                        >
+                                          Edit
+                                        </button>
+                                      </div>
+                                    ) : null}
                                     <div className="remove">
                                       <button
                                         className="btn btn-sm btn-danger remove-item-btn"

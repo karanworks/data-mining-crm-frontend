@@ -73,15 +73,18 @@ const Login = (props) => {
   document.title = "Login";
   return (
     <React.Fragment>
-      <div className="auth-page-content">
+      <div
+        className="auth-page-content d-flex justify-content-cener align-items-center"
+        style={{ height: "100vh" }}
+      >
         <Container>
           <Row className="justify-content-center">
             <Col md={8} lg={6} xl={5}>
               <Card className="mt-4">
                 <CardBody className="p-4">
                   <div className="text-center">
-                    <img src={ascentLogo} style={{ height: "100px" }} />
-                    <p className="text-muted">Ascent Admin Login</p>
+                    <img src={ascentLogo} style={{ height: "70px" }} />
+                    {/* <p className="text-muted">Ascent Admin Login</p> */}
                   </div>
                   {error && error ? (
                     <Alert color="danger"> {error} </Alert>
@@ -123,11 +126,11 @@ const Login = (props) => {
                       </div>
 
                       <div className="mb-3">
-                        <div className="float-end">
+                        {/* <div className="float-end">
                           <Link to="/forgot-password" className="text-muted">
                             Forgot password?
                           </Link>
-                        </div>
+                        </div> */}
                         <Label className="form-label" htmlFor="password-input">
                           Password
                         </Label>
@@ -164,7 +167,7 @@ const Login = (props) => {
                         </div>
                       </div>
 
-                      <div className="form-check">
+                      {/* <div className="form-check">
                         <Input
                           className="form-check-input"
                           type="checkbox"
@@ -177,7 +180,7 @@ const Login = (props) => {
                         >
                           Remember me
                         </Label>
-                      </div>
+                      </div> */}
 
                       <div className="mt-4">
                         <Button

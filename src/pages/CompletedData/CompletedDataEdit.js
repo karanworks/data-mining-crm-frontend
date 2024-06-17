@@ -25,7 +25,7 @@ import {
   getAssignedWorkData,
   createAssignedWorkData,
 } from "../../slices/AddWorkData/thunk";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { updateCompletedWorkData } from "../../slices/CompletedData/thunk";
 import {
   statusOptions,
@@ -46,6 +46,7 @@ const CompletedDataEdit = () => {
 
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const data = location.state?.data;
 
@@ -102,6 +103,9 @@ const CompletedDataEdit = () => {
           websiteDataId: data.id,
         })
       );
+      setTimeout(() => {
+        navigate("/completed-data");
+      }, 1500);
     },
   });
 
