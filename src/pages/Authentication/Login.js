@@ -18,14 +18,13 @@ import ascentLogo from "../../assets/images/ascentLogo.jpg";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-import { Link } from "react-router-dom";
 import withRouter from "../../Components/Common/withRouter";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // actions
-import { loginUser, resetLoginFlag } from "../../slices/thunks";
+import { loginUser, resetLoginFlag, loginGet } from "../../slices/thunks";
 
 import { createSelector } from "reselect";
 //import images
@@ -45,8 +44,7 @@ const Login = (props) => {
   const [passwordShow, setPasswordShow] = useState(false);
 
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
+    // enableReinitialize : use this flag when initial values needs to be changedenableReinitialize: true,
 
     initialValues: {
       usernameOrEmail: "",
@@ -63,12 +61,16 @@ const Login = (props) => {
   });
 
   useEffect(() => {
-    if (errorMsg) {
-      setTimeout(() => {
-        dispatch(resetLoginFlag());
-      }, 3000);
-    }
-  }, [dispatch, errorMsg]);
+    // dispatch(loginGet(props.router.navigate));
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (errorMsg) {
+  //     setTimeout(() => {
+  //       dispatch(resetLoginFlag());
+  //     }, 3000);
+  //   }
+  // }, [dispatch, errorMsg]);
 
   document.title = "Login";
   return (

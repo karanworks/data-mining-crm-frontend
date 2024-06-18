@@ -28,7 +28,6 @@ const countReportSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCountReportData.fulfilled, (state, action) => {
-      console.log("COUNT REPORT PAYLOAD ->", action.payload);
       if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {

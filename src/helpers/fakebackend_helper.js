@@ -27,6 +27,10 @@ export const postFakeRegister = (data) =>
 export const postLogin = (data) => {
   return api.create(url.POST_LOGIN, data);
 };
+
+export const getLogin = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/login`);
+};
 // *****************************************************************
 // *************************** USERS *******************************
 // *****************************************************************
@@ -51,7 +55,6 @@ export const updateUser = (userId, data, status) => {
 };
 
 export const changePassword = (data) => {
-  console.log("CHANGE PASSWORD ->", data);
   return api.update(
     `${process.env.REACT_APP_SERVER_URL}/change-password`,
     data
@@ -224,6 +227,7 @@ export const createAssignedWorkData = (data) => {
 // *********************** COMPLETED DATA **************************
 // *****************************************************************
 export const getCompletedWorkData = () => {
+  console.log("COMPLETED DATA ROUTE ->", `${process.env.REACT_APP_SERVER_URL}`);
   return api.get(`${process.env.REACT_APP_SERVER_URL}/completed-data`);
 };
 
