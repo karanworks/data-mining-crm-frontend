@@ -8,6 +8,7 @@ export const initialState = {
   reportDataForms: [],
   uncheckedForms: [],
   error: "",
+  logoutError: "",
 };
 
 const reportSlice = createSlice({

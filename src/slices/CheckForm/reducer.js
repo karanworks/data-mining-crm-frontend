@@ -11,7 +11,6 @@ const checkFormSlice = createSlice({
   initialState,
   reducers: {
     checkedForm(state, action) {
-      console.log("CHECKED FORM REDUCER CALLED ->", action.payload);
       state.checkedFormsIds = [...state.checkedFormsIds, action.payload];
     },
   },

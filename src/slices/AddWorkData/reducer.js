@@ -5,6 +5,7 @@ import { getAssignedWorkData, createAssignedWorkData } from "./thunk";
 export const initialState = {
   assignedWorkData: null,
   allAssignedWrorkData: null,
+  logoutError: "",
 };
 
 const addWorkDataSlice = createSlice({
@@ -13,7 +14,9 @@ const addWorkDataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAssignedWorkData.fulfilled, (state, action) => {
-      if (action.payload.status === "failure") {
+      if (action.payload.message === "User not logged in!") {
+        state.logoutError = action.payload.message;
+      } else if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {
         state.allAssignedWrorkData = action.payload?.data.assignedWorkData;

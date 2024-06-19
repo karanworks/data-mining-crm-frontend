@@ -39,6 +39,7 @@ import { tempBusinessTypeData } from "../../common/data/completedData";
 import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
 import { useFormik } from "formik";
 import { getLoggedinUser } from "../../helpers/api_helper";
+import UserLoggedOutModal from "../../UserLoggedOutModal";
 
 const CompletedData = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
@@ -55,7 +56,7 @@ const CompletedData = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const { userData, searchedData, error } = useSelector(
+  const { userData, searchedData, logoutError } = useSelector(
     (state) => state.CompletedData
   );
 
@@ -240,8 +241,8 @@ const CompletedData = () => {
   }
 
   document.title = "Completed Data";
-  return error ? (
-    <div style={{ marginTop: "150px" }}>{error}</div>
+  return logoutError ? (
+    <UserLoggedOutModal />
   ) : (
     <React.Fragment>
       <div className="page-content">

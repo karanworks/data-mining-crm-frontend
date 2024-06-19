@@ -9,13 +9,13 @@ const AuthProtected = (props) => {
 
   const location = useLocation();
 
+  const loggedInUser = getLoggedinUser();
+
   if (!userProfile && loading && !token) {
     return (
       <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
     );
   }
-
-  const loggedInUser = getLoggedinUser();
 
   const allAllowedRoutes = loggedInUser?.data.menus
     .map((menu) => {

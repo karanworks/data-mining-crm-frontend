@@ -14,6 +14,7 @@ export const initialState = {
   alreadyRegisteredError: null,
   error: "",
   clientUsers: [],
+  logoutError: "",
 };
 
 const clientSlice = createSlice({

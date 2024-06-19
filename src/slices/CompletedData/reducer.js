@@ -13,6 +13,7 @@ export const initialState = {
   filterCompletedWorkData: [],
   searchedData: [],
   error: "",
+  logoutError: "",
 };
 
 const completedWorkDataSlice = createSlice({
@@ -37,7 +38,9 @@ const completedWorkDataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCompletedWorkData.fulfilled, (state, action) => {
-      if (action.payload.status === "failure") {
+      if (action.payload.message === "User not logged in!") {
+        state.logoutError = action.payload.message;
+      } else if (action.payload.status === "failure") {
         state.error = action.payload.message;
       } else {
         state.userData = action.payload?.data;

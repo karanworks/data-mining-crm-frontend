@@ -37,6 +37,7 @@ import {
 } from "../../slices/CountReport/thunk";
 import Select from "react-select";
 import Loader from "../../Components/Common/Loader";
+import UserLoggedOutModal from "../../UserLoggedOutModal";
 
 const CountReport = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
@@ -46,7 +47,7 @@ const CountReport = () => {
   const [loading, setLoading] = useState(false);
 
   const { clients, clientUsers } = useSelector((state) => state.Client);
-  const { countReportData, searchedData } = useSelector(
+  const { countReportData, searchedData, logoutError } = useSelector(
     (state) => state.CountReport
   );
 
@@ -131,7 +132,9 @@ const CountReport = () => {
   }
 
   document.title = "Count Report";
-  return (
+  return logoutError ? (
+    <UserLoggedOutModal />
+  ) : (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>

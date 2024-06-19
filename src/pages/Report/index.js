@@ -22,6 +22,7 @@ import {
   createInvoice,
 } from "../../helpers/fakebackend_helper";
 import Loader from "../../Components/Common/Loader";
+import UserLoggedOutModal from "../../UserLoggedOutModal";
 
 const Report = () => {
   const [modal_list, setModal_list] = useState(false);
@@ -33,7 +34,7 @@ const Report = () => {
   const [totalCorrectIncorrectFieldsData, setTotalCorrectIncorrectFieldsData] =
     useState(null);
 
-  const { reportData } = useSelector((state) => state.Report);
+  const { reportData, logoutError } = useSelector((state) => state.Report);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -61,7 +62,9 @@ const Report = () => {
   }
 
   document.title = "Report";
-  return (
+  return logoutError ? (
+    <UserLoggedOutModal />
+  ) : (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
