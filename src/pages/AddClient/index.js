@@ -56,7 +56,7 @@ const AddClient = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const { users, alreadyRegisteredError } = useSelector((state) => state.Users);
+  const { alreadyRegisteredError } = useSelector((state) => state.Users);
   const { clients, filteredClients, clientUsers } = useSelector(
     (state) => state.Client
   );

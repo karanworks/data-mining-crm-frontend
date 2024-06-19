@@ -55,9 +55,10 @@ const CompletedData = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const { userData, searchedData } = useSelector(
+  const { userData, searchedData, error } = useSelector(
     (state) => state.CompletedData
   );
+
   const { clients, clientUsers } = useSelector((state) => state.Client);
 
   const dispatch = useDispatch();
@@ -79,8 +80,9 @@ const CompletedData = () => {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(getUsers());
+    // dispatch(getUsers());
     dispatch(getCompletedWorkData()).finally(() => setLoading(false));
+
     dispatch(getClients());
   }, [dispatch]);
 
@@ -238,7 +240,9 @@ const CompletedData = () => {
   }
 
   document.title = "Completed Data";
-  return (
+  return error ? (
+    <div style={{ marginTop: "150px" }}>{error}</div>
+  ) : (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
@@ -550,8 +554,6 @@ const CompletedData = () => {
 
                                 <td>
                                   <div className="d-flex gap-2">
-                                    
-
                                     {loggedInUser.data.isPremiumMember ? (
                                       <div className="edit">
                                         <button

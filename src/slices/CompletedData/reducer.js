@@ -12,6 +12,7 @@ export const initialState = {
   userData: [],
   filterCompletedWorkData: [],
   searchedData: [],
+  error: "",
 };
 
 const completedWorkDataSlice = createSlice({

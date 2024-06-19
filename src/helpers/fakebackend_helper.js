@@ -227,7 +227,6 @@ export const createAssignedWorkData = (data) => {
 // *********************** COMPLETED DATA **************************
 // *****************************************************************
 export const getCompletedWorkData = () => {
-  console.log("COMPLETED DATA ROUTE ->", `${process.env.REACT_APP_SERVER_URL}`);
   return api.get(`${process.env.REACT_APP_SERVER_URL}/completed-data`);
 };
 

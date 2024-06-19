@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
 //Dashboard
@@ -31,8 +31,23 @@ import CountReportCompletedData from "../pages/CountReport/CountReportCompletedD
 import ForChecking from "../pages/CountReport/ForChecking";
 import VerifiedData from "../pages/CountReport/VerifiedData";
 import Payment from "../pages/Payment";
+import NotAuthorized from "../pages/NotAuthorized";
 
-const authProtectedRoutes = [
+const additionalAuthProtectRoutes = [
+  //User Profile
+  { path: "/profile", component: <UserProfile /> },
+
+  // this route should be at the end of all other routes
+  // eslint-disable-next-line react/display-name
+  {
+    path: "/",
+    exact: true,
+    component: <Navigate to="/add-work-data" />,
+  },
+  { path: "*", component: <Navigate to="/add-work-data" /> },
+];
+
+const allRoutes = [
   // { path: "/users", component: <Users /> },
   { path: "/roles", component: <Mapping /> },
   { path: "/report-upload", component: <ReportUpload /> },
@@ -47,11 +62,11 @@ const authProtectedRoutes = [
   { path: "/count-report/assigned-data", component: <AssignedData /> },
   { path: "/count-report/for-checking", component: <ForChecking /> },
   { path: "/count-report/verified-data", component: <VerifiedData /> },
-  { path: "/payment", component: <Payment /> },
   {
     path: "/count-report/completed-data",
     component: <CountReportCompletedData />,
   },
+  { path: "/payment", component: <Payment /> },
   { path: "/completed-data", component: <CompletedData /> },
   { path: "/completed-data/edit", component: <CompletedDataEdit /> },
   { path: "/completed-data/view-data", component: <ViewFilledData /> },
@@ -59,25 +74,16 @@ const authProtectedRoutes = [
   { path: "/report", component: <Report /> },
   { path: "/report/check-form-data", component: <CheckFormData /> },
   { path: "/report/view-form-data", component: <SubmittedForms /> },
-
-  //User Profile
-  { path: "/profile", component: <UserProfile /> },
-
-  // this route should be at the end of all other routes
-  // eslint-disable-next-line react/display-name
-  {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/count-report" />,
-  },
-  { path: "*", component: <Navigate to="/count-report" /> },
 ];
+
+let authProtectedRoutes = [...allRoutes, ...additionalAuthProtectRoutes];
 
 const publicRoutes = [
   // Authentication Page
   { path: "/logout", component: <Logout /> },
   { path: "/login", component: <Login /> },
   { path: "/register", component: <Register /> },
+  { path: "/not-authorized", component: <NotAuthorized /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

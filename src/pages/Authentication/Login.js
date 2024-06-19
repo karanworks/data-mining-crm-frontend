@@ -89,9 +89,9 @@ const Login = (props) => {
                     {/* <p className="text-muted">Ascent Admin Login</p> */}
                   </div>
                   {error && error ? (
-                    <Alert color="danger"> {error} </Alert>
+                    <Alert color="danger mt-2"> {error} </Alert>
                   ) : null}
-                  <div className="p-2 mt-4">
+                  <div className="p-2 mt-2">
                     <Form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -191,11 +191,11 @@ const Login = (props) => {
                           className="btn btn-success w-100"
                           type="submit"
                         >
-                          {loading ? (
+                          {/* {loading ? (
                             <Spinner size="sm" className="me-2">
                               Loading...
                             </Spinner>
-                          ) : null}
+                          ) : null} */}
                           Login
                         </Button>
                       </div>
