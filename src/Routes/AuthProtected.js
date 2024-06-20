@@ -29,6 +29,7 @@ const AuthProtected = (props) => {
     return route.link;
   });
 
+  // these routes are not present in the database hence pushing them manually
   if (allowedRoutesPaths.includes("/count-report")) {
     allowedRoutesPaths.push(
       "/count-report/working-users",
@@ -50,6 +51,9 @@ const AuthProtected = (props) => {
       "/report/view-form-data"
     );
   }
+
+  // adding the home route manually as well
+  allowedRoutesPaths.push("/");
 
   console.log("ALLOWED ROUTES PATHS ->", allowedRoutesPaths);
 

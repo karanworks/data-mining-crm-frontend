@@ -33,21 +33,7 @@ import VerifiedData from "../pages/CountReport/VerifiedData";
 import Payment from "../pages/Payment";
 import NotAuthorized from "../pages/NotAuthorized";
 
-const additionalAuthProtectRoutes = [
-  //User Profile
-  { path: "/profile", component: <UserProfile /> },
-
-  // this route should be at the end of all other routes
-  // eslint-disable-next-line react/display-name
-  {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/add-work-data" />,
-  },
-  { path: "*", component: <Navigate to="/add-work-data" /> },
-];
-
-const allRoutes = [
+const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
   { path: "/roles", component: <Mapping /> },
   { path: "/report-upload", component: <ReportUpload /> },
@@ -74,9 +60,17 @@ const allRoutes = [
   { path: "/report", component: <Report /> },
   { path: "/report/check-form-data", component: <CheckFormData /> },
   { path: "/report/view-form-data", component: <SubmittedForms /> },
-];
+  { path: "/profile", component: <UserProfile /> },
 
-let authProtectedRoutes = [...allRoutes, ...additionalAuthProtectRoutes];
+  // this route should be at the end of all other routes
+  // eslint-disable-next-line react/display-name
+  {
+    path: "/",
+    exact: true,
+    component: <Navigate to="/add-work-data" />,
+  },
+  { path: "*", component: <Navigate to="/add-work-data" /> },
+];
 
 const publicRoutes = [
   // Authentication Page
