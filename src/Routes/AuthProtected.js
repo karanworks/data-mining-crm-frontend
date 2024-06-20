@@ -29,6 +29,30 @@ const AuthProtected = (props) => {
     return route.link;
   });
 
+  if (allowedRoutesPaths.includes("/count-report")) {
+    allowedRoutesPaths.push(
+      "/count-report/working-users",
+      "/count-report/assigned-data",
+      "/count-report/for-checking",
+      "/count-report/verified-data"
+    );
+  }
+
+  if (allowedRoutesPaths.includes("/completed-data")) {
+    allowedRoutesPaths.push(
+      "/completed-data/edit",
+      "/completed-data/view-data"
+    );
+  }
+  if (allowedRoutesPaths.includes("/report")) {
+    allowedRoutesPaths.push(
+      "/report/check-form-data",
+      "/report/view-form-data"
+    );
+  }
+
+  console.log("ALLOWED ROUTES PATHS ->", allowedRoutesPaths);
+
   const currentPath = location.pathname;
 
   if (!allowedRoutesPaths.includes(currentPath)) {
