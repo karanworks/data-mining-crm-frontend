@@ -14,10 +14,10 @@ const addWorkDataSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAssignedWorkData.fulfilled, (state, action) => {
-      if (action.payload.message === "User not logged in!") {
-        state.logoutError = action.payload.message;
-      } else if (action.payload.status === "failure") {
-        state.error = action.payload.message;
+      if (action.payload?.message === "User not logged in!") {
+        state.logoutError = action.payload?.message;
+      } else if (action.payload?.status === "failure") {
+        state.error = action.payload?.message;
       } else {
         state.allAssignedWrorkData = action.payload?.data.assignedWorkData;
         const singleData = action.payload?.data.assignedWorkData.find(

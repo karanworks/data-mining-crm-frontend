@@ -40,6 +40,7 @@ import { exportCompletedWorkData } from "../../helpers/fakebackend_helper";
 import { useFormik } from "formik";
 import { getLoggedinUser } from "../../helpers/api_helper";
 import UserLoggedOutModal from "../../UserLoggedOutModal";
+import { label } from "yet-another-react-lightbox";
 
 const CompletedData = () => {
   const [selectedSingleClient, setSelectedSingleClient] = useState(null);
@@ -273,7 +274,7 @@ const CompletedData = () => {
                           />
                         </div>
 
-                        <div className="d-flex">
+                        <div className="d-flex" style={{ flexWrap: "wrap" }}>
                           <Form onSubmit={(e) => filterHandleSubmit(e)}>
                             <div
                               className="d-flex"
@@ -292,7 +293,14 @@ const CompletedData = () => {
                                       //   client.value
                                       // );
                                     }}
-                                    options={clientOptions}
+                                    options={[
+                                      {
+                                        value: "",
+                                        label: "Choose All",
+                                        email: "",
+                                      },
+                                      ...clientOptions,
+                                    ]}
                                     placeholder="Select Client"
                                   />
                                 </div>
@@ -303,7 +311,11 @@ const CompletedData = () => {
                                   <UncontrolledDropdown>
                                     <DropdownToggle
                                       tag="button"
-                                      className="btn btn-light"
+                                      className="btn btn-light text-muted fw-normal"
+                                      style={{
+                                        backgroundColor: "white",
+                                        borderColor: "#ced4da",
+                                      }}
                                     >
                                       Select Users{" "}
                                       <i className="mdi mdi-chevron-down"></i>
@@ -406,39 +418,39 @@ const CompletedData = () => {
                                   <i className="ri-equalizer-line"></i> Apply
                                 </Button>
                               </div>
+                              <Button
+                                color="primary"
+                                className="add-btn me-1"
+                                onClick={handleExportData}
+                                id="create-btn"
+                              >
+                                <i className="ri-download-fill align-bottom me-1"></i>{" "}
+                                Export Data
+                              </Button>
+                              {selectedCompletedData.length > 0 ? (
+                                <>
+                                  <Button
+                                    color="primary"
+                                    className="delete-btn me-1"
+                                    onClick={handleSelectedDelete}
+                                    id="create-btn"
+                                  >
+                                    <i className="ri-add-line align-bottom me-1"></i>{" "}
+                                    Delete Selected Id
+                                  </Button>
+                                  <Button
+                                    color="primary"
+                                    className="submit-data-btn me-1"
+                                    onClick={handleSubmitFormData}
+                                    id="create-btn"
+                                  >
+                                    <i className="ri-add-line align-bottom me-1"></i>{" "}
+                                    Submit Data
+                                  </Button>
+                                </>
+                              ) : null}
                             </div>
                           </Form>
-                          <Button
-                            color="primary"
-                            className="add-btn me-1"
-                            onClick={handleExportData}
-                            id="create-btn"
-                          >
-                            <i className="ri-download-fill align-bottom me-1"></i>{" "}
-                            Export Data
-                          </Button>
-                          {selectedCompletedData.length > 0 ? (
-                            <>
-                              <Button
-                                color="primary"
-                                className="delete-btn me-1"
-                                onClick={handleSelectedDelete}
-                                id="create-btn"
-                              >
-                                <i className="ri-add-line align-bottom me-1"></i>{" "}
-                                Delete Selected Id
-                              </Button>
-                              <Button
-                                color="primary"
-                                className="submit-data-btn me-1"
-                                onClick={handleSubmitFormData}
-                                id="create-btn"
-                              >
-                                <i className="ri-add-line align-bottom me-1"></i>{" "}
-                                Submit Data
-                              </Button>
-                            </>
-                          ) : null}
                         </div>
                       </Col>
                     </Row>

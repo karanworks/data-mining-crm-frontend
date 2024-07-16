@@ -52,10 +52,9 @@ const AuthProtected = (props) => {
     );
   }
 
-  // adding the home route manually as well
+  // adding the home and profile route manually
   allowedRoutesPaths.push("/");
-
-  console.log("ALLOWED ROUTES PATHS ->", allowedRoutesPaths);
+  allowedRoutesPaths.push("/profile");
 
   const currentPath = location.pathname;
 

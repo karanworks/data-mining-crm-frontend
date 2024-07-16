@@ -101,6 +101,8 @@ const AddWorkData = () => {
       );
       dispatch(getAssignedWorkData());
       resetForm();
+      setSelectedSingleWebsiteStatus(null);
+      setSelectedSingleBusinessType(null);
     },
   });
 
